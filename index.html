@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TB Race - Travel Bug Race</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #map { height: 500px; margin: 20px 0; border-radius: 8px; }
+    .leaderboard { margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ccc; }
+    th { background-color: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <h1>🚗 TB Race Leaderboard</h1>
+  <p>Last updated: <span id="last-updated"></span></p>
+
+  <div class="leaderboard">
+    <h2>🏆 Leaderboard</h2>
+    <table id="leaderboard-table">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Car</th>
+          <th>Owner</th>
+          <th>Location</th>
+          <th>Distance (km)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <h2>🗺️ Live Map</h2>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    async function loadRaceData() {
+      const response = await fetch('racers.json');
+      const racers = await response.json();
+
+      // Update last updated time
+      const lastUpdated = new Date(racers[0]?.last_updated || Date.now());
+      document.getElementById('last-updated').textContent = lastUpdated.toLocaleString();
+
+      // Sort by km (descending)
+      racers.sort((a, b) => (b.km || 0) - (a.km || 0));
+
+      // Fill Leaderboard
+      const tbody = document.querySelector('#leaderboard-table tbody');
+      tbody.innerHTML = '';
+
+      racers.forEach((racer, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>#${index + 1}</strong></td>
+          <td>${racer.car}</td>
+          <td>${racer.owner}</td>
+          <td>${racer.location}</td>
+          <td><strong>${racer.km} km</strong></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Initialize Map
+      initMap(racers);
+    }
+
+    function initMap(racers) {
+      const map = L.map('map').setView([50.5, 5.0], 5); // Center on Europe
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      racers.forEach(racer => {
+        if (racer.coordinates && racer.coordinates.length === 2) {
+          const marker = L.marker(racer.coordinates).addTo(map);
+          
+          marker.bindPopup(`
+            <b>${racer.car}</b><br>
+            ${racer.name || ''}<br>
+            📍 ${racer.location}<br>
+            🛣️ ${racer.km} km
+          `);
+        }
+      });
+    }
+
+    // Load data when page opens
+    loadRaceData();
+  </script>
+</body>
+</html>

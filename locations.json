@@ -1,0 +1,19 @@
+{
+  "updated": "2026-06-03T09:11:27.836Z",
+  "tb": [
+    {
+      "car": "Testcar 2",
+      "reference": "TB83TQH",
+      "cache": "GC5GB7R",
+      "lat": 47.2682,
+      "lng": 11.3933
+    },
+    {
+      "car": "Testcar 3",
+      "reference": "TBXXXXXX",
+      "cache": "GC6JQ6X",
+      "lat": 50.8503,
+      "lng": 4.3517
+    }
+  ]
+}
