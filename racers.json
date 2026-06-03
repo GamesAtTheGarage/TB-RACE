@@ -1,0 +1,55 @@
+[
+  {
+    "car": "Mean Green Racing Machine #5",
+    "owner": "Penumbra59",
+    "reference": "BMNG69",
+    "cache": "",
+    "location": "In the hands of the owner.",
+    "km": 120,
+    "name": "Geo Mutant Tag",
+    "coordinates": null,
+    "last_updated": "2026-06-03T19:34:50.300860"
+  },
+  {
+    "car": "Testcar 2",
+    "owner": "Penumbra59",
+    "reference": "TB83TQH",
+    "cache": "GC5GB7R",
+    "location": "In Das eiserne Herz der \"Todten Frau\" (NC)",
+    "km": 95,
+    "name": "Belgium Beer Tag #2",
+    "coordinates": [
+      50.85,
+      4.35
+    ],
+    "last_updated": "2026-06-03T19:34:50.548793"
+  },
+  {
+    "car": "Testcar 3",
+    "owner": "Penumbra59",
+    "reference": "TB83TPR",
+    "cache": "GC6JQ6X",
+    "location": "In Hs.Nr. 7 Papaschlumpf im Schlumpfenwald",
+    "km": 95,
+    "name": "Belgium Beer Tag #1",
+    "coordinates": [
+      51.12,
+      6.4
+    ],
+    "last_updated": "2026-06-03T19:34:50.841902"
+  },
+  {
+    "car": "Testcar 5",
+    "owner": "Penumbra59",
+    "reference": "TB5EJWB",
+    "cache": "GC1H9V6",
+    "location": "In Route 73",
+    "km": 95,
+    "name": "Friendship Geocoin ( GCC oct. 2012 )",
+    "coordinates": [
+      48.85,
+      2.35
+    ],
+    "last_updated": "2026-06-03T19:34:51.101965"
+  }
+]
