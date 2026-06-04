@@ -144,19 +144,28 @@
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
 
-                racers.forEach(racer => {
-                    if (racer.coordinates && Array.isArray(racer.coordinates) && racer.coordinates.length === 2) {
-                        const lat = racer.coordinates[0];
-                        const lng = racer.coordinates[1];
+               racers.forEach(racer => {
+    if (racer.coordinates && Array.isArray(racer.coordinates) && racer.coordinates.length === 2) {
+        const lat = racer.coordinates[0];
+        const lng = racer.coordinates[1];
 
-                        const marker = L.marker([lat, lng]).addTo(map);
-                        marker.bindPopup(`
-                            <strong>${racer.car || racer.name}</strong><br>
-                            ${racer.location || ''}<br>
-                            <strong>${racer.km || 0} km</strong>
-                        `);
-                    }
-                });
+        // Custom car marker using emoji
+        const carIcon = L.divIcon({
+            className: 'car-marker',
+            html: '🚗',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+            popupAnchor: [0, -16]
+        });
+
+        const marker = L.marker([lat, lng], { icon: carIcon }).addTo(map);
+        marker.bindPopup(`
+            <strong>${racer.car || racer.name}</strong><br>
+            ${racer.location || ''}<br>
+            <strong>${racer.km || 0} km</strong>
+        `);
+    }
+});
 
             } catch (error) {
                 console.error('Error loading race data:', error);
