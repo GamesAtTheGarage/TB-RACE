@@ -24,7 +24,7 @@
         .hero img {
             max-width: 100%;
             height: auto;
-            max-height: 250px;
+            max-height: 340px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
@@ -73,17 +73,17 @@
             color: #bdc3c7;
             margin-bottom: 20px;
         }
-   .car-marker {
-    font-size: 28px;
-    text-align: center;
-    line-height: 32px;
-    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.4));
-}
+        .car-marker {
+            font-size: 48px;
+            text-align: center;
+            line-height: 56px;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.5));
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Banner only, no heading above it -->
+        <!-- Banner only -->
         <div class="hero">
             <img src="images/banner.jpg" alt="TB Racers Banner" style="max-width: 100%; height: auto; max-height: 340px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
         </div>
@@ -105,7 +105,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Populated by JavaScript -->
             </tbody>
         </table>
 
@@ -131,7 +130,6 @@
 
                 racers.forEach((racer, index) => {
                     const row = document.createElement('tr');
-
                     row.innerHTML = `
                         <td>#${index + 1}</td>
                         <td>${racer.car || racer.name || 'Unknown'}</td>
@@ -140,7 +138,6 @@
                         <td><a href="https://www.geocaching.com/geocache/${racer.cache}" target="_blank">${racer.cache || '-'}</a></td>
                         <td class="km">${racer.km || 0} km</td>
                     `;
-
                     tbody.appendChild(row);
                 });
 
@@ -150,28 +147,28 @@
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
 
-               racers.forEach(racer => {
-    if (racer.coordinates && Array.isArray(racer.coordinates) && racer.coordinates.length === 2) {
-        const lat = racer.coordinates[0];
-        const lng = racer.coordinates[1];
+                // Bigger car markers
+                racers.forEach(racer => {
+                    if (racer.coordinates && Array.isArray(racer.coordinates) && racer.coordinates.length === 2) {
+                        const lat = racer.coordinates[0];
+                        const lng = racer.coordinates[1];
 
-        // Custom car marker using emoji
-        const carIcon = L.divIcon({
-            className: 'car-marker',
-            html: '🚗',
-            iconSize: [32, 32],
-            iconAnchor: [16, 16],
-            popupAnchor: [0, -16]
-        });
+                        const carIcon = L.divIcon({
+                            className: 'car-marker',
+                            html: '🚗',
+                            iconSize: [56, 56],
+                            iconAnchor: [28, 28],
+                            popupAnchor: [0, -28]
+                        });
 
-        const marker = L.marker([lat, lng], { icon: carIcon }).addTo(map);
-        marker.bindPopup(`
-            <strong>${racer.car || racer.name}</strong><br>
-            ${racer.location || ''}<br>
-            <strong>${racer.km || 0} km</strong>
-        `);
-    }
-});
+                        const marker = L.marker([lat, lng], { icon: carIcon }).addTo(map);
+                        marker.bindPopup(`
+                            <strong>${racer.car || racer.name}</strong><br>
+                            ${racer.location || ''}<br>
+                            <strong>${racer.km || 0} km</strong>
+                        `);
+                    }
+                });
 
             } catch (error) {
                 console.error('Error loading race data:', error);
