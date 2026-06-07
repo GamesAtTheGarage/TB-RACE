@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TB Racers - Travel Bug Racers</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .hero img {
+            max-width: 100%;
+            height: auto;
+            max-height: 340px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #34495e;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #4a6278;
+        }
+        th {
+            background-color: #e74c3c;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #3d566b;
+        }
+        .km {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #map {
+            height: 500px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        .last-updated {
+            text-align: center;
+            font-style: italic;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+        .car-marker {
+            font-size: 48px;
+            text-align: center;
+            line-height: 56px;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.5));
+        }
+
+        /* Track Visual Styles */
+        #track-container {
+            position: relative;
+            width: 960px;
+            height: 580px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #111827;
+        }
+        .track-car {
+            position: absolute;
+            font-size: 28px;
+            z-index: 10;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+        }
+        .track-label {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.92);
+            color: #f1f5f9;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 20;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Banner only -->
+        <div class="hero">
+            <img src="images/banner.jpg" alt="TB Racers Banner" style="max-width: 100%; height: auto; max-height: 340px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        </div>
+
+        <div class="last-updated">
+            Last updated: <span id="last-updated">Loading...</span>
+        </div>
+
+        <h2>Leaderboard</h2>
+        <table id="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Car</th>
+                    <th>Owner</th>
+                    <th>TB Reference</th>
+                    <th>Cache</th>
+                    <th>Distance (km)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <!-- ==================== TRACK VISUAL ==================== -->
+        <h2>Track Positions</h2>
+        <div id="track-container" style="background-image: url('images/daytona-track.png');">
+            <!-- Cars are added dynamically by JavaScript -->
+        </div>
+
+        <h2>Live Map</h2>
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let racersData = [];
+
+        async function loadRaceData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/GamesAtTheGarage/TB-RACE/main/racers.json');
+                const racers = await response.json();
+                racersData = racers;
+
+                if (racers.length > 0 && racers[0].last_updated) {
+                    document.getElementById('last-updated').textContent = new Date(racers[0].last_updated).toLocaleString();
+                } else {
+                    document.getElementById('last-updated').textContent = 'Just now';
+                }
+
+                // Leaderboard
+                const tbody = document.querySelector('#leaderboard-table tbody');
+                tbody.innerHTML = '';
+
+                racers.forEach((racer, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>#${index + 1}</td>
+                        <td>${racer.car || racer.name || 'Unknown'}</td>
+                        <td>${racer.owner || ''}</td>
+                        <td><a href="https://www.geocaching.com/track/details.aspx?tracker=${racer.reference}" target="_blank">${racer.reference}</a></td>
+                        <td><a href="https://www.geocaching.com/geocache/${racer.cache}" target="_blank">${racer.cache || '-'}</a></td>
+                        <td class="km">${racer.km || 0} km</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                // Update Track Positions
+                updateTrackPositions(racers);
+
+                // Map
+                const map = L.map('map').setView([50.5, 7], 5.5);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+
+                racers.forEach(racer => {
+                    if (racer.coordinates && Array.isArray(racer.coordinates) && racer.coordinates.length === 2) {
+                        const lat = racer.coordinates[0];
+                        const lng = racer.coordinates[1];
+
+                        const carIcon = L.divIcon({
+                            className: 'car-marker',
+                            html: '🚗',
+                            iconSize: [56, 56],
+                            iconAnchor: [28, 28],
+                            popupAnchor: [0, -28]
+                        });
+
+                        const marker = L.marker([lat, lng], { icon: carIcon }).addTo(map);
+                        marker.bindPopup(`
+                            <strong>${racer.car || racer.name}</strong><br>
+                            ${racer.location || ''}<br>
+                            <strong>${racer.km || 0} km</strong>
+                        `);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error loading race data:', error);
+                document.getElementById('last-updated').textContent = 'Failed to load data';
+            }
+        }
+
+        // ==================== TRACK VISUAL FUNCTION ====================
+        function updateTrackPositions(racers) {
+            const container = document.getElementById('track-container');
+            container.querySelectorAll('.track-car, .track-label').forEach(el => el.remove());
+
+            racers.forEach((racer, index) => {
+                const distance = racer.km || 0;
+                const progress = Math.min(distance / 1500, 1);
+
+                // Basic positioning (we can improve this later)
+                let x = 185 + (progress * 570);
+                let y = 390 - (progress * 200);
+
+                if (progress > 0.3 && progress < 0.7) {
+                    y = 50 + (progress * 80);
+                }
+
+                const car = document.createElement('div');
+                car.className = 'track-car';
+                car.style.left = `${x}px`;
+                car.style.top = `${y}px`;
+                car.innerHTML = '🚗';
+                container.appendChild(car);
+
+                const label = document.createElement('div');
+                label.className = 'track-label';
+                label.style.left = `${x + 30}px`;
+                label.style.top = `${y - 20}px`;
+                label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km`;
+                container.appendChild(label);
+            });
+        }
+
+        window.onload = loadRaceData;
+    </script>
+</body>
+</html>
