@@ -136,14 +136,13 @@
                     <th>Distance (km)</th>
                 </tr>
             </thead>
-            <tbody>
-            </tbody>
+            <tbody></tbody>
         </table>
 
         <!-- ==================== TRACK VISUAL ==================== -->
         <h2>Track Positions</h2>
         <div id="track-container" style="background-image: url('images/daytona-track.png');">
-            <!-- Cars are added dynamically by JavaScript -->
+            <!-- Cars added by JavaScript -->
         </div>
 
         <h2>Live Map</h2>
@@ -161,99 +160,4 @@
                 racersData = racers;
 
                 if (racers.length > 0 && racers[0].last_updated) {
-                    document.getElementById('last-updated').textContent = new Date(racers[0].last_updated).toLocaleString();
-                } else {
-                    document.getElementById('last-updated').textContent = 'Just now';
-                }
-
-                // Leaderboard
-                const tbody = document.querySelector('#leaderboard-table tbody');
-                tbody.innerHTML = '';
-
-                racers.forEach((racer, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>#${index + 1}</td>
-                        <td>${racer.car || racer.name || 'Unknown'}</td>
-                        <td>${racer.owner || ''}</td>
-                        <td><a href="https://www.geocaching.com/track/details.aspx?tracker=${racer.reference}" target="_blank">${racer.reference}</a></td>
-                        <td><a href="https://www.geocaching.com/geocache/${racer.cache}" target="_blank">${racer.cache || '-'}</a></td>
-                        <td class="km">${racer.km || 0} km</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-
-                // Update Track Positions
-                updateTrackPositions(racers);
-
-                // Map
-                const map = L.map('map').setView([50.5, 7], 5.5);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors'
-                }).addTo(map);
-
-                racers.forEach(racer => {
-                    if (racer.coordinates && Array.isArray(racer.coordinates) && racer.coordinates.length === 2) {
-                        const lat = racer.coordinates[0];
-                        const lng = racer.coordinates[1];
-
-                        const carIcon = L.divIcon({
-                            className: 'car-marker',
-                            html: '🚗',
-                            iconSize: [56, 56],
-                            iconAnchor: [28, 28],
-                            popupAnchor: [0, -28]
-                        });
-
-                        const marker = L.marker([lat, lng], { icon: carIcon }).addTo(map);
-                        marker.bindPopup(`
-                            <strong>${racer.car || racer.name}</strong><br>
-                            ${racer.location || ''}<br>
-                            <strong>${racer.km || 0} km</strong>
-                        `);
-                    }
-                });
-
-            } catch (error) {
-                console.error('Error loading race data:', error);
-                document.getElementById('last-updated').textContent = 'Failed to load data';
-            }
-        }
-
-        // ==================== TRACK VISUAL FUNCTION ====================
-        function updateTrackPositions(racers) {
-            const container = document.getElementById('track-container');
-            container.querySelectorAll('.track-car, .track-label').forEach(el => el.remove());
-
-            racers.forEach((racer, index) => {
-                const distance = racer.km || 0;
-                const progress = Math.min(distance / 1500, 1);
-
-                // Basic positioning (we can improve this later)
-                let x = 185 + (progress * 570);
-                let y = 390 - (progress * 200);
-
-                if (progress > 0.3 && progress < 0.7) {
-                    y = 50 + (progress * 80);
-                }
-
-                const car = document.createElement('div');
-                car.className = 'track-car';
-                car.style.left = `${x}px`;
-                car.style.top = `${y}px`;
-                car.innerHTML = '🚗';
-                container.appendChild(car);
-
-                const label = document.createElement('div');
-                label.className = 'track-label';
-                label.style.left = `${x + 30}px`;
-                label.style.top = `${y - 20}px`;
-                label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km`;
-                container.appendChild(label);
-            });
-        }
-
-        window.onload = loadRaceData;
-    </script>
-</body>
-</html>
+                    document.getElement
