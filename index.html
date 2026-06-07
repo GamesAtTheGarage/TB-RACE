@@ -29,7 +29,6 @@
         #map { height: 500px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); margin-bottom: 30px; }
         .last-updated { text-align: center; font-style: italic; color: #bdc3c7; margin-bottom: 20px; }
 
-        /* Track */
         #track-container {
             position: relative; width: 960px; height: 580px; margin: 0 auto 30px auto;
             border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
@@ -75,22 +74,28 @@
             const container = document.getElementById('track-container');
             container.innerHTML = '';
 
-            racers.forEach(racer => {
+            racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
-                const progress = Math.min(distance / 1500, 1);
+                const progress = Math.min(distance / 2000, 1);
 
-                let x = 180, y = 390;
-                if (progress <= 0.35) {
-                    x = 180 + (progress * 520);
-                    y = 390;
-                } else if (progress <= 0.65) {
-                    x = 700 - ((progress - 0.35) * 650);
-                    y = 60;
+                let x, y;
+
+                if (progress <= 0.4) {
+                    x = 160 + (progress * 580);
+                    y = 385;
+                } else if (progress <= 0.7) {
+                    x = 720 - ((progress - 0.4) * 720);
+                    y = 65;
                 } else {
-                    x = 180 + ((progress - 0.65) * 520);
-                    y = 390;
+                    x = 160 + ((progress - 0.7) * 580);
+                    y = 385;
                 }
 
+                // Small offset so cars don't overlap
+                x += index * 12;
+                y += (index % 3) * 8;
+
+                // Car
                 const car = document.createElement('div');
                 car.className = 'track-car';
                 car.style.left = `${Math.round(x)}px`;
@@ -98,11 +103,12 @@
                 car.textContent = '🚗';
                 container.appendChild(car);
 
+                // Label
                 const label = document.createElement('div');
                 label.className = 'track-label';
-                label.style.left = `${Math.round(x + 35)}px`;
-                label.style.top = `${Math.round(y - 28)}px`;
-                label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km`;
+                label.style.left = `${Math.round(x + 38)}px`;
+                label.style.top = `${Math.round(y - 32)}px`;
+                label.innerHTML = `<strong>${racer.car || racer.name || 'Unknown'}</strong><br>${distance} km`;
                 container.appendChild(label);
             });
         }
@@ -142,25 +148,4 @@
                 }).addTo(map);
 
                 racers.forEach(racer => {
-                    if (racer.coordinates && racer.coordinates.length === 2) {
-                        const icon = L.divIcon({
-                            className: 'car-marker',
-                            html: '🚗',
-                            iconSize: [56, 56],
-                            iconAnchor: [28, 28]
-                        });
-                        L.marker(racer.coordinates, { icon: icon }).addTo(map)
-                            .bindPopup(`<strong>${racer.car || racer.name}</strong><br>${racer.km || 0} km`);
-                    }
-                });
-
-            } catch (e) {
-                console.error('Error:', e);
-                document.getElementById('last-updated').textContent = 'Failed to load data';
-            }
-        }
-
-        window.onload = loadRaceData;
-    </script>
-</body>
-</html>
+                    if (racer.coordinates
