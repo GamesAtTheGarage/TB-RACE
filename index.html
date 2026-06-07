@@ -85,7 +85,7 @@
             position: relative;
             width: 960px;
             height: 580px;
-            margin: 0 auto;
+            margin: 0 auto 30px auto;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0,0,0,0.6);
@@ -115,9 +115,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- Banner only -->
         <div class="hero">
-            <img src="images/banner.jpg" alt="TB Racers Banner" style="max-width: 100%; height: auto; max-height: 340px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <img src="images/banner.jpg" alt="TB Racers Banner">
         </div>
 
         <div class="last-updated">
@@ -139,11 +138,9 @@
             <tbody></tbody>
         </table>
 
-        <!-- ==================== TRACK VISUAL ==================== -->
+        <!-- TRACK VISUAL -->
         <h2>Track Positions</h2>
-        <div id="track-container" style="background-image: url('images/daytona-track.png');">
-            <!-- Cars added by JavaScript -->
-        </div>
+        <div id="track-container" style="background-image: url('images/daytona-track.png');"></div>
 
         <h2>Live Map</h2>
         <div id="map"></div>
@@ -151,13 +148,24 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        let racersData = [];
-
         async function loadRaceData() {
             try {
                 const response = await fetch('https://raw.githubusercontent.com/GamesAtTheGarage/TB-RACE/main/racers.json');
                 const racers = await response.json();
-                racersData = racers;
 
+                // Last updated
                 if (racers.length > 0 && racers[0].last_updated) {
-                    document.getElement
+                    document.getElementById('last-updated').textContent = new Date(racers[0].last_updated).toLocaleString();
+                } else {
+                    document.getElementById('last-updated').textContent = 'Just now';
+                }
+
+                // Leaderboard
+                const tbody = document.querySelector('#leaderboard-table tbody');
+                tbody.innerHTML = '';
+                racers.forEach((racer, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>#${index + 1}</td>
+                        <td>${racer.car || racer.name || 'Unknown'}</td>
+                        <td>${racer.owner || ''}</
