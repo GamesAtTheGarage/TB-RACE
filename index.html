@@ -75,21 +75,27 @@
                 const distance = racer.km || 0;
                 const progress = Math.min(distance / 2000, 1);
 
-                let x = 180, y = 390;
-                if (progress <= 0.4) {
-                    x = 160 + (progress * 580);
-                    y = 385;
-                } else if (progress <= 0.7) {
-                    x = 720 - ((progress - 0.4) * 720);
-                    y = 65;
+                let x, y;
+
+                if (progress <= 0.38) {
+                    // Front stretch (bottom)
+                    x = 140 + (progress * 620);
+                    y = 395;
+                } else if (progress <= 0.68) {
+                    // Back stretch (top)
+                    x = 740 - ((progress - 0.38) * 680);
+                    y = 72;
                 } else {
-                    x = 160 + ((progress - 0.7) * 580);
-                    y = 385;
+                    // Final stretch
+                    x = 140 + ((progress - 0.68) * 580);
+                    y = 395;
                 }
 
+                // Small offset so cars don't overlap
                 x += index * 12;
-                y += (index % 3) * 8;
+                y += index * 9;
 
+                // Car
                 const car = document.createElement('div');
                 car.className = 'track-car';
                 car.style.left = `${Math.round(x)}px`;
@@ -97,10 +103,11 @@
                 car.textContent = '🚗';
                 container.appendChild(car);
 
+                // Label
                 const label = document.createElement('div');
                 label.className = 'track-label';
-                label.style.left = `${Math.round(x + 38)}px`;
-                label.style.top = `${Math.round(y - 32)}px`;
+                label.style.left = `${Math.round(x + 40)}px`;
+                label.style.top = `${Math.round(y - 35)}px`;
                 label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km`;
                 container.appendChild(label);
             });
@@ -131,6 +138,7 @@
                     tbody.appendChild(row);
                 });
 
+                // Track
                 updateTrackPositions(racers);
 
                 // Map
