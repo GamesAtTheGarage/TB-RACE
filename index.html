@@ -4,75 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TB Racers - Travel Bug Racers</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #2c3e50; color: #ecf0f1; padding: 20px; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 20px;
+        }
         .container { max-width: 1200px; margin: 0 auto; }
-        table { width: 100%; border-collapse: collapse; background: #34495e; margin-bottom: 30px; }
-        th, td { padding: 12px; border-bottom: 1px solid #4a6278; text-align: left; }
-        th { background: #e74c3c; }
+        .hero { text-align: center; margin-bottom: 30px; }
+        .hero img { max-width: 100%; height: auto; max-height: 340px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        table {
+            width: 100%; border-collapse: collapse; background-color: #34495e;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3); margin-bottom: 30px;
+        }
+        th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #4a6278; }
+        th { background-color: #e74c3c; color: white; font-weight: bold; }
+        tr:hover { background-color: #3d566b; }
+        .km { font-weight: bold; color: #2ecc71; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        #map { height: 500px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); margin-bottom: 30px; }
+        .last-updated { text-align: center; font-style: italic; color: #bdc3c7; margin-bottom: 20px; }
+
+        /* Track */
         #track-container {
-            position: relative; width: 960px; height: 580px; margin: 20px auto;
-            background: url('images/daytona-track.png') center/contain no-repeat #111827;
-            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            position: relative; width: 960px; height: 580px; margin: 0 auto 30px auto;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            background-size: contain; background-position: center; background-repeat: no-repeat;
+            background-color: #111827;
         }
-        .track-car { position: absolute; font-size: 32px; }
-        .track-label { position: absolute; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>TB Racers Test</h1>
-
-        <h2>Leaderboard</h2>
-        <table id="leaderboard"><thead><tr><th>Car</th><th>km</th></tr></thead><tbody></tbody></table>
-
-        <h2>Track Positions</h2>
-        <div id="track-container"></div>
-    </div>
-
-    <script>
-        async function load() {
-            try {
-                const res = await fetch('https://raw.githubusercontent.com/GamesAtTheGarage/TB-RACE/main/racers.json');
-                const racers = await res.json();
-
-                // Leaderboard
-                const tbody = document.querySelector('#leaderboard tbody');
-                tbody.innerHTML = '';
-                racers.forEach(r => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${r.car || r.name}</td><td>${r.km || 0}</td>`;
-                    tbody.appendChild(tr);
-                });
-
-                // Track
-                const container = document.getElementById('track-container');
-                container.innerHTML = '';
-                racers.forEach((r, i) => {
-                    const car = document.createElement('div');
-                    car.className = 'track-car';
-                    car.style.left = (200 + i*120) + 'px';
-                    car.style.top = '350px';
-                    car.textContent = '🚗';
-                    container.appendChild(car);
-
-                    const label = document.createElement('div');
-                    label.className = 'track-label';
-                    label.style.left = (200 + i*120 + 40) + 'px';
-                    label.style.top = '300px';
-                    label.textContent = r.car || 'Car';
-                    container.appendChild(label);
-                });
-
-                console.log("✅ Loaded", racers.length, "racers");
-
-            } catch(e) {
-                console.error(e);
-                document.body.innerHTML += '<p style="color:red">Error loading data</p>';
-            }
-        }
-
-        window.onload = load;
-    </script>
-</body>
-</html>
+        .track-car { position: absolute; font-size: 28
