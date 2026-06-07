@@ -13,103 +13,38 @@
             margin: 0;
             padding: 20px;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .hero {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .hero { text-align: center; margin-bottom: 30px; }
         .hero img {
-            max-width: 100%;
-            height: auto;
-            max-height: 340px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            max-width: 100%; height: auto; max-height: 340px;
+            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #34495e;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 100%; border-collapse: collapse; background-color: #34495e;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             margin-bottom: 30px;
         }
-        th, td {
-            padding: 14px 18px;
-            text-align: left;
-            border-bottom: 1px solid #4a6278;
-        }
-        th {
-            background-color: #e74c3c;
-            color: white;
-            font-weight: bold;
-        }
-        tr:hover {
-            background-color: #3d566b;
-        }
-        .km {
-            font-weight: bold;
-            color: #2ecc71;
-        }
-        a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        #map {
-            height: 500px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            margin-bottom: 30px;
-        }
-        .last-updated {
-            text-align: center;
-            font-style: italic;
-            color: #bdc3c7;
-            margin-bottom: 20px;
-        }
-        .car-marker {
-            font-size: 48px;
-            text-align: center;
-            line-height: 56px;
-            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.5));
-        }
+        th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #4a6278; }
+        th { background-color: #e74c3c; color: white; font-weight: bold; }
+        tr:hover { background-color: #3d566b; }
+        .km { font-weight: bold; color: #2ecc71; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        #map { height: 500px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); margin-bottom: 30px; }
+        .last-updated { text-align: center; font-style: italic; color: #bdc3c7; margin-bottom: 20px; }
 
-        /* Track Visual Styles */
+        /* Track */
         #track-container {
-            position: relative;
-            width: 960px;
-            height: 580px;
-            margin: 0 auto 30px auto;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
+            position: relative; width: 960px; height: 580px; margin: 0 auto 30px auto;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            background-size: contain; background-position: center; background-repeat: no-repeat;
             background-color: #111827;
         }
-        .track-car {
-            position: absolute;
-            font-size: 28px;
-            z-index: 10;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
-        }
+        .track-car { position: absolute; font-size: 28px; z-index: 10; text-shadow: 2px 2px 6px rgba(0,0,0,0.9); }
         .track-label {
-            position: absolute;
-            background: rgba(15, 23, 42, 0.92);
-            color: #f1f5f9;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 20;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+            position: absolute; background: rgba(15, 23, 42, 0.92); color: #f1f5f9;
+            padding: 5px 10px; border-radius: 6px; font-size: 12px; white-space: nowrap;
+            z-index: 20; box-shadow: 0 3px 8px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -119,26 +54,18 @@
             <img src="images/banner.jpg" alt="TB Racers Banner">
         </div>
 
-        <div class="last-updated">
-            Last updated: <span id="last-updated">Loading...</span>
-        </div>
+        <div class="last-updated">Last updated: <span id="last-updated">Loading...</span></div>
 
         <h2>Leaderboard</h2>
         <table id="leaderboard-table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Car</th>
-                    <th>Owner</th>
-                    <th>TB Reference</th>
-                    <th>Cache</th>
-                    <th>Distance (km)</th>
+                    <th>#</th><th>Car</th><th>Owner</th><th>TB Reference</th><th>Cache</th><th>Distance (km)</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
 
-        <!-- TRACK VISUAL -->
         <h2>Track Positions</h2>
         <div id="track-container" style="background-image: url('images/daytona-track.png');"></div>
 
@@ -148,24 +75,11 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        async function loadRaceData() {
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/GamesAtTheGarage/TB-RACE/main/racers.json');
-                const racers = await response.json();
+        function updateTrackPositions(racers) {
+            const container = document.getElementById('track-container');
+            if (!container) return;
+            container.innerHTML = '';
 
-                // Last updated
-                if (racers.length > 0 && racers[0].last_updated) {
-                    document.getElementById('last-updated').textContent = new Date(racers[0].last_updated).toLocaleString();
-                } else {
-                    document.getElementById('last-updated').textContent = 'Just now';
-                }
-
-                // Leaderboard
-                const tbody = document.querySelector('#leaderboard-table tbody');
-                tbody.innerHTML = '';
-                racers.forEach((racer, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>#${index + 1}</td>
-                        <td>${racer.car || racer.name || 'Unknown'}</td>
-                        <td>${racer.owner || ''}</
+            racers.forEach(racer => {
+                const distance = racer.km || 0;
+                const progress = Math.min(distance / 150
