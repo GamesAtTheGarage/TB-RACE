@@ -1,7 +1,6 @@
 import pycaching
 import json
 from datetime import datetime
-import re
 
 JSON_FILE = 'racers.json'
 
@@ -20,46 +19,40 @@ for racer in racers:
 
     try:
         print(f"Fetching {tb_code} → {racer.get('car')}")
+
         tb = gc.get_trackable(tb_code)
+        if not tb:
+            print("   ❌ Could not load trackable")
+            continue
 
-        if tb:
-            racer['name'] = getattr(tb, 'name', racer.get('car'))
+        racer['name'] = getattr(tb, 'name', racer.get('car'))
 
-            # === Auto-detect current cache code ===
-            current_cache_code = None
-            location_str = str(getattr(tb, 'location', 'Unknown'))
+        # Use the manual cache code from JSON
+        current_cache_code = racer.get('cache', '').strip()
 
-            # Try to extract GC code from location string
-            match = re.search(r'(GC[0-9A-Z]+)', location_str)
-            if match:
-                current_cache_code = match.group(1)
-                racer['cache'] = current_cache_code
-            else:
-                # If no GC code found, it's probably in someone's hands
-                racer['cache'] = ""
+        location_str = str(getattr(tb, 'location', 'Unknown')).strip()
+        racer['location'] = location_str
 
-            racer['location'] = location_str
+        # Get coordinates if cache code is provided
+        coords = None
+        if current_cache_code:
+            try:
+                cache = gc.get_cache(current_cache_code)
+                cache.load()
+                if hasattr(cache, 'location') and cache.location:
+                    point = cache.location
+                    coords = [float(point.latitude), float(point.longitude)]
+            except:
+                pass
 
-            # === Get coordinates if we have a cache code ===
-            coords = None
-            if current_cache_code:
-                try:
-                    cache = gc.get_cache(current_cache_code)
-                    cache.load()
-                    if hasattr(cache, 'location') and cache.location:
-                        point = cache.location
-                        coords = [float(point.latitude), float(point.longitude)]
-                except:
-                    pass
+        racer['coordinates'] = coords
+        racer['last_updated'] = datetime.now().isoformat()
 
-            racer['coordinates'] = coords
-            racer['last_updated'] = datetime.now().isoformat()
-
-            print(f"   ✅ Updated | Location: {racer['location']}")
-            if current_cache_code:
-                print(f"   📍 Cache: {current_cache_code} | Coordinates: {coords}")
-            else:
-                print("   📍 In hands of a geocacher (no cache)")
+        print(f"   ✅ Updated | Location: {racer['location']}")
+        if current_cache_code:
+            print(f"   📍 Cache: {current_cache_code} | Coordinates: {'Yes' if coords else 'No'}")
+        else:
+            print("   📍 In hands of a geocacher (no cache code set)")
 
     except Exception as e:
         print(f"   ❌ Error with {tb_code}: {e}")
@@ -68,4 +61,4 @@ for racer in racers:
 with open(JSON_FILE, 'w', encoding='utf-8') as f:
     json.dump(racers, f, indent=2, ensure_ascii=False)
 
-print("\n🎉 Update completed! (Auto cache detection + coordinates)")
+print("\n🎉 Update completed! (Manual cache mode)")
