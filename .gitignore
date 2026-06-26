@@ -1,1 +1,13 @@
+# Geocaching credentials
 .gc_credentials
+
+# Python
+__pycache__/
+*.pyc
+
+# Python virtual environment
+.venv/
+venv/
+
+# VS Code (optioneel)
+.vscode/
