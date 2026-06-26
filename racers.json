@@ -1,46 +1,24 @@
 [
   {
-    "car": "Mean Green Racing Machine #5",
+    "car": "TB RACERS TEST CAR 1",
     "owner": "Penumbra59",
-    "reference": "BMNG69",
+    "reference": "TBB93KK",
     "cache": "",
-    "location": "In the hands of the owner.",
-    "km": 0,
-    "name": "Geo Mutant Tag",
+    "location": "In The Last farm in Hjörleifshöfði",
+    "km": 2430,
+    "name": "TB RACERS TEST CAR 1",
     "coordinates": null,
-    "last_updated": ""
+    "last_updated": "2026-06-25T22:06:54.760019"
   },
   {
-    "car": "Testcar 2",
+    "car": "TB RACERS TEST CAR 5",
     "owner": "Penumbra59",
-    "reference": "TB83TQH",
-    "cache": "GC5GB7R",
-    "location": "In Das eiserne Herz der \"Todten Frau\" (NC)",
-    "km": 0,
-    "name": "Belgium Beer Tag #2",
-    "coordinates": [48.64375, 8.13675],
-    "last_updated": ""
-  },
-  {
-    "car": "Testcar 3",
-    "owner": "Penumbra59",
-    "reference": "TB83TPR",
-    "cache": "GC6JQ6X",
-    "location": "In Hs.Nr. 7 Papaschlumpf im Schlumpfenwald",
-    "km": 0,
-    "name": "Belgium Beer Tag #1",
-    "coordinates": [50.26438, 11.6449],
-    "last_updated": ""
-  },
-  {
-    "car": "Testcar 5",
-    "owner": "Penumbra59",
-    "reference": "TB5EJWB",
-    "cache": "GC1H9V6",
-    "location": "In Route 73",
-    "km": 0,
-    "name": "Friendship Geocoin ( GCC oct. 2012 )",
-    "coordinates": [46.62515, 13.43298],
-    "last_updated": ""
+    "reference": "TB7B75M",
+    "cache": "",
+    "location": "In the hands of team clou.",
+    "km": 3099,
+    "name": "TB RACERS TEST CAR 5",
+    "coordinates": null,
+    "last_updated": "2026-06-25T22:06:55.050400"
   }
 ]
