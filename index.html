@@ -141,18 +141,31 @@
 
                 updateTrackPositions(racers);
 
-                const map = L.map('map').setView([50.5, 7], 5.5);
+                const map = L.map('map');
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
+
+                const markerBounds = [];
 
                 racers.forEach(racer => {
                     if (racer.coordinates && racer.coordinates.length === 2) {
                         const icon = L.divIcon({className: 'car-marker', html: '🚗', iconSize: [56,56], iconAnchor: [28,28]});
                         L.marker(racer.coordinates, {icon}).addTo(map)
                             .bindPopup(`<strong>${racer.car || racer.name}</strong><br>${racer.km || 0} km`);
+
+                        markerBounds.push(racer.coordinates);
                     }
                 });
+
+                if (markerBounds.length > 0) {
+                    map.fitBounds(markerBounds, {
+                        padding: [60, 60],
+                        maxZoom: 9
+                    });
+                } else {
+                    map.setView([50.5, 7], 5.5);
+                }
 
             } catch (e) {
                 console.error(e);
