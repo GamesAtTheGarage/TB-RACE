@@ -7,8 +7,11 @@
     "location": "In The Last farm in Hjörleifshöfði",
     "km": 2430,
     "name": "TB RACERS TEST CAR 1",
-    "coordinates": null,
-    "last_updated": "2026-06-25T22:06:54.760019"
+    "coordinates": [
+      63.41742,
+      -18.76048
+    ],
+    "last_updated": "2026-06-29T14:28:15.052458"
   },
   {
     "car": "TB RACERS TEST CAR 5",
@@ -18,7 +21,10 @@
     "location": "In the hands of team clou.",
     "km": 3099,
     "name": "TB RACERS TEST CAR 5",
-    "coordinates": null,
-    "last_updated": "2026-06-25T22:06:55.050400"
+    "coordinates": [
+      63.7875,
+      -18.06332
+    ],
+    "last_updated": "2026-06-29T14:28:16.153308"
   }
 ]
