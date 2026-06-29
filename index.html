@@ -21,10 +21,11 @@
         .last-updated { text-align: center; font-style: italic; color: #bdc3c7; margin-bottom: 20px; }
 
         #track-container {
-            position: relative; width: 960px; height: 580px; margin: 0 auto 30px auto;
+            position: relative; width: 960px; height: 640px; margin: 0 auto 30px auto;
             border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             background-size: contain; background-position: center; background-repeat: no-repeat;
             background-color: #111827;
+            max-width: 100%;
         }
         .track-car { position: absolute; font-size: 30px; z-index: 10; text-shadow: 2px 2px 6px rgba(0,0,0,0.95); }
         .track-label { 
@@ -53,52 +54,83 @@
         </table>
 
         <h2>Track Positions</h2>
-        <div id="track-container" style="background-image: url('images/daytona-track.png');"></div>
+        <div id="track-container" style="background-image: url('images/TBtrack1.png');"></div>
 
         <h2>Live Map</h2>
         <div id="map"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="racing-line.js"></script>
     <script>
         function updateTrackPositions(racers) {
             const container = document.getElementById('track-container');
             container.innerHTML = '';
 
+            if (typeof racingLine === 'undefined' || !Array.isArray(racingLine) || racingLine.length === 0) {
+                console.error('racing-line.js is missing or racingLine is empty.');
+                return;
+            }
+
+            const TRACK_IMAGE_WIDTH = 1536;
+            const TRACK_IMAGE_HEIGHT = 1024;
+
+            const maxDistance = Math.max(...racers.map(racer => racer.km || 0), 1);
+
+            function getDisplayPoint(trackPoint) {
+                const containerWidth = container.clientWidth;
+                const containerHeight = container.clientHeight;
+
+                const scale = Math.min(
+                    containerWidth / TRACK_IMAGE_WIDTH,
+                    containerHeight / TRACK_IMAGE_HEIGHT
+                );
+
+                const displayedWidth = TRACK_IMAGE_WIDTH * scale;
+                const displayedHeight = TRACK_IMAGE_HEIGHT * scale;
+                const offsetX = (containerWidth - displayedWidth) / 2;
+                const offsetY = (containerHeight - displayedHeight) / 2;
+
+                return {
+                    x: offsetX + trackPoint[0] * scale,
+                    y: offsetY + trackPoint[1] * scale
+                };
+            }
+
+            function clamp(value, min, max) {
+                return Math.max(min, Math.min(max, value));
+            }
+
             racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
-                const progress = Math.min(distance / 2000, 1);
+                const progress = maxDistance > 0 ? distance / maxDistance : 0;
+                const pointIndex = Math.min(
+                    Math.floor(progress * (racingLine.length - 1)),
+                    racingLine.length - 1
+                );
 
-                let x, y;
+                const point = getDisplayPoint(racingLine[pointIndex]);
 
-                if (progress <= 0.38) {
-                    x = 150 + (progress * 610);
-                    y = 395;
-                } else if (progress <= 0.68) {
-                    x = 735 - ((progress - 0.38) * 670);
-                    y = 75;
-                } else {
-                    x = 150 + ((progress - 0.68) * 590);
-                    y = 395;
-                }
-
-                // Small offset
-                x += index * 10;
-                y += index * 8;
+                // Small offset so cars with nearly identical positions do not fully overlap.
+                const x = point.x + index * 8;
+                const y = point.y + index * 6;
 
                 const car = document.createElement('div');
                 car.className = 'track-car';
-                car.style.left = `${Math.round(x)}px`;
-                car.style.top = `${Math.round(y)}px`;
+                car.style.left = `${Math.round(x - 15)}px`;
+                car.style.top = `${Math.round(y - 15)}px`;
                 car.textContent = '🚗';
                 container.appendChild(car);
 
                 const label = document.createElement('div');
                 label.className = 'track-label';
-                label.style.left = `${Math.round(x + 40)}px`;
-                label.style.top = `${Math.round(y - 35)}px`;
                 label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km`;
                 container.appendChild(label);
+
+                const labelX = clamp(x + 35, 10, container.clientWidth - label.offsetWidth - 10);
+                const labelY = clamp(y - 38, 10, container.clientHeight - label.offsetHeight - 10);
+                label.style.left = `${Math.round(labelX)}px`;
+                label.style.top = `${Math.round(labelY)}px`;
             });
         }
 
