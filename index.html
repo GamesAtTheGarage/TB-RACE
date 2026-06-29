@@ -102,6 +102,19 @@
             });
         }
 
+
+        function getCacheDisplay(racer) {
+            if (racer.status === 'in_hands') {
+                return racer.location || 'In the hands of a geocacher';
+            }
+
+            if (racer.cache) {
+                return `<a href="https://www.geocaching.com/geocache/${racer.cache}" target="_blank">${racer.cache}</a>`;
+            }
+
+            return '-';
+        }
+
         async function loadRaceData() {
             try {
                 const response = await fetch('https://raw.githubusercontent.com/GamesAtTheGarage/TB-RACE/main/racers.json');
@@ -120,7 +133,7 @@
                         <td>${racer.car || racer.name || 'Unknown'}</td>
                         <td>${racer.owner || ''}</td>
                         <td><a href="https://www.geocaching.com/track/details.aspx?tracker=${racer.reference}" target="_blank">${racer.reference}</a></td>
-                        <td><a href="https://www.geocaching.com/geocache/${racer.cache}" target="_blank">${racer.cache || '-'}</a></td>
+                        <td>${getCacheDisplay(racer)}</td>
                         <td class="km">${racer.km || 0} km</td>
                     `;
                     tbody.appendChild(row);
