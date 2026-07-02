@@ -113,7 +113,17 @@
             }
 
             function getCarColor(racer, index) {
-                const colors = ['#8e44ad', '#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#e67e22'];
+                // Fixed colours for the real test cars.
+                // TB RACERS TEST CAR 5 is green, TB RACERS TEST CAR 1 is yellow.
+                if (racer.reference === 'TB7B75M' || racer.car === 'TB RACERS TEST CAR 5') {
+                    return '#2ecc71';
+                }
+
+                if (racer.reference === 'TBB93KK' || racer.car === 'TB RACERS TEST CAR 1') {
+                    return '#f1c40f';
+                }
+
+                const colors = ['#8e44ad', '#e74c3c', '#3498db', '#e67e22', '#1abc9c', '#95a5a6'];
                 return racer.color || colors[index % colors.length];
             }
 
