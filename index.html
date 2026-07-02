@@ -234,6 +234,9 @@
                 const response = await fetch('https://raw.githubusercontent.com/GamesAtTheGarage/TB-RACE/main/racers.json');
                 const racers = await response.json();
 
+                // Sort the leaderboard and track positions by distance, highest km first.
+                racers.sort((a, b) => (b.km || 0) - (a.km || 0));
+
                 document.getElementById('last-updated').textContent = racers[0]?.last_updated 
                     ? new Date(racers[0].last_updated).toLocaleString() 
                     : 'Just now';
