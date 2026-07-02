@@ -169,9 +169,9 @@
 
                 // Fine-tune the visual car position for the SVG cars.
                 // The racing line itself stays unchanged; only the drawn car is nudged a little.
-                // On the top straight the car goes slightly up, on the bottom straight slightly down.
+                // On the top straight the car goes slightly up, on the bottom straight slightly down. This is a gentle correction.
                 const trackCenterY = container.clientHeight / 2;
-                const verticalTrackOffset = Math.max(5, Math.min(11, container.clientWidth * 0.012));
+                const verticalTrackOffset = Math.max(3, Math.min(6, container.clientWidth * 0.006));
                 const visualOffsetY = point.y < trackCenterY ? -verticalTrackOffset : verticalTrackOffset;
 
                 // Small stagger along the racing line so cars with nearly identical positions do not fully overlap.
