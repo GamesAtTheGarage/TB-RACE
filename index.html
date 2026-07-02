@@ -27,10 +27,15 @@
             background-color: #111827;
         }
         .track-car {
-            position: absolute; font-size: clamp(22px, 3.2vw, 30px); z-index: 10;
-            transform: translate(-50%, -50%);
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.95);
+            position: absolute;
+            width: clamp(32px, 5.2vw, 48px);
+            height: clamp(18px, 2.9vw, 27px);
+            z-index: 10;
+            transform: translate(-50%, -50%) rotate(0deg);
+            transform-origin: center center;
+            filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.75));
         }
+        .track-car svg { width: 100%; height: 100%; display: block; }
         .track-label { 
             position: absolute; background: rgba(15, 23, 42, 0.92); color: #f1f5f9;
             padding: 6px 12px; border-radius: 6px; font-size: 12.5px; white-space: nowrap;
@@ -104,6 +109,22 @@
                 return Math.max(min, Math.min(max, value));
             }
 
+            function getRaceCarSvg(index) {
+                const colors = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6', '#e67e22'];
+                const color = colors[index % colors.length];
+                return `
+                    <svg viewBox="0 0 64 36" aria-hidden="true">
+                        <path d="M7 18 C10 8, 22 5, 39 7 C49 8, 57 12, 61 18 C57 24, 49 28, 39 29 C22 31, 10 28, 7 18 Z" fill="${color}" stroke="#111827" stroke-width="2"/>
+                        <path d="M25 9 L41 11 L48 18 L41 25 L25 27 L19 18 Z" fill="#ecf0f1" opacity="0.92"/>
+                        <path d="M31 10 L37 11 L37 25 L31 26 Z" fill="#111827" opacity="0.45"/>
+                        <path d="M9 18 L20 14 L20 22 Z" fill="#111827" opacity="0.35"/>
+                        <circle cx="20" cy="7" r="3.5" fill="#111827"/>
+                        <circle cx="20" cy="29" r="3.5" fill="#111827"/>
+                        <circle cx="47" cy="8" r="3.5" fill="#111827"/>
+                        <circle cx="47" cy="28" r="3.5" fill="#111827"/>
+                    </svg>`;
+            }
+
             racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
                 const progress = maxDistance > 0 ? distance / maxDistance : 0;
@@ -141,11 +162,14 @@
                     + (inwardY / inwardLength) * inwardOffset
                     + (tangentY / tangentLength) * stagger;
 
+                const angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
+
                 const car = document.createElement('div');
                 car.className = 'track-car';
                 car.style.left = `${Math.round(x)}px`;
                 car.style.top = `${Math.round(y)}px`;
-                car.textContent = '🚗';
+                car.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+                car.innerHTML = getRaceCarSvg(index);
                 container.appendChild(car);
 
                 const label = document.createElement('div');
