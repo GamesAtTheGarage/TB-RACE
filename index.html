@@ -167,17 +167,12 @@
 
                 const point = getDisplayPoint(racingLine[pointIndex]);
 
-                // Push the car a little towards the inside/center of the track.
-                // This fixes cars that sit too close to the outer edge on desktop and mobile.
-                const trackCenter = {
-                    x: container.clientWidth / 2,
-                    y: container.clientHeight / 2
-                };
-
-                const inwardX = trackCenter.x - point.x;
-                const inwardY = trackCenter.y - point.y;
-                const inwardLength = Math.hypot(inwardX, inwardY) || 1;
-                const inwardOffset = Math.max(6, Math.min(14, container.clientWidth * 0.018));
+                // Fine-tune the visual car position for the SVG cars.
+                // The racing line itself stays unchanged; only the drawn car is nudged a little.
+                // On the top straight the car goes slightly up, on the bottom straight slightly down.
+                const trackCenterY = container.clientHeight / 2;
+                const verticalTrackOffset = Math.max(5, Math.min(11, container.clientWidth * 0.012));
+                const visualOffsetY = point.y < trackCenterY ? -verticalTrackOffset : verticalTrackOffset;
 
                 // Small stagger along the racing line so cars with nearly identical positions do not fully overlap.
                 const prevPoint = getDisplayPoint(racingLine[Math.max(pointIndex - 1, 0)]);
@@ -188,10 +183,9 @@
                 const stagger = (index - (racers.length - 1) / 2) * 8;
 
                 const x = point.x
-                    + (inwardX / inwardLength) * inwardOffset
                     + (tangentX / tangentLength) * stagger;
                 const y = point.y
-                    + (inwardY / inwardLength) * inwardOffset
+                    + visualOffsetY
                     + (tangentY / tangentLength) * stagger;
 
                 const angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
