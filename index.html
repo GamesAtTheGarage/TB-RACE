@@ -28,14 +28,17 @@
         }
         .track-car {
             position: absolute;
-            width: clamp(32px, 5.2vw, 48px);
-            height: clamp(18px, 2.9vw, 27px);
+            width: clamp(32px, 5vw, 48px);
+            height: clamp(18px, 2.8vw, 27px);
             z-index: 10;
-            transform: translate(-50%, -50%) rotate(0deg);
-            transform-origin: center center;
-            filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.75));
+            transform-origin: 50% 50%;
+            filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.85));
         }
-        .track-car svg { width: 100%; height: 100%; display: block; }
+        .track-car svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
         .track-label { 
             position: absolute; background: rgba(15, 23, 42, 0.92); color: #f1f5f9;
             padding: 6px 12px; border-radius: 6px; font-size: 12.5px; white-space: nowrap;
@@ -109,20 +112,39 @@
                 return Math.max(min, Math.min(max, value));
             }
 
-            function getRaceCarSvg(index) {
-                const colors = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6', '#e67e22'];
-                const color = colors[index % colors.length];
+            function getCarColor(racer, index) {
+                const colors = ['#8e44ad', '#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#e67e22'];
+                return racer.color || colors[index % colors.length];
+            }
+
+            function getRaceCarSvg(color) {
                 return `
-                    <svg viewBox="0 0 64 36" aria-hidden="true">
-                        <path d="M7 18 C10 8, 22 5, 39 7 C49 8, 57 12, 61 18 C57 24, 49 28, 39 29 C22 31, 10 28, 7 18 Z" fill="${color}" stroke="#111827" stroke-width="2"/>
-                        <path d="M25 9 L41 11 L48 18 L41 25 L25 27 L19 18 Z" fill="#ecf0f1" opacity="0.92"/>
-                        <path d="M31 10 L37 11 L37 25 L31 26 Z" fill="#111827" opacity="0.45"/>
-                        <path d="M9 18 L20 14 L20 22 Z" fill="#111827" opacity="0.35"/>
-                        <circle cx="20" cy="7" r="3.5" fill="#111827"/>
-                        <circle cx="20" cy="29" r="3.5" fill="#111827"/>
-                        <circle cx="47" cy="8" r="3.5" fill="#111827"/>
-                        <circle cx="47" cy="28" r="3.5" fill="#111827"/>
-                    </svg>`;
+                    <svg viewBox="0 0 64 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <!-- Simple TB-RACE top-view car, based on Kevin's 3D printed model. Nose points right. -->
+                        <g stroke="#07111f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+                            <rect x="7" y="3" width="12" height="8" rx="2" fill="#111827"/>
+                            <rect x="7" y="25" width="12" height="8" rx="2" fill="#111827"/>
+                            <rect x="45" y="3" width="12" height="8" rx="2" fill="#111827"/>
+                            <rect x="45" y="25" width="12" height="8" rx="2" fill="#111827"/>
+
+                            <path d="M8 18 L15 7 L43 5 L57 12 L61 18 L57 24 L43 31 L15 29 Z" fill="${color}"/>
+                            <path d="M39 8 L55 14 L58 18 L55 22 L39 28 L46 18 Z" fill="#ffffff" opacity="0.14" stroke="none"/>
+                            <path d="M23 10 L35 11 L40 18 L35 25 L23 26 L18 18 Z" fill="#0f172a" opacity="0.38"/>
+                            <path d="M4 12 L8 12 L8 24 L4 24 Z" fill="${color}"/>
+                            <path d="M57 10 L62 10 M57 26 L62 26"/>
+
+                            <circle cx="23" cy="13" r="1.8" fill="#d1d5db" opacity="0.85" stroke="none"/>
+                            <circle cx="29" cy="13" r="1.8" fill="#d1d5db" opacity="0.85" stroke="none"/>
+                            <circle cx="23" cy="18" r="1.8" fill="#d1d5db" opacity="0.85" stroke="none"/>
+                            <circle cx="29" cy="18" r="1.8" fill="#d1d5db" opacity="0.85" stroke="none"/>
+                            <circle cx="23" cy="23" r="1.8" fill="#d1d5db" opacity="0.85" stroke="none"/>
+                            <circle cx="29" cy="23" r="1.8" fill="#d1d5db" opacity="0.85" stroke="none"/>
+
+                            <path d="M10 18 L17 18" opacity="0.45"/>
+                            <path d="M52 18 L60 18" opacity="0.45"/>
+                        </g>
+                    </svg>
+                `;
             }
 
             racers.forEach((racer, index) => {
@@ -169,7 +191,7 @@
                 car.style.left = `${Math.round(x)}px`;
                 car.style.top = `${Math.round(y)}px`;
                 car.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-                car.innerHTML = getRaceCarSvg(index);
+                car.innerHTML = getRaceCarSvg(getCarColor(racer, index));
                 container.appendChild(car);
 
                 const label = document.createElement('div');
