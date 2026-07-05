@@ -52,6 +52,27 @@
             z-index: 20; box-shadow: 0 3px 10px rgba(0,0,0,0.6);
         }
 
+        .debug-point {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #ff2d2d;
+            border: 1px solid rgba(255,255,255,0.9);
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            pointer-events: none;
+            opacity: 0.9;
+            box-shadow: 0 0 4px rgba(0,0,0,0.8);
+        }
+        .debug-point.start-finish {
+            width: 9px;
+            height: 9px;
+            background: #00e5ff;
+            border: 2px solid white;
+            z-index: 7;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 0 6px 16px;
@@ -146,6 +167,11 @@
             const TRACK_IMAGE_WIDTH = 1536;
             const TRACK_IMAGE_HEIGHT = 1024;
 
+            // Temporary debug view: shows the racing line as red dots.
+            // The larger cyan dot marks the start/finish point.
+            const SHOW_RACING_LINE_DEBUG = true;
+            const DEBUG_POINT_STEP = 25;
+
             function getDisplayPoint(trackPoint) {
                 const containerWidth = container.clientWidth;
                 const containerHeight = container.clientHeight;
@@ -169,6 +195,24 @@
             function clamp(value, min, max) {
                 return Math.max(min, Math.min(max, value));
             }
+
+            function drawRacingLineDebug() {
+                if (!SHOW_RACING_LINE_DEBUG) return;
+
+                racingLine.forEach((trackPoint, i) => {
+                    if (i !== 0 && i % DEBUG_POINT_STEP !== 0) return;
+
+                    const point = getDisplayPoint(trackPoint);
+                    const dot = document.createElement('div');
+                    dot.className = i === 0 ? 'debug-point start-finish' : 'debug-point';
+                    dot.title = i === 0 ? 'Start/finish' : `Racing line point ${i}`;
+                    dot.style.left = `${Math.round(point.x)}px`;
+                    dot.style.top = `${Math.round(point.y)}px`;
+                    container.appendChild(dot);
+                });
+            }
+
+            drawRacingLineDebug();
 
             function getCarColor(racer, index) {
                 // Fixed colours for the real test cars.
