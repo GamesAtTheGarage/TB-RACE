@@ -146,8 +146,6 @@
             const TRACK_IMAGE_WIDTH = 1536;
             const TRACK_IMAGE_HEIGHT = 1024;
 
-            const maxDistance = Math.max(...racers.map(racer => racer.km || 0), 1);
-
             function getDisplayPoint(trackPoint) {
                 const containerWidth = container.clientWidth;
                 const containerHeight = container.clientHeight;
@@ -219,7 +217,12 @@
 
             racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
-                const progress = maxDistance > 0 ? distance / maxDistance : 0;
+
+                // Use the distance inside the current lap for the track position.
+                // The leaderboard still sorts by total km, but the car position loops every 5000 km.
+                const distanceInCurrentLap = distance % KM_PER_LAP;
+                const progress = distanceInCurrentLap / KM_PER_LAP;
+
                 const pointIndex = Math.min(
                     Math.floor(progress * (racingLine.length - 1)),
                     racingLine.length - 1
@@ -261,7 +264,7 @@
 
                 const label = document.createElement('div');
                 label.className = 'track-label';
-                label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km`;
+                label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km · Lap ${getLap(distance)}`;
                 container.appendChild(label);
 
                 const labelX = clamp(x + 35, 10, container.clientWidth - label.offsetWidth - 10);
