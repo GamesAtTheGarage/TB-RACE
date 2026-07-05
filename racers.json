@@ -4,29 +4,29 @@
     "owner": "Penumbra59",
     "reference": "TBB93KK",
     "cache": "GC893B7",
-    "location": "In The Last farm in Hjörleifshöfði",
+    "location": "In the hands of Mikehammer69.",
     "km": 2430,
     "name": "TB RACERS TEST CAR 1",
     "coordinates": [
       63.41742,
       -18.76048
     ],
-    "last_updated": "2026-07-02T22:17:52.989282",
-    "status": "in_cache"
+    "last_updated": "2026-07-05T22:30:34.691296",
+    "status": "in_hands"
   },
   {
     "car": "TB RACERS TEST CAR 5",
     "owner": "Penumbra59",
     "reference": "TB7B75M",
-    "cache": "GC4G80M",
-    "location": "In the hands of team clou.",
-    "km": 6115,
+    "cache": "GC94B2Q",
+    "location": "In Zwillinge ?",
+    "km": 6312,
     "name": "TB RACERS TEST CAR 5",
     "coordinates": [
-      63.7875,
-      -18.06332
+      54.09313,
+      12.12885
     ],
-    "last_updated": "2026-07-02T22:17:53.254717",
-    "status": "in_hands"
+    "last_updated": "2026-07-05T22:30:35.559608",
+    "status": "in_cache"
   }
 ]
