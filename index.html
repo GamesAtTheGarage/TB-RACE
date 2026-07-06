@@ -212,44 +212,101 @@
                 `;
             }
 
+            // Temporary test mode:
+            // true  = place all cars on the staggered start grid, even if they already have km.
+            // false = only cars with 0 km are placed on the start grid.
+            const FORCE_START_GRID_TEST = true;
+
+            function getStartGridPosition(racer, index) {
+                const startPoint = getDisplayPoint(racingLine[0]);
+                const directionPoint = getDisplayPoint(racingLine[Math.min(10, racingLine.length - 1)]);
+
+                const tangentX = directionPoint.x - startPoint.x;
+                const tangentY = directionPoint.y - startPoint.y;
+                const tangentLength = Math.hypot(tangentX, tangentY) || 1;
+
+                const unitTangentX = tangentX / tangentLength;
+                const unitTangentY = tangentY / tangentLength;
+
+                // Perpendicular direction for the left/right zigzag.
+                const normalX = -unitTangentY;
+                const normalY = unitTangentX;
+
+                // Use race_number for the grid slot. Fallback to display order.
+                const gridIndex = Math.max((racer.race_number || index + 1) - 1, 0);
+
+                // Narrow staggered grid:
+                // 1
+                //    2
+                // 3
+                //    4
+                const side = gridIndex % 2 === 0 ? -1 : 1;
+
+                const sideOffset = Math.max(8, Math.min(18, container.clientWidth * 0.018));
+                const rowSpacing = Math.max(24, Math.min(44, container.clientWidth * 0.046));
+                const backOffset = Math.max(16, Math.min(30, container.clientWidth * 0.032));
+
+                return {
+                    x: startPoint.x
+                        - unitTangentX * (backOffset + gridIndex * rowSpacing)
+                        + normalX * side * sideOffset,
+                    y: startPoint.y
+                        - unitTangentY * (backOffset + gridIndex * rowSpacing)
+                        + normalY * side * sideOffset,
+                    angle: Math.atan2(unitTangentY, unitTangentX) * 180 / Math.PI
+                };
+            }
+
             racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
+                const isOnStartGrid = FORCE_START_GRID_TEST || distance === 0;
 
-                // Use the distance inside the current lap for the track position.
-                // The leaderboard still sorts by total km, but the car position loops every 5000 km.
-                const distanceInCurrentLap = distance % KM_PER_LAP;
-                const progress = distanceInCurrentLap / KM_PER_LAP;
+                let x;
+                let y;
+                let angle;
 
-                const pointIndex = Math.min(
-                    Math.floor(progress * (racingLine.length - 1)),
-                    racingLine.length - 1
-                );
+                if (isOnStartGrid) {
+                    const gridPosition = getStartGridPosition(racer, index);
+                    x = gridPosition.x;
+                    y = gridPosition.y;
+                    angle = gridPosition.angle;
+                } else {
+                    // Use the distance inside the current lap for the track position.
+                    // The leaderboard still sorts by total km, but the car position loops every 5000 km.
+                    const distanceInCurrentLap = distance % KM_PER_LAP;
+                    const progress = distanceInCurrentLap / KM_PER_LAP;
 
-                const point = getDisplayPoint(racingLine[pointIndex]);
+                    const pointIndex = Math.min(
+                        Math.floor(progress * (racingLine.length - 1)),
+                        racingLine.length - 1
+                    );
 
-                // Fine-tune the visual car position for the SVG cars.
-                // The racing line itself stays unchanged; only the drawn car is nudged a little.
-                // Bottom straight was good; top straight is moved slightly back down.
-                const trackCenterY = container.clientHeight / 2;
-                const verticalTrackOffset = Math.max(3, Math.min(6, container.clientWidth * 0.006));
-                const topStraightOffset = Math.max(1, Math.min(2, container.clientWidth * 0.002));
-                const visualOffsetY = point.y < trackCenterY ? topStraightOffset : verticalTrackOffset;
+                    const point = getDisplayPoint(racingLine[pointIndex]);
 
-                // Small stagger along the racing line so cars with nearly identical positions do not fully overlap.
-                const prevPoint = getDisplayPoint(racingLine[Math.max(pointIndex - 1, 0)]);
-                const nextPoint = getDisplayPoint(racingLine[Math.min(pointIndex + 1, racingLine.length - 1)]);
-                const tangentX = nextPoint.x - prevPoint.x;
-                const tangentY = nextPoint.y - prevPoint.y;
-                const tangentLength = Math.hypot(tangentX, tangentY) || 1;
-                const stagger = (index - (racers.length - 1) / 2) * 8;
+                    // Fine-tune the visual car position for the SVG cars.
+                    // The racing line itself stays unchanged; only the drawn car is nudged a little.
+                    // Bottom straight was good; top straight is moved slightly back down.
+                    const trackCenterY = container.clientHeight / 2;
+                    const verticalTrackOffset = Math.max(3, Math.min(6, container.clientWidth * 0.006));
+                    const topStraightOffset = Math.max(1, Math.min(2, container.clientWidth * 0.002));
+                    const visualOffsetY = point.y < trackCenterY ? topStraightOffset : verticalTrackOffset;
 
-                const x = point.x
-                    + (tangentX / tangentLength) * stagger;
-                const y = point.y
-                    + visualOffsetY
-                    + (tangentY / tangentLength) * stagger;
+                    // Small stagger along the racing line so cars with nearly identical positions do not fully overlap.
+                    const prevPoint = getDisplayPoint(racingLine[Math.max(pointIndex - 1, 0)]);
+                    const nextPoint = getDisplayPoint(racingLine[Math.min(pointIndex + 1, racingLine.length - 1)]);
+                    const tangentX = nextPoint.x - prevPoint.x;
+                    const tangentY = nextPoint.y - prevPoint.y;
+                    const tangentLength = Math.hypot(tangentX, tangentY) || 1;
+                    const stagger = (index - (racers.length - 1) / 2) * 8;
 
-                const angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
+                    x = point.x
+                        + (tangentX / tangentLength) * stagger;
+                    y = point.y
+                        + visualOffsetY
+                        + (tangentY / tangentLength) * stagger;
+
+                    angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
+                }
 
                 const car = document.createElement('div');
                 car.className = 'track-car';
