@@ -1,6 +1,6 @@
 [
   {
-    "car": "TB RACERS TEST CAR 1",
+    "car": "Yellow 1",
     "owner": "Penumbra59",
     "reference": "TBB93KK",
     "cache": "GC893B7",
@@ -11,11 +11,15 @@
       63.41742,
       -18.76048
     ],
-    "last_updated": "2026-07-05T22:30:34.691296",
-    "status": "in_hands"
+    "last_updated": "2026-07-06T22:10:17.265745",
+    "status": "in_hands",
+    "nickname": "TB RACERS TEST CAR 1",
+    "race_number": 1,
+    "color_name": "Yellow",
+    "color": "#f1c40f"
   },
   {
-    "car": "TB RACERS TEST CAR 5",
+    "car": "Green 5",
     "owner": "Penumbra59",
     "reference": "TB7B75M",
     "cache": "GC94B2Q",
@@ -26,7 +30,11 @@
       54.09313,
       12.12885
     ],
-    "last_updated": "2026-07-05T22:30:35.559608",
-    "status": "in_cache"
+    "last_updated": "2026-07-06T22:10:18.341080",
+    "status": "in_cache",
+    "nickname": "TB RACERS TEST CAR 5",
+    "race_number": 5,
+    "color_name": "Green",
+    "color": "#2ecc71"
   }
 ]
