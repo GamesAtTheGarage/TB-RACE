@@ -1,0 +1,192 @@
+[
+  {
+    "car": "Red 1",
+    "owner": "Penumbra59",
+    "reference": "TBTEST01",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 1",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 1",
+    "race_number": 1,
+    "color_name": "Red",
+    "color": "#e74c3c"
+  },
+  {
+    "car": "Yellow 2",
+    "owner": "Penumbra59",
+    "reference": "TBTEST02",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 2",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 2",
+    "race_number": 2,
+    "color_name": "Yellow",
+    "color": "#f1c40f"
+  },
+  {
+    "car": "Green 3",
+    "owner": "Penumbra59",
+    "reference": "TBTEST03",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 3",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 3",
+    "race_number": 3,
+    "color_name": "Green",
+    "color": "#2ecc71"
+  },
+  {
+    "car": "Blue 4",
+    "owner": "Penumbra59",
+    "reference": "TBTEST04",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 4",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 4",
+    "race_number": 4,
+    "color_name": "Blue",
+    "color": "#3498db"
+  },
+  {
+    "car": "Orange 5",
+    "owner": "Penumbra59",
+    "reference": "TBTEST05",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 5",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 5",
+    "race_number": 5,
+    "color_name": "Orange",
+    "color": "#e67e22"
+  },
+  {
+    "car": "Purple 6",
+    "owner": "Penumbra59",
+    "reference": "TBTEST06",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 6",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 6",
+    "race_number": 6,
+    "color_name": "Purple",
+    "color": "#8e44ad"
+  },
+  {
+    "car": "Turquoise 7",
+    "owner": "Penumbra59",
+    "reference": "TBTEST07",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 7",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 7",
+    "race_number": 7,
+    "color_name": "Turquoise",
+    "color": "#1abc9c"
+  },
+  {
+    "car": "White 8",
+    "owner": "Penumbra59",
+    "reference": "TBTEST08",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 8",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 8",
+    "race_number": 8,
+    "color_name": "White",
+    "color": "#ecf0f1"
+  },
+  {
+    "car": "Black 9",
+    "owner": "Penumbra59",
+    "reference": "TBTEST09",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 9",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 9",
+    "race_number": 9,
+    "color_name": "Black",
+    "color": "#111827"
+  },
+  {
+    "car": "Pink 10",
+    "owner": "Penumbra59",
+    "reference": "TBTEST10",
+    "cache": "START",
+    "location": "Start grid test",
+    "km": 0,
+    "name": "TB RACERS DUMMY CAR 10",
+    "coordinates": [
+      50.8798,
+      4.7005
+    ],
+    "last_updated": "2026-07-06T22:30:00",
+    "status": "in_cache",
+    "nickname": "Dummy car 10",
+    "race_number": 10,
+    "color_name": "Pink",
+    "color": "#ff66cc"
+  }
+]
