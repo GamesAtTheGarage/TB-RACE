@@ -365,7 +365,7 @@
 
         async function loadRaceData() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/GamesAtTheGarage/TB-RACE/main/racers.json');
+                const response = await fetch('racers_startgrid_10_test.json');
                 const racers = await response.json();
 
                 // Sort the leaderboard and track positions by distance, highest km first.
