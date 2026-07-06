@@ -314,15 +314,19 @@
                 car.innerHTML = getRaceCarSvg(getCarColor(racer, index));
                 container.appendChild(car);
 
-                const label = document.createElement('div');
-                label.className = 'track-label';
-                label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km · Lap ${getLap(distance)}`;
-                container.appendChild(label);
+                // Hide labels for cars on the startgrid.
+                // The grid is only used at 0 km, and labels would cover the cars too much.
+                if (!isOnStartGrid) {
+                    const label = document.createElement('div');
+                    label.className = 'track-label';
+                    label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km · Lap ${getLap(distance)}`;
+                    container.appendChild(label);
 
-                const labelX = clamp(x + 35, 10, container.clientWidth - label.offsetWidth - 10);
-                const labelY = clamp(y - 38, 10, container.clientHeight - label.offsetHeight - 10);
-                label.style.left = `${Math.round(labelX)}px`;
-                label.style.top = `${Math.round(labelY)}px`;
+                    const labelX = clamp(x + 35, 10, container.clientWidth - label.offsetWidth - 10);
+                    const labelY = clamp(y - 38, 10, container.clientHeight - label.offsetHeight - 10);
+                    label.style.left = `${Math.round(labelX)}px`;
+                    label.style.top = `${Math.round(labelY)}px`;
+                }
             });
         }
 
