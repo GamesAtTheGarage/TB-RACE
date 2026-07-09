@@ -249,9 +249,9 @@
                 const backOffset = Math.max(12, Math.min(22, container.clientWidth * 0.020));
 
                 // Geo Grand Prix tuning:
-                // The clicked racing-line start point is a little high on the straight.
-                // Move the complete start grid down so the cars sit more centrally on the track.
-                const gridDrop = Math.max(12, Math.min(20, container.clientWidth * 0.018));
+                // The clicked racing-line start point is already close to the upper row.
+                // Use only a small downward correction so both rows stay on the main straight.
+                const gridDrop = Math.max(2, Math.min(6, container.clientWidth * 0.005));
 
                 return {
                     x: startPoint.x + gridDirectionX * (backOffset + gridIndex * rowSpacing),
