@@ -244,14 +244,29 @@
                 // Even numbers are shifted only a little lower, so the grid stays compact.
                 const isEvenSlot = gridIndex % 2 === 1;
 
-                const rowSpacing = Math.max(20, Math.min(28, container.clientWidth * 0.026));
-                const evenSideOffset = Math.max(18, Math.min(28, container.clientWidth * 0.028));
-                const backOffset = Math.max(12, Math.min(22, container.clientWidth * 0.020));
+                // Keep the accepted desktop grid unchanged, but use a much tighter
+                // proportional grid on small screens. The old fixed minimums (20/18/12px)
+                // were too large on mobile and pushed the last cars off the straight.
+                const isMobileGrid = container.clientWidth <= 600;
+
+                const rowSpacing = isMobileGrid
+                    ? Math.max(10, Math.min(13, container.clientWidth * 0.032))
+                    : Math.max(20, Math.min(28, container.clientWidth * 0.026));
+
+                const evenSideOffset = isMobileGrid
+                    ? Math.max(10, Math.min(14, container.clientWidth * 0.033))
+                    : Math.max(18, Math.min(28, container.clientWidth * 0.028));
+
+                const backOffset = isMobileGrid
+                    ? Math.max(7, Math.min(10, container.clientWidth * 0.022))
+                    : Math.max(12, Math.min(22, container.clientWidth * 0.020));
 
                 // Geo Grand Prix tuning:
                 // The clicked racing-line start point is already close to the upper row.
                 // Use only a small downward correction so both rows stay on the main straight.
-                const gridDrop = Math.max(2, Math.min(6, container.clientWidth * 0.005));
+                const gridDrop = isMobileGrid
+                    ? Math.max(1, Math.min(3, container.clientWidth * 0.005))
+                    : Math.max(2, Math.min(6, container.clientWidth * 0.005));
 
                 return {
                     x: startPoint.x + gridDirectionX * (backOffset + gridIndex * rowSpacing),
