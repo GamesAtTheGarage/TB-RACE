@@ -265,7 +265,7 @@
                 // The clicked racing-line start point is already close to the upper row.
                 // Use only a small downward correction so both rows stay on the main straight.
                 const gridDrop = isMobileGrid
-                    ? -1
+                    ? 0
                     : Math.max(1, Math.min(5, container.clientWidth * 0.005 - 1));
 
                 return {
