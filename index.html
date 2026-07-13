@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TB Racers - Travel Bug Racing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #2c3e50;
@@ -14,6 +17,7 @@
             --red: #e74c3c;
             --yellow: #f1c40f;
             --shadow: rgba(0, 0, 0, 0.35);
+            --display-font: 'Barlow Condensed', 'Segoe UI', Arial, sans-serif;
         }
         * { box-sizing: border-box; }
         body {
@@ -43,10 +47,19 @@
         }
         .intro h1 {
             margin: 0 0 8px;
-            font-size: clamp(2rem, 5vw, 3.6rem);
-            letter-spacing: 1px;
-            line-height: 1.1;
+            font-family: var(--display-font);
+            font-size: clamp(3rem, 8vw, 5.6rem);
+            font-weight: 800;
+            font-style: italic;
+            letter-spacing: 2px;
+            line-height: 0.9;
+            text-transform: uppercase;
+            text-shadow: 3px 4px 0 rgba(0,0,0,0.32);
         }
+        .title-red {
+            color: var(--red);
+        }
+
         .tagline {
             margin: 0 0 16px;
             color: var(--yellow);
@@ -54,7 +67,18 @@
             font-weight: 700;
         }
         .intro p { margin: 0 auto; color: var(--muted); font-size: 1.05rem; }
-        .section-title { margin: 34px 0 16px; font-size: 1.55rem; color: #fff; }
+        .section-title {
+            margin: 34px 0 16px;
+            font-family: var(--display-font);
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 800;
+            font-style: italic;
+            letter-spacing: 1px;
+            line-height: 0.95;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 2px 3px 0 rgba(0,0,0,0.25);
+        }
         .race-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -116,8 +140,14 @@
         .badge.secondary { background-color: rgba(52, 152, 219, 0.95); }
         .race-card h2 {
             margin: 0 0 8px;
-            font-size: clamp(1.65rem, 3vw, 2.25rem);
-            line-height: 1.05;
+            font-family: var(--display-font);
+            font-size: clamp(2.25rem, 4.6vw, 3.6rem);
+            font-weight: 800;
+            font-style: italic;
+            letter-spacing: 1px;
+            line-height: 0.9;
+            text-transform: uppercase;
+            text-shadow: 3px 4px 0 rgba(0,0,0,0.30);
         }
         .race-card p { margin: 0 0 18px; color: #dfe6e9; max-width: 520px; }
         .button {
@@ -144,7 +174,16 @@
             border: 1px solid rgba(255,255,255,0.06);
         }
         .info-card .icon { font-size: 2rem; margin-bottom: 10px; }
-        .info-card h3, .about-card h2 { margin: 0 0 8px; }
+        .info-card h3, .about-card h2 {
+            margin: 0 0 8px;
+            font-family: var(--display-font);
+            font-size: 1.85rem;
+            font-weight: 800;
+            font-style: italic;
+            letter-spacing: 0.6px;
+            line-height: 1;
+            text-transform: uppercase;
+        }
         .info-card p, .about-card p { color: var(--muted); margin: 0; }
         .about-card { position: relative; overflow: hidden; }
         .about-card::before {
@@ -184,7 +223,8 @@
         @media (max-width: 520px) {
             .race-card-content { padding: 20px; }
             .intro p { font-size: 0.98rem; }
-            .section-title { font-size: 1.3rem; }
+            .section-title { font-size: 1.8rem; }
+            .intro h1 { font-size: 3.4rem; }
             .info-card, .about-card { padding: 18px; }
         }
     </style>
@@ -196,7 +236,7 @@
 
     <main class="container">
         <section class="intro">
-            <h1>TB RACERS</h1>
+            <h1><span class="title-red">TB</span> RACERS</h1>
             <p class="tagline">Travel Bugs. Real kilometres. Virtual racing.</p>
             <p>
                 TB-RACERS turns real geocaching Travel Bug journeys into a virtual race.
