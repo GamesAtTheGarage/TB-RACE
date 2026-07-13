@@ -89,6 +89,34 @@
             letter-spacing: 1px;
             font-weight: 800;
         }
+
+        .race-status {
+            max-width: 760px;
+            margin: 0 auto 22px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(231,76,60,0.20), rgba(15,23,42,0.72));
+            border: 1px solid rgba(241,196,15,0.35);
+            box-shadow: 0 6px 22px rgba(0,0,0,0.22);
+            text-align: center;
+        }
+        .race-status strong {
+            display: block;
+            margin-bottom: 4px;
+            font-family: var(--display-font);
+            font-size: clamp(1.9rem, 4vw, 2.8rem);
+            font-weight: 800;
+            font-style: italic;
+            line-height: 0.9;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #f1c40f;
+            text-shadow: 2px 3px 0 rgba(0,0,0,0.28);
+        }
+        .race-status span {
+            color: #dfe6e9;
+            font-size: 0.98rem;
+        }
         h2 {
             font-family: var(--display-font);
             font-size: clamp(2rem, 4vw, 2.8rem);
@@ -216,6 +244,12 @@
     <div class="container">
         <h1 class="race-title">Geo Grand Prix</h1>
         <p class="race-subtitle">Official TB-RACE</p>
+
+        <div class="race-status">
+            <strong>Car Roll-Out</strong>
+            <span>The TB-RACERS cars are rolling onto the starting grid. The green flag has not dropped yet.</span>
+        </div>
+
         <div class="last-updated">Last updated: <span id="last-updated">Loading...</span></div>
 
         <h2>Leaderboard</h2>
