@@ -200,7 +200,7 @@
             gap: 12px;
             flex-wrap: wrap;
         }
-        .small-link {
+        .small-link, .email-button {
             display: inline-block;
             padding: 9px 13px;
             border-radius: 9px;
@@ -208,6 +208,49 @@
             background-color: rgba(15, 23, 42, 0.55);
             border: 1px solid rgba(255,255,255,0.10);
             font-weight: 700;
+        }
+        .email-button {
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .small-link:hover, .email-button:hover {
+            text-decoration: none;
+            background-color: rgba(231, 76, 60, 0.85);
+        }
+        .race-control {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255,255,255,0.10);
+        }
+        .race-control-title {
+            margin: 0 0 6px;
+            font-family: var(--display-font);
+            font-size: 1.65rem;
+            font-weight: 800;
+            font-style: italic;
+            letter-spacing: 0.6px;
+            line-height: 1;
+            text-transform: uppercase;
+            color: #f1c40f;
+        }
+        .race-control p {
+            margin: 0 0 12px;
+            color: var(--muted);
+        }
+        .email-output {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background-color: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(241, 196, 15, 0.25);
+            color: #ecf0f1;
+            font-weight: 700;
+            word-break: break-word;
+        }
+        .email-output.visible {
+            display: inline-block;
         }
         .footer {
             text-align: center;
@@ -298,9 +341,27 @@
                 <a class="small-link" href="geograndprix.html">Current official race</a>
                 <a class="small-link" href="test-race.html">Test race</a>
             </div>
+
+            <div class="race-control">
+                <h3 class="race-control-title">Race Control</h3>
+                <p>Questions, race updates or TB issues?</p>
+                <button class="email-button" type="button" onclick="showRaceControlEmail()">Show Race Control email</button>
+                <div class="email-output" id="race-control-email" aria-live="polite"></div>
+            </div>
         </section>
 
         <p class="footer">Made for geocachers, by geocachers.</p>
+
+        <script>
+            function showRaceControlEmail() {
+                const user = 'race' + 'control';
+                const domain = 'tb' + 'racers' + '.com';
+                const email = user + '@' + domain;
+                const output = document.getElementById('race-control-email');
+                output.textContent = email;
+                output.classList.add('visible');
+            }
+        </script>
     </main>
 </body>
 </html>
