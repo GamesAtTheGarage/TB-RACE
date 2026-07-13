@@ -24,33 +24,31 @@
         .site-nav-inner {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 10px 20px;
+            padding: 11px 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            justify-content: flex-start;
+            gap: 18px;
             flex-wrap: wrap;
         }
         .nav-link {
             display: inline-block;
-            padding: 8px 13px;
-            border-radius: 999px;
-            color: #ecf0f1;
-            background: rgba(52, 73, 94, 0.72);
-            border: 1px solid rgba(255,255,255,0.10);
+            color: #bdc3c7;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.7px;
+            border-bottom: 2px solid transparent;
+            padding: 3px 0;
         }
         .nav-link:hover {
             text-decoration: none;
-            background: rgba(231, 76, 60, 0.95);
-            color: #fff;
+            color: #ffffff;
+            border-bottom-color: #f1c40f;
         }
         .nav-link.active {
-            background: #e74c3c;
-            color: #fff;
+            color: #ffffff;
+            border-bottom-color: #e74c3c;
         }
         table { width: 100%; border-collapse: collapse; background-color: #34495e; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3); margin-bottom: 30px; }
         #leaderboard-table th:nth-child(1), #leaderboard-table td:nth-child(1) { width: 44px; }
@@ -144,13 +142,14 @@
             }
 
             .site-nav-inner {
-                padding: 8px 6px;
-                gap: 6px;
+                padding: 9px 10px;
+                gap: 13px;
+                justify-content: flex-start;
             }
 
             .nav-link {
                 font-size: 0.78rem;
-                padding: 7px 9px;
+                padding: 3px 0;
             }
 
             table {
