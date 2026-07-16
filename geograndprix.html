@@ -144,7 +144,8 @@
             transform-origin: 50% 50%;
             filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.85));
         }
-        .track-car svg {
+        .track-car svg,
+        .track-car img {
             width: 100%;
             height: 100%;
             display: block;
@@ -345,6 +346,16 @@
                 `;
             }
 
+            function getRaceCarMarkup(racer, index) {
+                // Test mode for the first official Geo Grand Prix car:
+                // if race number 1 exists, show Kevin's own generated SVG file.
+                if (Number(racer.race_number) === 1) {
+                    return `<img src="images/tb-racers-car-blue-1.svg" alt="${racer.car || 'Blue 1'}">`;
+                }
+
+                return getRaceCarSvg(getCarColor(racer, index));
+            }
+
             // Temporary test mode:
             // true  = place all cars on the staggered start grid, even if they already have km.
             // false = only cars with 0 km are placed on the start grid.
@@ -460,7 +471,7 @@
                 car.style.left = `${Math.round(x)}px`;
                 car.style.top = `${Math.round(y)}px`;
                 car.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-                car.innerHTML = getRaceCarSvg(getCarColor(racer, index));
+                car.innerHTML = getRaceCarMarkup(racer, index);
                 container.appendChild(car);
 
                 // Hide labels for cars on the startgrid.
