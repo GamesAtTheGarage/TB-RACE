@@ -150,6 +150,17 @@
             height: 100%;
             display: block;
         }
+
+        .track-car.custom-svg-car {
+            width: clamp(44px, 6.8vw, 64px);
+            height: clamp(44px, 6.8vw, 64px);
+        }
+
+        .track-car.custom-svg-car img {
+            object-fit: contain;
+            transform: rotate(-90deg) scale(1.08);
+            transform-origin: 50% 50%;
+        }
         .track-label { 
             position: absolute; background: rgba(15, 23, 42, 0.92); color: #f1f5f9;
             padding: 6px 12px; border-radius: 6px; font-size: 12.5px; white-space: nowrap;
@@ -468,6 +479,11 @@
 
                 const car = document.createElement('div');
                 car.className = 'track-car';
+
+                if (Number(racer.race_number) === 1) {
+                    car.classList.add('custom-svg-car');
+                }
+
                 car.style.left = `${Math.round(x)}px`;
                 car.style.top = `${Math.round(y)}px`;
                 car.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
