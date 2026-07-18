@@ -13,10 +13,11 @@
     "nickname": "Geo Grand Prix Car 1",
     "race_number": 1,
     "color_name": "Blue",
-    "color": "#3498db"
+    "color": "#3498db",
+    "image": "images/tb-racers-car-blue-1.svg"
   },
   {
-    "car": "Red 2",
+    "car": "Yellow 2",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -28,11 +29,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 2",
     "race_number": 2,
-    "color_name": "Red",
-    "color": "#e74c3c"
+    "color_name": "Yellow",
+    "color": "#f1c40f",
+    "image": "images/tb-racers-car-yellow-2.svg"
   },
   {
-    "car": "Yellow 3",
+    "car": "Red 3",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -44,11 +46,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 3",
     "race_number": 3,
-    "color_name": "Yellow",
-    "color": "#f1c40f"
+    "color_name": "Red",
+    "color": "#e74c3c",
+    "image": "images/tb-racers-car-red-3.svg"
   },
   {
-    "car": "Green 5",
+    "car": "Black 5",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -60,11 +63,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 5",
     "race_number": 5,
-    "color_name": "Green",
-    "color": "#2ecc71"
+    "color_name": "Black",
+    "color": "#111827",
+    "image": "images/tb-racers-car-black-5.svg"
   },
   {
-    "car": "Orange 6",
+    "car": "White 6",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -76,11 +80,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 6",
     "race_number": 6,
-    "color_name": "Orange",
-    "color": "#e67e22"
+    "color_name": "White",
+    "color": "#ecf0f1",
+    "image": "images/tb-racers-car-white-6.svg"
   },
   {
-    "car": "Purple 7",
+    "car": "Orange 7",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -92,11 +97,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 7",
     "race_number": 7,
-    "color_name": "Purple",
-    "color": "#8e44ad"
+    "color_name": "Orange",
+    "color": "#e67e22",
+    "image": "images/tb-racers-car-orange-7.svg"
   },
   {
-    "car": "White 8",
+    "car": "Green 8",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -108,11 +114,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 8",
     "race_number": 8,
-    "color_name": "White",
-    "color": "#ecf0f1"
+    "color_name": "Green",
+    "color": "#2ecc71",
+    "image": "images/tb-racers-car-green-8.svg"
   },
   {
-    "car": "Black 9",
+    "car": "Darkgreen 9",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -124,11 +131,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 9",
     "race_number": 9,
-    "color_name": "Black",
-    "color": "#111827"
+    "color_name": "Darkgreen",
+    "color": "#145a32",
+    "image": "images/tb-racers-car-darkgreen-9.svg"
   },
   {
-    "car": "Silver 10",
+    "car": "Gold 10",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -140,11 +148,12 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 10",
     "race_number": 10,
-    "color_name": "Silver",
-    "color": "#95a5a6"
+    "color_name": "Gold",
+    "color": "#d4af37",
+    "image": "images/tb-racers-car-gold-10.svg"
   },
   {
-    "car": "Turquoise 11",
+    "car": "Purple 11",
     "owner": "Penumbra59",
     "reference": "TB-CODE-HERE",
     "cache": "",
@@ -156,7 +165,8 @@
     "status": "in_cache",
     "nickname": "Geo Grand Prix Car 11",
     "race_number": 11,
-    "color_name": "Turquoise",
-    "color": "#1abc9c"
+    "color_name": "Purple",
+    "color": "#8e44ad",
+    "image": "images/tb-racers-car-purple-11.svg"
   }
 ]
