@@ -357,11 +357,28 @@
                 `;
             }
 
+            const customCarImages = {
+                1: 'images/tb-racers-car-blue-1.svg',
+                2: 'images/tb-racers-car-yellow-2.svg',
+                3: 'images/tb-racers-car-red-3.svg',
+                5: 'images/tb-racers-car-black-5.svg',
+                6: 'images/tb-racers-car-white-6.svg',
+                7: 'images/tb-racers-car-orange-7.svg',
+                8: 'images/tb-racers-car-green-8.svg',
+                9: 'images/tb-racers-car-darkgreen-9.svg',
+                10: 'images/tb-racers-car-gold-10.svg',
+                11: 'images/tb-racers-car-purple-11.svg'
+            };
+
+            function getCustomCarImage(racer) {
+                return racer.image || customCarImages[Number(racer.race_number)] || '';
+            }
+
             function getRaceCarMarkup(racer, index) {
-                // Test mode for the first official Geo Grand Prix car:
-                // if race number 1 exists, show Kevin's own generated SVG file.
-                if (Number(racer.race_number) === 1) {
-                    return `<img src="images/tb-racers-car-blue-1.svg" alt="${racer.car || 'Blue 1'}">`;
+                const customImage = getCustomCarImage(racer);
+
+                if (customImage) {
+                    return `<img src="${customImage}" alt="${racer.car || 'TB-RACERS car'}">`;
                 }
 
                 return getRaceCarSvg(getCarColor(racer, index));
@@ -480,7 +497,7 @@
                 const car = document.createElement('div');
                 car.className = 'track-car';
 
-                if (Number(racer.race_number) === 1) {
+                if (getCustomCarImage(racer)) {
                     car.classList.add('custom-svg-car');
                 }
 
