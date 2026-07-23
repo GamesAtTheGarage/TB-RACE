@@ -4,15 +4,15 @@
     "owner": "Penumbra59",
     "reference": "TBB93KK",
     "cache": "GCX29Y",
-    "location": "In Schloss Orth",
+    "location": "In the hands of LB0708.",
     "km": 5051,
     "name": "TB RACERS TEST CAR 1",
     "coordinates": [
       47.91122,
       13.79192
     ],
-    "last_updated": "2026-07-18T13:33:45.324720",
-    "status": "in_cache",
+    "last_updated": "2026-07-23T22:47:47.801668",
+    "status": "in_hands",
     "nickname": "TB RACERS TEST CAR 1",
     "race_number": 1,
     "color_name": "Yellow",
@@ -30,7 +30,7 @@
       54.09313,
       12.12885
     ],
-    "last_updated": "2026-07-18T13:33:45.680783",
+    "last_updated": "2026-07-23T22:47:48.061609",
     "status": "in_hands",
     "nickname": "TB RACERS TEST CAR 5",
     "race_number": 5,
