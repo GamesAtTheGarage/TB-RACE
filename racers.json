@@ -8,10 +8,10 @@
     "km": 5258,
     "name": "TB RACERS TEST CAR 1",
     "coordinates": [
-      47.91122,
-      13.79192
+      49.75597,
+      13.33183
     ],
-    "last_updated": "2026-07-28T22:49:47.137488",
+    "last_updated": "2026-08-04T22:10:14.342253",
     "status": "in_cache",
     "nickname": "TB RACERS TEST CAR 1",
     "race_number": 1,
@@ -22,16 +22,16 @@
     "car": "Green 5",
     "owner": "Penumbra59",
     "reference": "TB7B75M",
-    "cache": "GC94B2Q",
-    "location": "In the hands of Tinchen1812Uferchen.",
-    "km": 7988,
+    "cache": "GCBNY7B",
+    "location": "In 9. KGB (Korschenbroicher Geocacher Beisammensein)",
+    "km": 8072,
     "name": "TB RACERS TEST CAR 5",
     "coordinates": [
-      54.09313,
-      12.12885
+      51.18992,
+      6.51242
     ],
-    "last_updated": "2026-07-28T22:49:47.448367",
-    "status": "in_hands",
+    "last_updated": "2026-08-04T22:10:15.232088",
+    "status": "in_cache",
     "nickname": "TB RACERS TEST CAR 5",
     "race_number": 5,
     "color_name": "Green",
