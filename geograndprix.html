@@ -63,6 +63,60 @@
         .gap { font-weight: bold; color: #f1c40f; white-space: nowrap; }
         .gap-leader { color: #2ecc71; }
         .nickname { display: block; margin-top: 3px; font-size: inherit; font-weight: 600; color: #dfe6e9; }
+        .driver-poster-trigger {
+            cursor: pointer;
+            border-bottom: 1px dotted rgba(241, 196, 15, 0.75);
+        }
+        .driver-poster-trigger:hover {
+            color: #f1c40f;
+        }
+        .driver-poster-preview {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 9999;
+            display: none;
+            width: min(270px, 44vw);
+            max-height: 78vh;
+            padding: 8px;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.96);
+            border: 1px solid rgba(241, 196, 15, 0.45);
+            box-shadow: 0 14px 45px rgba(0,0,0,0.75);
+        }
+        .driver-poster-preview.visible {
+            display: block;
+        }
+        .driver-poster-preview img {
+            display: block;
+            width: 100%;
+            max-height: calc(78vh - 54px);
+            object-fit: contain;
+            border-radius: 10px;
+            background: #111827;
+        }
+        .driver-poster-caption {
+            margin-top: 6px;
+            color: #ecf0f1;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .driver-poster-close {
+            display: none;
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 28px;
+            height: 28px;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.72);
+            color: #fff;
+            font-size: 20px;
+            line-height: 28px;
+            cursor: pointer;
+        }
         a { color: #3498db; text-decoration: none; }
         a:hover { text-decoration: underline; }
         #map { height: 500px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); margin-bottom: 30px; }
@@ -212,6 +266,19 @@
                 font-size: inherit;
             }
 
+            .driver-poster-preview {
+                width: min(230px, 72vw);
+                max-height: 70vh;
+            }
+
+            .driver-poster-preview img {
+                max-height: calc(70vh - 54px);
+            }
+
+            .driver-poster-close {
+                display: block;
+            }
+
             #map {
                 height: 360px;
                 border-radius: 12px;
@@ -279,6 +346,12 @@
 
         <h2>Live Map</h2>
         <div id="map"></div>
+    </div>
+
+    <div id="driver-poster-preview" class="driver-poster-preview" aria-hidden="true">
+        <button type="button" class="driver-poster-close" aria-label="Close driver poster">×</button>
+        <img src="" alt="">
+        <div class="driver-poster-caption"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -536,13 +609,144 @@
             return '-';
         }
 
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         function getCarDisplay(racer) {
             const mainName = racer.car || racer.name || 'Unknown';
-            const nickname = racer.nickname && racer.nickname !== mainName
-                ? `<span class="nickname">${racer.nickname}</span>`
+            const safeMainName = escapeHtml(mainName);
+            const teamName = racer.nickname && racer.nickname !== mainName
+                ? escapeHtml(racer.nickname)
                 : '';
 
-            return `${mainName}${nickname}`;
+            const posterPath = racer.poster ? escapeHtml(racer.poster) : '';
+
+            const nickname = teamName
+                ? `<span class="nickname driver-poster-trigger" data-poster="${posterPath}" data-car="${safeMainName}" data-team="${teamName}">${teamName}</span>`
+                : '';
+
+            return `${safeMainName}${nickname}`;
+        }
+
+        function showDriverPoster(trigger) {
+            const posterPath = trigger.dataset.poster;
+            if (!posterPath) {
+                return;
+            }
+
+            const preview = document.getElementById('driver-poster-preview');
+            const image = preview.querySelector('img');
+            const caption = preview.querySelector('.driver-poster-caption');
+
+            image.src = posterPath;
+            image.alt = `${trigger.dataset.car || 'Driver'} poster`;
+            caption.textContent = `${trigger.dataset.car || ''} · ${trigger.dataset.team || ''}`.trim();
+
+            preview.classList.add('visible');
+            preview.setAttribute('aria-hidden', 'false');
+
+            positionDriverPoster(trigger);
+        }
+
+        function positionDriverPoster(trigger) {
+            const preview = document.getElementById('driver-poster-preview');
+            const rect = trigger.getBoundingClientRect();
+            const margin = 12;
+
+            const previewWidth = preview.offsetWidth || 270;
+            const previewHeight = preview.offsetHeight || 360;
+
+            let left = rect.right + 16;
+            let top = rect.top - 12;
+
+            if (left + previewWidth > window.innerWidth - margin) {
+                left = rect.left - previewWidth - 16;
+            }
+
+            if (left < margin) {
+                left = Math.max(margin, (window.innerWidth - previewWidth) / 2);
+            }
+
+            if (top + previewHeight > window.innerHeight - margin) {
+                top = window.innerHeight - previewHeight - margin;
+            }
+
+            if (top < margin) {
+                top = margin;
+            }
+
+            preview.style.left = `${Math.round(left)}px`;
+            preview.style.top = `${Math.round(top)}px`;
+        }
+
+        function hideDriverPoster() {
+            const preview = document.getElementById('driver-poster-preview');
+            const image = preview.querySelector('img');
+
+            preview.classList.remove('visible');
+            preview.setAttribute('aria-hidden', 'true');
+            preview.dataset.locked = 'false';
+            image.removeAttribute('src');
+        }
+
+        function setupDriverPosterPreview() {
+            const preview = document.getElementById('driver-poster-preview');
+            const closeButton = preview.querySelector('.driver-poster-close');
+
+            document.querySelectorAll('.driver-poster-trigger').forEach(trigger => {
+                trigger.addEventListener('mouseenter', () => {
+                    preview.dataset.locked = 'false';
+                    showDriverPoster(trigger);
+                });
+
+                trigger.addEventListener('mouseleave', () => {
+                    if (preview.dataset.locked !== 'true') {
+                        hideDriverPoster();
+                    }
+                });
+
+                trigger.addEventListener('focus', () => {
+                    preview.dataset.locked = 'false';
+                    showDriverPoster(trigger);
+                });
+
+                trigger.addEventListener('blur', () => {
+                    if (preview.dataset.locked !== 'true') {
+                        hideDriverPoster();
+                    }
+                });
+
+                trigger.addEventListener('click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    preview.dataset.locked = 'true';
+                    showDriverPoster(trigger);
+                });
+            });
+
+            closeButton.addEventListener('click', event => {
+                event.stopPropagation();
+                hideDriverPoster();
+            });
+
+            document.addEventListener('click', event => {
+                if (!preview.contains(event.target) && !event.target.classList.contains('driver-poster-trigger')) {
+                    hideDriverPoster();
+                }
+            });
+
+            window.addEventListener('resize', hideDriverPoster);
+            window.addEventListener('scroll', () => {
+                if (preview.dataset.locked !== 'true') {
+                    hideDriverPoster();
+                }
+            }, true);
         }
 
         const KM_PER_LAP = 5000;
@@ -589,6 +793,8 @@
                     `;
                     tbody.appendChild(row);
                 });
+
+                setupDriverPosterPreview();
 
                 updateTrackPositions(racers);
 
