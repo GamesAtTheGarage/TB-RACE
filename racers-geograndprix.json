@@ -4,179 +4,199 @@
     "owner": "Penumbra59",
     "reference": "TBBARN5",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - P-E Racing - Car: Blue 1",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:09.247183",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:24.793122",
+    "status": "in_cache",
     "nickname": "P-E Racing",
     "race_number": 1,
     "color_name": "Blue",
     "color": "#3498db",
-    "image": "images/tb-racers-car-blue-1.svg",
-    "poster": "images/driver-poster-blue-1.png"
+    "image": "images/tb-racers-car-blue-1.svg"
   },
   {
     "car": "Yellow 2",
     "owner": "Penumbra59",
     "reference": "TBBARN4",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Mettes Racing - Car: Yellow #2",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:09.545532",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:25.645557",
+    "status": "in_cache",
     "nickname": "Mettes Racing",
     "race_number": 2,
     "color_name": "Yellow",
     "color": "#f1c40f",
-    "image": "images/tb-racers-car-yellow-2.svg",
-    "poster": "images/driver-poster-yellow-2.png"
+    "image": "images/tb-racers-car-yellow-2.svg"
   },
   {
     "car": "Red 3",
     "owner": "Penumbra59",
     "reference": "TBBARN6",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Car Red #3",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:09.849313",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:26.796514",
+    "status": "in_cache",
     "nickname": "TB Racer",
     "race_number": 3,
     "color_name": "Red",
     "color": "#e74c3c",
-    "image": "images/tb-racers-car-red-3.svg",
-    "poster": "images/driver-poster-red-3.png"
+    "image": "images/tb-racers-car-red-3.svg"
   },
   {
     "car": "Black 5",
     "owner": "Penumbra59",
     "reference": "TBBARND",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Malcroys Racing - Car: Black #5",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:10.157530",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:27.986354",
+    "status": "in_cache",
     "nickname": "Malcroys Racing",
     "race_number": 5,
     "color_name": "Black",
     "color": "#111827",
-    "image": "images/tb-racers-car-black-5.svg",
-    "poster": "images/driver-poster-black-5.png"
+    "image": "images/tb-racers-car-black-5.svg"
   },
   {
     "car": "White 6",
     "owner": "Penumbra59",
     "reference": "TBBARN7",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - The Stig - Car: White #6",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:10.463239",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:28.991391",
+    "status": "in_cache",
     "nickname": "The Stig",
     "race_number": 6,
     "color_name": "White",
     "color": "#ecf0f1",
-    "image": "images/tb-racers-car-white-6.svg",
-    "poster": "images/driver-poster-white-6.png"
+    "image": "images/tb-racers-car-white-6.svg"
   },
   {
     "car": "Orange 7",
     "owner": "Penumbra59",
     "reference": "TBBARN8",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Car: Orange #7",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:10.789625",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:30.048502",
+    "status": "in_cache",
     "nickname": "TB Racer",
     "race_number": 7,
     "color_name": "Orange",
     "color": "#e67e22",
-    "image": "images/tb-racers-car-orange-7.svg",
-    "poster": "images/driver-poster-orange-7.png"
+    "image": "images/tb-racers-car-orange-7.svg"
   },
   {
     "car": "Green 8",
     "owner": "Penumbra59",
     "reference": "TBBARN9",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Monster Blaze Racing - Car: light green #8",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:11.082432",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:31.073187",
+    "status": "in_cache",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
     "color_name": "Green",
     "color": "#2ecc71",
-    "image": "images/tb-racers-car-green-8.svg",
-    "poster": "images/driver-poster-lightgreen-8.png"
+    "image": "images/tb-racers-car-green-8.svg"
   },
   {
     "car": "Darkgreen 9",
     "owner": "Penumbra59",
     "reference": "TBBARN1",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Felis Racing - Car: Dark Green #9",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:11.402796",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:32.506026",
+    "status": "in_cache",
     "nickname": "Felis Racing",
     "race_number": 9,
     "color_name": "Darkgreen",
     "color": "#145a32",
-    "image": "images/tb-racers-car-darkgreen-9.svg",
-    "poster": "images/driver-poster-darkgreen-9.png"
+    "image": "images/tb-racers-car-darkgreen-9.svg"
   },
   {
     "car": "Gold 10",
     "owner": "Penumbra59",
     "reference": "TBBARN2",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Golden Racer - Car: Gold #10",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:12.144051",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:33.468851",
+    "status": "in_cache",
     "nickname": "Golden Racer",
     "race_number": 10,
     "color_name": "Gold",
     "color": "#d4af37",
-    "image": "images/tb-racers-car-gold-10.svg",
-    "poster": "images/driver-poster-gold-10.png"
+    "image": "images/tb-racers-car-gold-10.svg"
   },
   {
     "car": "Purple 11",
     "owner": "Penumbra59",
     "reference": "TBBARN3",
     "cache": "GCBVZYW",
-    "location": "In the hands of the owner.",
+    "location": "In Godspeed 59",
     "km": 0,
     "name": "TB RACER - Violet Velocity - Car: Purple #11",
-    "coordinates": null,
-    "last_updated": "2026-08-10T13:18:12.452018",
-    "status": "in_hands",
+    "coordinates": [
+      51.1308,
+      4.43603
+    ],
+    "last_updated": "2026-08-14T22:01:34.529561",
+    "status": "in_cache",
     "nickname": "Violet Velocity",
     "race_number": 11,
     "color_name": "Purple",
     "color": "#8e44ad",
-    "image": "images/tb-racers-car-purple-11.svg",
-    "poster": "images/driver-poster-purple-11.png"
+    "image": "images/tb-racers-car-purple-11.svg"
   }
 ]
