@@ -17,7 +17,8 @@
     "race_number": 1,
     "color_name": "Blue",
     "color": "#3498db",
-    "image": "images/tb-racers-car-blue-1.svg"
+    "image": "images/tb-racers-car-blue-1.svg",
+    "poster": "images/driver-poster-blue-1.png"
   },
   {
     "car": "Yellow 2",
@@ -37,7 +38,8 @@
     "race_number": 2,
     "color_name": "Yellow",
     "color": "#f1c40f",
-    "image": "images/tb-racers-car-yellow-2.svg"
+    "image": "images/tb-racers-car-yellow-2.svg",
+    "poster": "images/driver-poster-yellow-2.png"
   },
   {
     "car": "Red 3",
@@ -57,7 +59,8 @@
     "race_number": 3,
     "color_name": "Red",
     "color": "#e74c3c",
-    "image": "images/tb-racers-car-red-3.svg"
+    "image": "images/tb-racers-car-red-3.svg",
+    "poster": "images/driver-poster-red-3.png"
   },
   {
     "car": "Black 5",
@@ -77,7 +80,8 @@
     "race_number": 5,
     "color_name": "Black",
     "color": "#111827",
-    "image": "images/tb-racers-car-black-5.svg"
+    "image": "images/tb-racers-car-black-5.svg",
+    "poster": "images/driver-poster-black-5.png"
   },
   {
     "car": "White 6",
@@ -97,7 +101,8 @@
     "race_number": 6,
     "color_name": "White",
     "color": "#ecf0f1",
-    "image": "images/tb-racers-car-white-6.svg"
+    "image": "images/tb-racers-car-white-6.svg",
+    "poster": "images/driver-poster-white-6.png"
   },
   {
     "car": "Orange 7",
@@ -117,7 +122,8 @@
     "race_number": 7,
     "color_name": "Orange",
     "color": "#e67e22",
-    "image": "images/tb-racers-car-orange-7.svg"
+    "image": "images/tb-racers-car-orange-7.svg",
+    "poster": "images/driver-poster-orange-7.png"
   },
   {
     "car": "Green 8",
@@ -137,7 +143,8 @@
     "race_number": 8,
     "color_name": "Green",
     "color": "#2ecc71",
-    "image": "images/tb-racers-car-green-8.svg"
+    "image": "images/tb-racers-car-green-8.svg",
+    "poster": "images/driver-poster-lightgreen-8.png"
   },
   {
     "car": "Darkgreen 9",
@@ -157,7 +164,8 @@
     "race_number": 9,
     "color_name": "Darkgreen",
     "color": "#145a32",
-    "image": "images/tb-racers-car-darkgreen-9.svg"
+    "image": "images/tb-racers-car-darkgreen-9.svg",
+    "poster": "images/driver-poster-darkgreen-9.png"
   },
   {
     "car": "Gold 10",
@@ -177,7 +185,8 @@
     "race_number": 10,
     "color_name": "Gold",
     "color": "#d4af37",
-    "image": "images/tb-racers-car-gold-10.svg"
+    "image": "images/tb-racers-car-gold-10.svg",
+    "poster": "images/driver-poster-gold-10.png"
   },
   {
     "car": "Purple 11",
@@ -197,6 +206,7 @@
     "race_number": 11,
     "color_name": "Purple",
     "color": "#8e44ad",
-    "image": "images/tb-racers-car-purple-11.svg"
+    "image": "images/tb-racers-car-purple-11.svg",
+    "poster": "images/driver-poster-purple-11.png"
   }
 ]
