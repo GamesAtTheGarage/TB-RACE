@@ -588,21 +588,24 @@
                     const groupSeen = positionGroupSeen[groupKey] || 0;
                     positionGroupSeen[groupKey] = groupSeen + 1;
 
-                    const overlapSpacing = container.clientWidth <= 600 ? 20 : 24;
+                    const overlapSpacing = container.clientWidth <= 600 ? 16 : 18;
                     const overlapOffset = (groupSeen - (groupTotal - 1) / 2) * overlapSpacing;
 
-                    const normalX = -tangentUnitY;
-                    const normalY = tangentUnitX;
+                    let normalX = -tangentUnitY;
+                    let normalY = tangentUnitX;
 
                     // Fine-tuned start straight:
-                    // keep equal-distance cars neatly side-by-side, but place them just past the line.
-                    const startStraightDrop = isStartStraight
-                        ? (container.clientWidth <= 600 ? 1 : 2)
-                        : 0;
+                    // On the first straight, spread equal-distance cars only up/down.
+                    // This avoids a false visual lead and keeps them just past the start line.
+                    let startStraightForward = 0;
+                    let startStraightDrop = 0;
 
-                    const startStraightForward = isStartStraight
-                        ? (container.clientWidth <= 600 ? 12 : 22)
-                        : 0;
+                    if (isStartStraight) {
+                        normalX = 0;
+                        normalY = 1;
+                        startStraightForward = container.clientWidth <= 600 ? 6 : 10;
+                        startStraightDrop = container.clientWidth <= 600 ? -6 : -8;
+                    }
 
                     x = point.x + startStraightForward + normalX * overlapOffset;
                     y = point.y + visualOffsetY + startStraightDrop + normalY * overlapOffset;
