@@ -583,6 +583,14 @@
                     y = point.y + visualOffsetY + normalY * overlapOffset;
 
                     angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
+
+                    // Start/finish direction fix:
+                    // very low km values are still on the horizontal start straight.
+                    // The first few racing-line points can give a wrong tangent,
+                    // so force the cars to face forward there.
+                    if (distanceInCurrentLap > 0 && distanceInCurrentLap <= 120) {
+                        angle = 0;
+                    }
                 }
 
                 const car = document.createElement('div');
