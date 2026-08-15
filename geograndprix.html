@@ -519,7 +519,7 @@
 
                 if (!isOnStartGrid) {
                     const distanceInCurrentLap = distance % KM_PER_LAP;
-                    const key = String(Math.round(distanceInCurrentLap * 10) / 10);
+                    const key = String(Math.round(distanceInCurrentLap));
                     positionGroupTotals[key] = (positionGroupTotals[key] || 0) + 1;
                 }
             });
