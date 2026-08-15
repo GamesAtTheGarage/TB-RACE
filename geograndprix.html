@@ -216,9 +216,7 @@
             transform-origin: 50% 50%;
         }
         .track-label { 
-            position: absolute; background: rgba(15, 23, 42, 0.92); color: #f1f5f9;
-            padding: 6px 12px; border-radius: 6px; font-size: 12.5px; white-space: nowrap;
-            z-index: 20; box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+            display: none;
         }
 
         @media (max-width: 600px) {
@@ -297,12 +295,6 @@
                 min-height: 10px;
                 max-width: 24px;
                 max-height: 14px;
-            }
-
-            .track-label {
-                font-size: 8px;
-                padding: 3px 5px;
-                border-radius: 4px;
             }
         }
     </style>
@@ -516,6 +508,22 @@
                 };
             }
 
+            // Group cars with the same non-zero distance.
+            // This prevents visual crashes when two racers have exactly the same km.
+            const positionGroupTotals = {};
+            const positionGroupSeen = {};
+
+            racers.forEach(racer => {
+                const distance = racer.km || 0;
+                const isOnStartGrid = FORCE_START_GRID_TEST || distance === 0;
+
+                if (!isOnStartGrid) {
+                    const distanceInCurrentLap = distance % KM_PER_LAP;
+                    const key = String(Math.round(distanceInCurrentLap * 10) / 10);
+                    positionGroupTotals[key] = (positionGroupTotals[key] || 0) + 1;
+                }
+            });
+
             racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
                 const isOnStartGrid = FORCE_START_GRID_TEST || distance === 0;
@@ -550,19 +558,29 @@
                     const topStraightOffset = Math.max(1, Math.min(2, container.clientWidth * 0.002));
                     const visualOffsetY = point.y < trackCenterY ? topStraightOffset : verticalTrackOffset;
 
-                    // Small stagger along the racing line so cars with nearly identical positions do not fully overlap.
-                    const prevPoint = getDisplayPoint(racingLine[Math.max(pointIndex - 1, 0)]);
-                    const nextPoint = getDisplayPoint(racingLine[Math.min(pointIndex + 1, racingLine.length - 1)]);
+                    // Stable direction near start/finish:
+                    // use a small look-ahead on the racing line instead of only the neighbouring point.
+                    const prevPoint = getDisplayPoint(racingLine[Math.max(pointIndex - 2, 0)]);
+                    const nextPoint = getDisplayPoint(racingLine[Math.min(pointIndex + 4, racingLine.length - 1)]);
                     const tangentX = nextPoint.x - prevPoint.x;
                     const tangentY = nextPoint.y - prevPoint.y;
                     const tangentLength = Math.hypot(tangentX, tangentY) || 1;
-                    const stagger = (index - (racers.length - 1) / 2) * 8;
 
-                    x = point.x
-                        + (tangentX / tangentLength) * stagger;
-                    y = point.y
-                        + visualOffsetY
-                        + (tangentY / tangentLength) * stagger;
+                    // If several cars have the exact same km, spread them sideways across the track.
+                    // Their real km stays unchanged; this is only visual.
+                    const groupKey = String(Math.round(distanceInCurrentLap * 10) / 10);
+                    const groupTotal = positionGroupTotals[groupKey] || 1;
+                    const groupSeen = positionGroupSeen[groupKey] || 0;
+                    positionGroupSeen[groupKey] = groupSeen + 1;
+
+                    const overlapSpacing = container.clientWidth <= 600 ? 10 : 16;
+                    const overlapOffset = (groupSeen - (groupTotal - 1) / 2) * overlapSpacing;
+
+                    const normalX = -tangentY / tangentLength;
+                    const normalY = tangentX / tangentLength;
+
+                    x = point.x + normalX * overlapOffset;
+                    y = point.y + visualOffsetY + normalY * overlapOffset;
 
                     angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
                 }
@@ -580,19 +598,6 @@
                 car.innerHTML = getRaceCarMarkup(racer, index);
                 container.appendChild(car);
 
-                // Hide labels for cars on the startgrid.
-                // The grid is only used at 0 km, and labels would cover the cars too much.
-                if (!isOnStartGrid) {
-                    const label = document.createElement('div');
-                    label.className = 'track-label';
-                    label.innerHTML = `<strong>${racer.car || racer.name}</strong><br>${distance} km · Lap ${getLap(distance)}`;
-                    container.appendChild(label);
-
-                    const labelX = clamp(x + 35, 10, container.clientWidth - label.offsetWidth - 10);
-                    const labelY = clamp(y - 38, 10, container.clientHeight - label.offsetHeight - 10);
-                    label.style.left = `${Math.round(labelX)}px`;
-                    label.style.top = `${Math.round(labelY)}px`;
-                }
             });
         }
 
