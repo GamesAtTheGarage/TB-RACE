@@ -564,7 +564,22 @@
                     const nextPoint = getDisplayPoint(racingLine[Math.min(pointIndex + 4, racingLine.length - 1)]);
                     const tangentX = nextPoint.x - prevPoint.x;
                     const tangentY = nextPoint.y - prevPoint.y;
-                    const tangentLength = Math.hypot(tangentX, tangentY) || 1;
+                    let tangentLength = Math.hypot(tangentX, tangentY) || 1;
+                    let tangentUnitX = tangentX / tangentLength;
+                    let tangentUnitY = tangentY / tangentLength;
+                    let angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
+
+                    const isStartStraight = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
+
+                    // Start/finish fix:
+                    // very low km values are still on the horizontal start straight.
+                    // Force the visual direction and side-by-side spread to be horizontal/vertical,
+                    // so equal-distance cars do not look like one is ahead of the other.
+                    if (isStartStraight) {
+                        tangentUnitX = 1;
+                        tangentUnitY = 0;
+                        angle = 0;
+                    }
 
                     // If several cars have the exact same km, spread them sideways across the track.
                     // Their real km stays unchanged; this is only visual.
@@ -573,24 +588,19 @@
                     const groupSeen = positionGroupSeen[groupKey] || 0;
                     positionGroupSeen[groupKey] = groupSeen + 1;
 
-                    const overlapSpacing = container.clientWidth <= 600 ? 22 : 30;
+                    const overlapSpacing = container.clientWidth <= 600 ? 20 : 26;
                     const overlapOffset = (groupSeen - (groupTotal - 1) / 2) * overlapSpacing;
 
-                    const normalX = -tangentY / tangentLength;
-                    const normalY = tangentX / tangentLength;
+                    const normalX = -tangentUnitY;
+                    const normalY = tangentUnitX;
+
+                    // Move the first straight a little lower so the upper car stays fully on the asphalt.
+                    const startStraightDrop = isStartStraight
+                        ? (container.clientWidth <= 600 ? 4 : 7)
+                        : 0;
 
                     x = point.x + normalX * overlapOffset;
-                    y = point.y + visualOffsetY + normalY * overlapOffset;
-
-                    angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
-
-                    // Start/finish direction fix:
-                    // very low km values are still on the horizontal start straight.
-                    // The first few racing-line points can give a wrong tangent,
-                    // so force the cars to face forward there.
-                    if (distanceInCurrentLap > 0 && distanceInCurrentLap <= 120) {
-                        angle = 0;
-                    }
+                    y = point.y + visualOffsetY + startStraightDrop + normalY * overlapOffset;
                 }
 
                 const car = document.createElement('div');
