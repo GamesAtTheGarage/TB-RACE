@@ -588,18 +588,23 @@
                     const groupSeen = positionGroupSeen[groupKey] || 0;
                     positionGroupSeen[groupKey] = groupSeen + 1;
 
-                    const overlapSpacing = container.clientWidth <= 600 ? 20 : 26;
+                    const overlapSpacing = container.clientWidth <= 600 ? 20 : 24;
                     const overlapOffset = (groupSeen - (groupTotal - 1) / 2) * overlapSpacing;
 
                     const normalX = -tangentUnitY;
                     const normalY = tangentUnitX;
 
-                    // Move the first straight a little lower so the upper car stays fully on the asphalt.
+                    // Fine-tuned start straight:
+                    // keep equal-distance cars neatly side-by-side, but place them just past the line.
                     const startStraightDrop = isStartStraight
-                        ? (container.clientWidth <= 600 ? 4 : 7)
+                        ? (container.clientWidth <= 600 ? 1 : 2)
                         : 0;
 
-                    x = point.x + normalX * overlapOffset;
+                    const startStraightForward = isStartStraight
+                        ? (container.clientWidth <= 600 ? 12 : 22)
+                        : 0;
+
+                    x = point.x + startStraightForward + normalX * overlapOffset;
                     y = point.y + visualOffsetY + startStraightDrop + normalY * overlapOffset;
                 }
 
