@@ -573,7 +573,7 @@
                     const groupSeen = positionGroupSeen[groupKey] || 0;
                     positionGroupSeen[groupKey] = groupSeen + 1;
 
-                    const overlapSpacing = container.clientWidth <= 600 ? 10 : 16;
+                    const overlapSpacing = container.clientWidth <= 600 ? 22 : 30;
                     const overlapOffset = (groupSeen - (groupTotal - 1) / 2) * overlapSpacing;
 
                     const normalX = -tangentY / tangentLength;
