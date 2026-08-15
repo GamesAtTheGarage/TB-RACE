@@ -11,7 +11,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:23.493201",
+    "last_updated": "2026-08-15T12:04:54.246007",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -32,7 +32,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-15T10:06:24.360438",
+    "last_updated": "2026-08-15T12:04:55.181688",
     "status": "in_cache",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:25.255532",
+    "last_updated": "2026-08-15T12:04:56.028555",
     "status": "in_cache",
     "nickname": "TB Racer",
     "race_number": 3,
@@ -74,7 +74,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:26.151281",
+    "last_updated": "2026-08-15T12:04:56.859047",
     "status": "in_cache",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -95,7 +95,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:27.059444",
+    "last_updated": "2026-08-15T12:04:57.733425",
     "status": "in_cache",
     "nickname": "The Stig",
     "race_number": 6,
@@ -109,15 +109,15 @@
     "owner": "Penumbra59",
     "reference": "TBBARN8",
     "cache": "GCBVZYW",
-    "location": "In Godspeed 59",
+    "location": "In the hands of AxelFox.",
     "km": 0,
     "name": "TB RACER - Car: Orange #7",
     "coordinates": [
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:27.981752",
-    "status": "in_cache",
+    "last_updated": "2026-08-15T12:04:58.061575",
+    "status": "in_hands",
     "nickname": "TB Racer",
     "race_number": 7,
     "color_name": "Orange",
@@ -137,7 +137,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-15T10:06:28.853244",
+    "last_updated": "2026-08-15T12:04:58.992087",
     "status": "in_cache",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -158,7 +158,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:29.735927",
+    "last_updated": "2026-08-15T12:05:00.376205",
     "status": "in_cache",
     "nickname": "Felis Racing",
     "race_number": 9,
@@ -179,7 +179,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:30.634659",
+    "last_updated": "2026-08-15T12:05:01.284947",
     "status": "in_cache",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -200,7 +200,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-15T10:06:31.514020",
+    "last_updated": "2026-08-15T12:05:02.196013",
     "status": "in_cache",
     "nickname": "Violet Velocity",
     "race_number": 11,
