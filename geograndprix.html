@@ -768,13 +768,18 @@
             return Math.floor((km || 0) / KM_PER_LAP) + 1;
         }
 
+        function formatKm(value) {
+            const rounded = Math.round((value || 0) * 10) / 10;
+            return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+        }
+
         function getGapDisplay(racer, leaderKm, index) {
             if (index === 0) {
                 return '<span class="gap gap-leader">Leader</span>';
             }
 
             const gap = leaderKm - (racer.km || 0);
-            return `<span class="gap">${gap} km</span>`;
+            return `<span class="gap">${formatKm(gap)} km</span>`;
         }
 
         async function loadRaceData() {
@@ -801,7 +806,7 @@
                         <td>${racer.owner || ''}</td>
                         <td><a href="https://www.geocaching.com/track/details.aspx?tracker=${racer.reference}" target="_blank">${racer.reference}</a></td>
                         <td>${getCacheDisplay(racer)}</td>
-                        <td class="km">${racerKm} km<span class="lap">Lap ${getLap(racerKm)}</span></td>
+                        <td class="km">${formatKm(racerKm)} km<span class="lap">Lap ${getLap(racerKm)}</span></td>
                         <td>${getGapDisplay(racer, leaderKm, i)}</td>
                     `;
                     tbody.appendChild(row);
