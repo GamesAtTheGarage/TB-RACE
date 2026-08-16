@@ -625,20 +625,22 @@
 
                     // Keep the pack narrow enough to stay on the asphalt, but give each pair just a bit
                     // more lateral breathing room so the cars don't visually merge.
-                    const laneOffset = isMobileTrack ? 6 : 9;
+                    const laneOffset = isMobileTrack ? 5 : 7;
 
                     // Push the next pair a little further back so stacked cars read as separate rows.
-                    const rowSpacing = isMobileTrack ? 20 : 42;
+                    const rowSpacing = isMobileTrack ? 20 : 34;
 
                     const nearbyCount = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
                     }).length;
 
-                    // Maximum two cars next to each other: upper/lower lane, then a new row.
-                    const laneSide = nearbyCount % 2 === 0 ? -1 : 1;
-                    const packRow = Math.floor(nearbyCount / 2);
+                    // Staggered race-pack overlap handling:
+                    // Keep cars inside the asphalt by using only two narrow lanes,
+                    // but separate every extra nearby car further back along the racing line.
+                    // This creates a compact diagonal "pack" instead of wide side-by-side rows.
+                    const laneSide = nearbyCount % 2 === 0 ? 1 : -1;
                     const sidewaysOffset = laneSide * laneOffset;
-                    const backwardOffset = packRow * rowSpacing;
+                    const backwardOffset = nearbyCount * rowSpacing;
 
                     const unitTangentX = tangentX / tangentLength;
                     const unitTangentY = tangentY / tangentLength;
@@ -656,7 +658,7 @@
                     // Nudge only that lane slightly downward without affecting the real track order.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     if (isStartStraightZone && laneSide === 1) {
-                        y += isMobileTrack ? 1 : 2;
+                        y += isMobileTrack ? 2 : 3;
                     }
 
                     placedTrackCars.push({
