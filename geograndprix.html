@@ -652,11 +652,11 @@
                     // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const forwardPackBias = (isStartStraightZone && nearbyCount > 0)
-                        ? (isMobileTrack ? 22 : 50)
+                        ? (isMobileTrack ? 23 : 54)
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
                     const startStraightForwardShift = isStartStraightZone
-                        ? (isMobileTrack ? 14 : 30)
+                        ? (isMobileTrack ? 15 : 32)
                         : 0;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
@@ -666,7 +666,7 @@
                     // Give the leading moving car on the start straight a tiny extra pull-ahead,
                     // so Blue 1 separates a bit better from Yellow 2 without disturbing the rest.
                     const leaderBreakawayShift = (isStartStraightZone && nearbyCount === 0)
-                        ? (isMobileTrack ? 7 : 18)
+                        ? (isMobileTrack ? 8 : 22)
                         : 0;
                     const totalForwardShift = startStraightForwardShift + leaderBreakawayShift;
 
@@ -685,6 +685,13 @@
                     // Nudge only that lane slightly downward without affecting the real track order.
                     if (isStartStraightZone && laneSide === 1) {
                         y += isMobileTrack ? 2 : 3;
+                    }
+
+                    // One extra tiny drop for the second moving car on the start straight
+                    // (Yellow 2 in the current pack), so it sits a touch lower and overlaps
+                    // less with Green 8.
+                    if (isStartStraightZone && nearbyCount === 1) {
+                        y += isMobileTrack ? 1 : 2;
                     }
 
                     placedTrackCars.push({
