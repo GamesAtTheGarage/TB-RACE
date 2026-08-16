@@ -612,23 +612,37 @@
                     const normalX = -tangentY / tangentLength;
                     const normalY = tangentX / tangentLength;
 
-                    // Compact overlap handling:
-                    // cars whose REAL base positions are close on screen are fanned out
-                    // a little across the track. Their forward/backward race position is untouched.
+                    // Compact two-lane overlap handling:
+                    // Keep a tight racing pack inside the asphalt instead of fanning cars
+                    // out into 3 or 4 lanes. Cars alternate between two small lateral lanes.
+                    // When more than two cars are close together, the next pair is nudged
+                    // slightly backwards along the racing line. Because racers are processed
+                    // leader-first, this never makes a trailing car look further ahead.
                     const isMobileTrack = container.clientWidth <= 600;
-                    const nearbyThreshold = isMobileTrack ? 27 : 40;
-                    const laneSpacing = isMobileTrack ? 10 : 16;
-                    const lanePattern = [0, 1, -1, 2, -2, 3, -3, 4, -4];
+                    const nearbyThreshold = isMobileTrack ? 25 : 38;
+                    const laneOffset = isMobileTrack ? 6 : 10;
+                    const rowSpacing = isMobileTrack ? 14 : 24;
 
                     const nearbyCount = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
                     }).length;
 
-                    const lane = lanePattern[Math.min(nearbyCount, lanePattern.length - 1)];
-                    const overlapOffset = lane * laneSpacing;
+                    // Maximum two cars next to each other: upper/lower lane, then a new row.
+                    const laneSide = nearbyCount % 2 === 0 ? -1 : 1;
+                    const packRow = Math.floor(nearbyCount / 2);
+                    const sidewaysOffset = laneSide * laneOffset;
+                    const backwardOffset = packRow * rowSpacing;
 
-                    x = point.x + normalX * overlapOffset;
-                    y = point.y + visualOffsetY + normalY * overlapOffset;
+                    const unitTangentX = tangentX / tangentLength;
+                    const unitTangentY = tangentY / tangentLength;
+
+                    x = point.x
+                        + normalX * sidewaysOffset
+                        - unitTangentX * backwardOffset;
+                    y = point.y
+                        + visualOffsetY
+                        + normalY * sidewaysOffset
+                        - unitTangentY * backwardOffset;
 
                     placedTrackCars.push({
                         baseX: point.x,
