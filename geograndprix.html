@@ -652,11 +652,11 @@
                     // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const forwardPackBias = (isStartStraightZone && nearbyCount > 0)
-                        ? (isMobileTrack ? 20 : 46)
+                        ? (isMobileTrack ? 22 : 50)
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
                     const startStraightForwardShift = isStartStraightZone
-                        ? (isMobileTrack ? 13 : 27)
+                        ? (isMobileTrack ? 14 : 30)
                         : 0;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
@@ -666,7 +666,7 @@
                     // Give the leading moving car on the start straight a tiny extra pull-ahead,
                     // so Blue 1 separates a bit better from Yellow 2 without disturbing the rest.
                     const leaderBreakawayShift = (isStartStraightZone && nearbyCount === 0)
-                        ? (isMobileTrack ? 6 : 14)
+                        ? (isMobileTrack ? 7 : 18)
                         : 0;
                     const totalForwardShift = startStraightForwardShift + leaderBreakawayShift;
 
