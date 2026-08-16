@@ -619,9 +619,17 @@
                     // slightly backwards along the racing line. Because racers are processed
                     // leader-first, this never makes a trailing car look further ahead.
                     const isMobileTrack = container.clientWidth <= 600;
-                    const nearbyThreshold = isMobileTrack ? 25 : 38;
-                    const laneOffset = isMobileTrack ? 6 : 10;
-                    const rowSpacing = isMobileTrack ? 14 : 24;
+                    // Treat a slightly larger area as one pack, so cars that are close on the
+                    // start straight join the same compact group instead of partially overlapping.
+                    const nearbyThreshold = isMobileTrack ? 30 : 52;
+
+                    // Keep the pack narrow enough to stay on the asphalt.
+                    // Most of the separation should happen front-to-back, not side-to-side.
+                    const laneOffset = isMobileTrack ? 5 : 8;
+
+                    // A bigger row spacing makes each new pair sit clearly behind the previous pair,
+                    // which reduces the "half on top of each other" look without sending cars into the grass.
+                    const rowSpacing = isMobileTrack ? 18 : 38;
 
                     const nearbyCount = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
