@@ -508,21 +508,70 @@
                 };
             }
 
-            // Group cars with the same non-zero distance.
-            // This prevents visual crashes when two racers have exactly the same km.
-            const positionGroupTotals = {};
-            const positionGroupSeen = {};
+            // Build a continuous path from the clicked racing-line points.
+            // This avoids "snapping" to one point per ~40 km at the start of the race.
+            const trackSegments = [];
+            let totalTrackLength = 0;
 
-            racers.forEach(racer => {
-                const distance = racer.km || 0;
-                const isOnStartGrid = FORCE_START_GRID_TEST || distance === 0;
+            for (let i = 0; i < racingLine.length; i++) {
+                const start = racingLine[i];
+                const end = racingLine[(i + 1) % racingLine.length];
+                const dx = end[0] - start[0];
+                const dy = end[1] - start[1];
+                const length = Math.hypot(dx, dy);
 
-                if (!isOnStartGrid) {
-                    const distanceInCurrentLap = distance % KM_PER_LAP;
-                    const key = String(Math.round(distanceInCurrentLap));
-                    positionGroupTotals[key] = (positionGroupTotals[key] || 0) + 1;
+                if (length > 0) {
+                    trackSegments.push({
+                        start,
+                        end,
+                        length,
+                        startDistance: totalTrackLength
+                    });
+                    totalTrackLength += length;
                 }
-            });
+            }
+
+            function getTrackPositionAtProgress(progress) {
+                const wrappedProgress = ((progress % 1) + 1) % 1;
+                const targetDistance = wrappedProgress * totalTrackLength;
+
+                let segment = trackSegments[trackSegments.length - 1];
+
+                for (const candidate of trackSegments) {
+                    if (targetDistance <= candidate.startDistance + candidate.length) {
+                        segment = candidate;
+                        break;
+                    }
+                }
+
+                const distanceIntoSegment = targetDistance - segment.startDistance;
+                const t = clamp(distanceIntoSegment / segment.length, 0, 1);
+
+                const rawPoint = [
+                    segment.start[0] + (segment.end[0] - segment.start[0]) * t,
+                    segment.start[1] + (segment.end[1] - segment.start[1]) * t
+                ];
+
+                const point = getDisplayPoint(rawPoint);
+                const startDisplay = getDisplayPoint(segment.start);
+                const endDisplay = getDisplayPoint(segment.end);
+
+                const tangentX = endDisplay.x - startDisplay.x;
+                const tangentY = endDisplay.y - startDisplay.y;
+                const tangentLength = Math.hypot(tangentX, tangentY) || 1;
+
+                return {
+                    point,
+                    tangentX,
+                    tangentY,
+                    tangentLength
+                };
+            }
+
+            // Cars are first placed at their exact race position.
+            // Nearby cars get only a small sideways lane offset.
+            // The km / longitudinal race position itself never changes.
+            const placedTrackCars = [];
 
             racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
@@ -543,12 +592,14 @@
                     const distanceInCurrentLap = distance % KM_PER_LAP;
                     const progress = distanceInCurrentLap / KM_PER_LAP;
 
-                    const pointIndex = Math.min(
-                        Math.floor(progress * (racingLine.length - 1)),
-                        racingLine.length - 1
-                    );
-
-                    const point = getDisplayPoint(racingLine[pointIndex]);
+                    // Continuous interpolation along the full racing line.
+                    // A racer at 8.5 km is therefore really ahead of one at 1.4 km,
+                    // instead of both being snapped to racingLine[0].
+                    const trackPosition = getTrackPositionAtProgress(progress);
+                    const point = trackPosition.point;
+                    const tangentX = trackPosition.tangentX;
+                    const tangentY = trackPosition.tangentY;
+                    const tangentLength = trackPosition.tangentLength;
 
                     // Fine-tune the visual car position for the SVG cars.
                     // The racing line itself stays unchanged; only the drawn car is nudged a little.
@@ -558,36 +609,37 @@
                     const topStraightOffset = Math.max(1, Math.min(2, container.clientWidth * 0.002));
                     const visualOffsetY = point.y < trackCenterY ? topStraightOffset : verticalTrackOffset;
 
-                    // Stable direction near start/finish:
-                    // use a small look-ahead on the racing line instead of only the neighbouring point.
-                    const prevPoint = getDisplayPoint(racingLine[Math.max(pointIndex - 2, 0)]);
-                    const nextPoint = getDisplayPoint(racingLine[Math.min(pointIndex + 4, racingLine.length - 1)]);
-                    const tangentX = nextPoint.x - prevPoint.x;
-                    const tangentY = nextPoint.y - prevPoint.y;
-                    const tangentLength = Math.hypot(tangentX, tangentY) || 1;
-
-                    // If several cars have the exact same km, spread them sideways across the track.
-                    // Their real km stays unchanged; this is only visual.
-                    const groupKey = String(Math.round(distanceInCurrentLap * 10) / 10);
-                    const groupTotal = positionGroupTotals[groupKey] || 1;
-                    const groupSeen = positionGroupSeen[groupKey] || 0;
-                    positionGroupSeen[groupKey] = groupSeen + 1;
-
-                    const overlapSpacing = container.clientWidth <= 600 ? 22 : 30;
-                    const overlapOffset = (groupSeen - (groupTotal - 1) / 2) * overlapSpacing;
-
                     const normalX = -tangentY / tangentLength;
                     const normalY = tangentX / tangentLength;
 
+                    // Compact overlap handling:
+                    // cars whose REAL base positions are close on screen are fanned out
+                    // a little across the track. Their forward/backward race position is untouched.
+                    const isMobileTrack = container.clientWidth <= 600;
+                    const nearbyThreshold = isMobileTrack ? 27 : 40;
+                    const laneSpacing = isMobileTrack ? 10 : 16;
+                    const lanePattern = [0, 1, -1, 2, -2, 3, -3, 4, -4];
+
+                    const nearbyCount = placedTrackCars.filter(other => {
+                        return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
+                    }).length;
+
+                    const lane = lanePattern[Math.min(nearbyCount, lanePattern.length - 1)];
+                    const overlapOffset = lane * laneSpacing;
+
                     x = point.x + normalX * overlapOffset;
                     y = point.y + visualOffsetY + normalY * overlapOffset;
+
+                    placedTrackCars.push({
+                        baseX: point.x,
+                        baseY: point.y
+                    });
 
                     angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
 
                     // Start/finish direction fix:
                     // very low km values are still on the horizontal start straight.
-                    // The first few racing-line points can give a wrong tangent,
-                    // so force the cars to face forward there.
+                    // Force the cars to face forward there.
                     if (distanceInCurrentLap > 0 && distanceInCurrentLap <= 120) {
                         angle = 0;
                     }
