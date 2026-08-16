@@ -645,18 +645,27 @@
                     const unitTangentX = tangentX / tangentLength;
                     const unitTangentY = tangentY / tangentLength;
 
+                    // Version 5.2 tuning:
+                    // keep the staggered pack, but pull clustered cars a bit forward again
+                    // on the start straight so they sit beyond the start line and stay clear
+                    // of the 0 km grid cars.
+                    const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
+                    const forwardPackBias = (isStartStraightZone && nearbyCount > 0)
+                        ? (isMobileTrack ? 12 : 24)
+                        : 0;
+                    const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
+
                     x = point.x
                         + normalX * sidewaysOffset
-                        - unitTangentX * backwardOffset;
+                        - unitTangentX * effectiveBackwardOffset;
                     y = point.y
                         + visualOffsetY
                         + normalY * sidewaysOffset
-                        - unitTangentY * backwardOffset;
+                        - unitTangentY * effectiveBackwardOffset;
 
                     // Small polishing tweak for the horizontal start straight:
                     // the upper lane was sitting a touch too high, especially for car 7.
                     // Nudge only that lane slightly downward without affecting the real track order.
-                    const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     if (isStartStraightZone && laneSide === 1) {
                         y += isMobileTrack ? 2 : 3;
                     }
