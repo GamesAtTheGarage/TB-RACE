@@ -652,26 +652,33 @@
                     // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const forwardPackBias = (isStartStraightZone && nearbyCount > 0)
-                        ? (isMobileTrack ? 16 : 36)
+                        ? (isMobileTrack ? 18 : 42)
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
                     const startStraightForwardShift = isStartStraightZone
-                        ? (isMobileTrack ? 10 : 22)
+                        ? (isMobileTrack ? 12 : 24)
                         : 0;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
                         : 0;
                     const adjustedSidewaysOffset = sidewaysOffset + laneSide * startStraightLaneBonus;
 
+                    // Give the leading moving car on the start straight a tiny extra pull-ahead,
+                    // so Blue 1 separates a bit better from Yellow 2 without disturbing the rest.
+                    const leaderBreakawayShift = (isStartStraightZone && nearbyCount === 0)
+                        ? (isMobileTrack ? 5 : 10)
+                        : 0;
+                    const totalForwardShift = startStraightForwardShift + leaderBreakawayShift;
+
                     x = point.x
                         + normalX * adjustedSidewaysOffset
                         - unitTangentX * effectiveBackwardOffset
-                        + unitTangentX * startStraightForwardShift;
+                        + unitTangentX * totalForwardShift;
                     y = point.y
                         + visualOffsetY
                         + normalY * adjustedSidewaysOffset
                         - unitTangentY * effectiveBackwardOffset
-                        + unitTangentY * startStraightForwardShift;
+                        + unitTangentY * totalForwardShift;
 
                     // Small polishing tweak for the horizontal start straight:
                     // the upper lane was sitting a touch too high, especially for car 7.
