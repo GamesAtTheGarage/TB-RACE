@@ -652,11 +652,11 @@
                     // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const forwardPackBias = (isStartStraightZone && nearbyCount > 0)
-                        ? (isMobileTrack ? 12 : 24)
+                        ? (isMobileTrack ? 16 : 36)
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
                     const startStraightForwardShift = isStartStraightZone
-                        ? (isMobileTrack ? 8 : 18)
+                        ? (isMobileTrack ? 10 : 22)
                         : 0;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
