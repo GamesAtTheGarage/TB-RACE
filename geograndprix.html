@@ -645,23 +645,33 @@
                     const unitTangentX = tangentX / tangentLength;
                     const unitTangentY = tangentY / tangentLength;
 
-                    // Version 5.2 tuning:
-                    // keep the staggered pack, but pull clustered cars a bit forward again
-                    // on the start straight so they sit beyond the start line and stay clear
-                    // of the 0 km grid cars.
+                    // Version 5.3 tuning:
+                    // keep the staggered pack, but shift the whole moving pack a bit further
+                    // forward on the start straight so the km-cars sit beyond the start line.
+                    // Also add a tiny extra sideways separation there so car 1 and car 2 read
+                    // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const forwardPackBias = (isStartStraightZone && nearbyCount > 0)
                         ? (isMobileTrack ? 12 : 24)
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
+                    const startStraightForwardShift = isStartStraightZone
+                        ? (isMobileTrack ? 8 : 18)
+                        : 0;
+                    const startStraightLaneBonus = isStartStraightZone
+                        ? (isMobileTrack ? 1 : 2)
+                        : 0;
+                    const adjustedSidewaysOffset = sidewaysOffset + laneSide * startStraightLaneBonus;
 
                     x = point.x
-                        + normalX * sidewaysOffset
-                        - unitTangentX * effectiveBackwardOffset;
+                        + normalX * adjustedSidewaysOffset
+                        - unitTangentX * effectiveBackwardOffset
+                        + unitTangentX * startStraightForwardShift;
                     y = point.y
                         + visualOffsetY
-                        + normalY * sidewaysOffset
-                        - unitTangentY * effectiveBackwardOffset;
+                        + normalY * adjustedSidewaysOffset
+                        - unitTangentY * effectiveBackwardOffset
+                        + unitTangentY * startStraightForwardShift;
 
                     // Small polishing tweak for the horizontal start straight:
                     // the upper lane was sitting a touch too high, especially for car 7.
