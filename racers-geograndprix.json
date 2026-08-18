@@ -11,7 +11,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:45.484618",
+    "last_updated": "2026-08-18T22:10:31.350491",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -32,7 +32,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-18T20:46:45.848542",
+    "last_updated": "2026-08-18T22:10:31.673276",
     "status": "in_hands",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:46.209854",
+    "last_updated": "2026-08-18T22:10:31.982562",
     "status": "in_hands",
     "nickname": "AxelFox Racing",
     "race_number": 3,
@@ -74,7 +74,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:46.785559",
+    "last_updated": "2026-08-18T22:10:32.287759",
     "status": "in_hands",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -88,15 +88,15 @@
     "owner": "Penumbra59",
     "reference": "TBBARN7",
     "cache": "GCBVZYW",
-    "location": "In Godspeed 59  - TB Racers starting hub",
+    "location": "In the hands of Oli12Lou16.",
     "km": 0,
     "name": "TB RACER - The Stig - Car: White #6",
     "coordinates": [
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:47.833202",
-    "status": "in_cache",
+    "last_updated": "2026-08-18T22:10:32.588088",
+    "status": "in_hands",
     "nickname": "The Stig",
     "race_number": 6,
     "color_name": "White",
@@ -116,7 +116,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:48.165966",
+    "last_updated": "2026-08-18T22:10:32.886819",
     "status": "in_hands",
     "nickname": "KrisBuytaert Racing",
     "race_number": 7,
@@ -137,7 +137,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-18T20:46:48.492631",
+    "last_updated": "2026-08-18T22:10:33.358900",
     "status": "in_hands",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -151,15 +151,15 @@
     "owner": "Suuz59",
     "reference": "TBBARN1",
     "cache": "GCBVZYW",
-    "location": "In Godspeed 59  - TB Racers starting hub",
+    "location": "In the hands of Oli12Lou16.",
     "km": 0,
     "name": "TB RACER - Felis Racing - Car: Dark Green #9",
     "coordinates": [
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:50.028008",
-    "status": "in_cache",
+    "last_updated": "2026-08-18T22:10:33.651124",
+    "status": "in_hands",
     "nickname": "Felis Racing",
     "race_number": 9,
     "color_name": "Darkgreen",
@@ -179,7 +179,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:50.370525",
+    "last_updated": "2026-08-18T22:10:33.955050",
     "status": "in_hands",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -200,7 +200,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T20:46:50.667655",
+    "last_updated": "2026-08-18T22:10:34.272710",
     "status": "in_hands",
     "nickname": "Violet Velocity",
     "race_number": 11,
