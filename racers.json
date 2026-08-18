@@ -11,7 +11,7 @@
       49.75597,
       13.33183
     ],
-    "last_updated": "2026-08-09T00:18:43.611817",
+    "last_updated": "2026-08-18T22:38:44.689483",
     "status": "in_cache",
     "nickname": "TB RACERS TEST CAR 1",
     "race_number": 1,
@@ -22,16 +22,16 @@
     "car": "Green 5",
     "owner": "Penumbra59",
     "reference": "TB7B75M",
-    "cache": "GCBNY7B",
-    "location": "In the hands of Edgareule.",
-    "km": 8340,
+    "cache": "GCBF6V3",
+    "location": "In Die vier Prüfungen des großen Cacheroni",
+    "km": 8900,
     "name": "TB RACERS TEST CAR 5",
     "coordinates": [
-      51.18992,
-      6.51242
+      50.24042,
+      10.56477
     ],
-    "last_updated": "2026-08-09T00:18:43.899115",
-    "status": "in_hands",
+    "last_updated": "2026-08-18T22:38:45.604798",
+    "status": "in_cache",
     "nickname": "TB RACERS TEST CAR 5",
     "race_number": 5,
     "color_name": "Green",
