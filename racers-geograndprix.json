@@ -11,7 +11,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:31.350491",
+    "last_updated": "2026-08-19T18:37:26.733250",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -32,7 +32,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-18T22:10:31.673276",
+    "last_updated": "2026-08-19T18:37:27.419509",
     "status": "in_hands",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:31.982562",
+    "last_updated": "2026-08-19T18:37:27.701449",
     "status": "in_hands",
     "nickname": "AxelFox Racing",
     "race_number": 3,
@@ -74,7 +74,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:32.287759",
+    "last_updated": "2026-08-19T18:37:27.978795",
     "status": "in_hands",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -95,7 +95,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:32.588088",
+    "last_updated": "2026-08-19T18:37:28.266466",
     "status": "in_hands",
     "nickname": "The Stig",
     "race_number": 6,
@@ -116,7 +116,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:32.886819",
+    "last_updated": "2026-08-19T18:37:28.561757",
     "status": "in_hands",
     "nickname": "KrisBuytaert Racing",
     "race_number": 7,
@@ -137,7 +137,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-18T22:10:33.358900",
+    "last_updated": "2026-08-19T18:37:28.855274",
     "status": "in_hands",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -158,7 +158,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:33.651124",
+    "last_updated": "2026-08-19T18:37:29.141794",
     "status": "in_hands",
     "nickname": "Felis Racing",
     "race_number": 9,
@@ -179,7 +179,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:33.955050",
+    "last_updated": "2026-08-19T18:37:29.430013",
     "status": "in_hands",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -190,7 +190,7 @@
   },
   {
     "car": "Purple 11",
-    "owner": "Penumbra59",
+    "owner": "Reyrt",
     "reference": "TBBARN3",
     "cache": "GCBVZYW",
     "location": "In the hands of Color de primavera.",
@@ -200,7 +200,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-18T22:10:34.272710",
+    "last_updated": "2026-08-19T18:37:29.720340",
     "status": "in_hands",
     "nickname": "Violet Velocity",
     "race_number": 11,
