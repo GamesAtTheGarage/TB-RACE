@@ -11,7 +11,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:36.939150",
+    "last_updated": "2026-08-20T20:59:01.104122",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -26,13 +26,13 @@
     "reference": "TBBARN4",
     "cache": "GCBVKCD",
     "location": "In the hands of Lady Linneke.",
-    "km": 35,
+    "km": 54,
     "name": "TB RACER - Mettes Racing - Car: Yellow #2",
     "coordinates": [
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-19T23:19:37.265959",
+    "last_updated": "2026-08-20T20:59:01.369076",
     "status": "in_hands",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:37.586566",
+    "last_updated": "2026-08-20T20:59:01.624161",
     "status": "in_hands",
     "nickname": "AxelFox Racing",
     "race_number": 3,
@@ -68,13 +68,13 @@
     "reference": "TBBARND",
     "cache": "GCBVZYW",
     "location": "In the hands of KrisBuytaert.",
-    "km": 8.4,
+    "km": 16.7,
     "name": "TB RACER - Malcroys Racing - Car: Black #5",
     "coordinates": [
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:37.920581",
+    "last_updated": "2026-08-20T20:59:01.876180",
     "status": "in_hands",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -95,7 +95,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:38.242980",
+    "last_updated": "2026-08-20T20:59:02.116192",
     "status": "in_hands",
     "nickname": "The Stig",
     "race_number": 6,
@@ -116,7 +116,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:38.551906",
+    "last_updated": "2026-08-20T20:59:02.411533",
     "status": "in_hands",
     "nickname": "KrisBuytaert Racing",
     "race_number": 7,
@@ -131,13 +131,13 @@
     "reference": "TBBARN9",
     "cache": "GCBVKCD",
     "location": "In the hands of Lady Linneke.",
-    "km": 35,
+    "km": 54,
     "name": "TB RACER - Monster Blaze Racing - Car: light green #8",
     "coordinates": [
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-19T23:19:38.873060",
+    "last_updated": "2026-08-20T20:59:02.678969",
     "status": "in_hands",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -158,7 +158,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:39.192491",
+    "last_updated": "2026-08-20T20:59:02.943155",
     "status": "in_hands",
     "nickname": "Felis Racing",
     "race_number": 9,
@@ -173,13 +173,13 @@
     "reference": "TBBARN2",
     "cache": "GCBVZYW",
     "location": "In the hands of KrisBuytaert.",
-    "km": 8.3,
+    "km": 16.6,
     "name": "TB RACER - Golden Racer - Car: Gold #10",
     "coordinates": [
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:39.515566",
+    "last_updated": "2026-08-20T20:59:03.208303",
     "status": "in_hands",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -200,7 +200,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-19T23:19:39.833500",
+    "last_updated": "2026-08-20T20:59:03.489437",
     "status": "in_hands",
     "nickname": "Violet Velocity",
     "race_number": 11,
