@@ -11,7 +11,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:01.104122",
+    "last_updated": "2026-08-22T12:41:45.699700",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -32,7 +32,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-20T20:59:01.369076",
+    "last_updated": "2026-08-22T12:41:46.087655",
     "status": "in_hands",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:01.624161",
+    "last_updated": "2026-08-22T12:41:46.446914",
     "status": "in_hands",
     "nickname": "AxelFox Racing",
     "race_number": 3,
@@ -68,13 +68,13 @@
     "reference": "TBBARND",
     "cache": "GCBVZYW",
     "location": "In the hands of KrisBuytaert.",
-    "km": 16.7,
+    "km": 25,
     "name": "TB RACER - Malcroys Racing - Car: Black #5",
     "coordinates": [
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:01.876180",
+    "last_updated": "2026-08-22T12:41:46.784983",
     "status": "in_hands",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -95,7 +95,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:02.116192",
+    "last_updated": "2026-08-22T12:41:47.107537",
     "status": "in_hands",
     "nickname": "The Stig",
     "race_number": 6,
@@ -116,7 +116,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:02.411533",
+    "last_updated": "2026-08-22T12:41:47.430172",
     "status": "in_hands",
     "nickname": "KrisBuytaert Racing",
     "race_number": 7,
@@ -137,7 +137,7 @@
       51.20762,
       4.4396
     ],
-    "last_updated": "2026-08-20T20:59:02.678969",
+    "last_updated": "2026-08-22T12:41:47.760018",
     "status": "in_hands",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -158,7 +158,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:02.943155",
+    "last_updated": "2026-08-22T12:41:48.059411",
     "status": "in_hands",
     "nickname": "Felis Racing",
     "race_number": 9,
@@ -173,13 +173,13 @@
     "reference": "TBBARN2",
     "cache": "GCBVZYW",
     "location": "In the hands of KrisBuytaert.",
-    "km": 16.6,
+    "km": 25,
     "name": "TB RACER - Golden Racer - Car: Gold #10",
     "coordinates": [
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:03.208303",
+    "last_updated": "2026-08-22T12:41:48.892632",
     "status": "in_hands",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -200,7 +200,7 @@
       51.1308,
       4.43603
     ],
-    "last_updated": "2026-08-20T20:59:03.489437",
+    "last_updated": "2026-08-22T12:41:49.356847",
     "status": "in_hands",
     "nickname": "Violet Velocity",
     "race_number": 11,
