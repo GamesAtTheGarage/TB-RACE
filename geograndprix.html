@@ -699,11 +699,13 @@
                         baseY: point.y
                     });
 
-                    angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI;
+                    // The custom SVG cars point in the opposite direction of the
+                    // racing-line tangent, so rotate the calculated tangent by 180 degrees.
+                    // Without this correction, the first car that leaves the <=120 km
+                    // start-straight override suddenly appears to drive backwards.
+                    angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI + 180;
 
-                    // Start/finish direction fix:
-                    // very low km values are still on the horizontal start straight.
-                    // Force the cars to face forward there.
+                    // Keep very low km values perfectly horizontal on the start straight.
                     if (distanceInCurrentLap > 0 && distanceInCurrentLap <= 120) {
                         angle = 0;
                     }
