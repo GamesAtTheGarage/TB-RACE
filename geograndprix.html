@@ -694,6 +694,14 @@
                         y += isMobileTrack ? 2 : 5;
                     }
 
+                    // If the leading car has already left the start-straight pack and is alone
+                    // in the first sector after the line (Orange 7 in the current situation),
+                    // nudge it a little upward so it doesn't sit visually underneath Blue 1.
+                    const isOpeningSector = distanceInCurrentLap > 120 && distanceInCurrentLap <= 350;
+                    if (isOpeningSector && nearbyCount === 0) {
+                        y -= isMobileTrack ? 4 : 8;
+                    }
+
                     placedTrackCars.push({
                         baseX: point.x,
                         baseY: point.y
