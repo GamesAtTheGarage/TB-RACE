@@ -628,7 +628,7 @@
                     const laneOffset = isMobileTrack ? 5 : 7;
 
                     // Push the next pair a little further back so stacked cars read as separate rows.
-                    const rowSpacing = isMobileTrack ? 20 : 34;
+                    const rowSpacing = isMobileTrack ? 22 : 40;
 
                     const nearbyCount = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
@@ -651,22 +651,34 @@
                     // Also add a tiny extra sideways separation there so car 1 and car 2 read
                     // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
-                    const forwardPackBias = (isStartStraightZone && nearbyCount > 0)
-                        ? (isMobileTrack ? 23 : 54)
+
+                    // Version 5.14: smoothly fade the special launch correction as the cars
+                    // gain distance. Previously the full start-pack boost stayed active all the
+                    // way to 120 km and then disappeared at once. That could make a 68 km car
+                    // visually catch a 123 km car even though the latter had almost twice the km.
+                    const launchFactor = isStartStraightZone
+                        ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
+                        : 0;
+
+                    // The old forward pack bias is still useful for cars that have only just
+                    // crossed the line, but it now fades much faster than the general launch shift.
+                    // This keeps tiny-km packs clear of the 0 km grid while allowing real km gaps
+                    // to become visible as soon as the race spreads out.
+                    const forwardPackBias = (nearbyCount > 0)
+                        ? (isMobileTrack ? 23 : 54) * launchFactor * launchFactor
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
-                    const startStraightForwardShift = isStartStraightZone
-                        ? (isMobileTrack ? 15 : 32)
-                        : 0;
+
+                    const startStraightForwardShift = (isMobileTrack ? 15 : 32) * launchFactor;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
                         : 0;
                     const adjustedSidewaysOffset = sidewaysOffset + laneSide * startStraightLaneBonus;
 
-                    // Give the leading moving car on the start straight a tiny extra pull-ahead,
-                    // so Blue 1 separates a bit better from Yellow 2 without disturbing the rest.
-                    const leaderBreakawayShift = (isStartStraightZone && nearbyCount === 0)
-                        ? (isMobileTrack ? 8 : 22)
+                    // Give the leading moving car a little extra pull-ahead while it is still
+                    // in the launch zone. This also fades smoothly instead of switching off.
+                    const leaderBreakawayShift = (nearbyCount === 0)
+                        ? (isMobileTrack ? 8 : 22) * launchFactor
                         : 0;
                     const totalForwardShift = startStraightForwardShift + leaderBreakawayShift;
 
