@@ -573,6 +573,17 @@
             // The km / longitudinal race position itself never changes.
             const placedTrackCars = [];
 
+            // Pre-count exact 0.1 km groups so both members of an equal-km pair can use
+            // the same wider two-lane spacing from the moment the first one is drawn.
+            const distanceGroupTotals = {};
+            racers.forEach(racer => {
+                const d = (racer.km || 0) % KM_PER_LAP;
+                if (d > 0) {
+                    const key = String(Math.round(d * 10) / 10);
+                    distanceGroupTotals[key] = (distanceGroupTotals[key] || 0) + 1;
+                }
+            });
+
             racers.forEach((racer, index) => {
                 const distance = racer.km || 0;
                 const isOnStartGrid = FORCE_START_GRID_TEST || distance === 0;
@@ -630,17 +641,43 @@
                     // Push the next pair a little further back so stacked cars read as separate rows.
                     const rowSpacing = isMobileTrack ? 22 : 40;
 
-                    const nearbyCount = placedTrackCars.filter(other => {
+                    const nearbyCars = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
-                    }).length;
+                    });
 
-                    // Staggered race-pack overlap handling:
-                    // Keep cars inside the asphalt by using only two narrow lanes,
-                    // but separate every extra nearby car further back along the racing line.
-                    // This creates a compact diagonal "pack" instead of wide side-by-side rows.
-                    const laneSide = nearbyCount % 2 === 0 ? 1 : -1;
-                    const sidewaysOffset = laneSide * laneOffset;
-                    const backwardOffset = nearbyCount * rowSpacing;
+                    // Version 5.15: equal-distance cars form one visual distance group.
+                    // Two cars on exactly the same km should sit mainly side-by-side instead of
+                    // the second car being pushed a full row backwards. Different km groups still
+                    // use the staggered longitudinal spacing that keeps the track readable.
+                    const distanceKey = String(Math.round(distanceInCurrentLap * 10) / 10);
+                    const sameDistanceCars = nearbyCars.filter(other => other.distanceKey === distanceKey);
+                    const otherDistanceGroups = new Set(
+                        nearbyCars
+                            .filter(other => other.distanceKey !== distanceKey)
+                            .map(other => other.distanceKey)
+                    );
+
+                    const nearbyGroupCount = otherDistanceGroups.size;
+                    const sameDistanceIndex = sameDistanceCars.length;
+                    const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
+                    const isEqualDistanceGroup = distanceGroupTotal > 1;
+
+                    // First two equal-km cars share the same longitudinal position and use opposite
+                    // narrow lanes. If three or more ever share the same km, additional pairs get a
+                    // modest extra row rather than stacking directly on top of each other.
+                    let laneSide;
+                    if (sameDistanceIndex === 0) {
+                        laneSide = nearbyGroupCount % 2 === 0 ? 1 : -1;
+                    } else {
+                        const firstSameLane = sameDistanceCars[0].laneSide || 1;
+                        laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
+                    }
+
+                    const equalKmLaneOffset = isMobileTrack ? 7 : 11;
+                    const sidewaysOffset = laneSide * (isEqualDistanceGroup ? equalKmLaneOffset : laneOffset);
+                    const equalKmExtraRow = Math.floor(sameDistanceIndex / 2) * (isMobileTrack ? 14 : 24);
+                    const backwardOffset = nearbyGroupCount * rowSpacing + equalKmExtraRow;
+                    const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
                     const unitTangentY = tangentY / tangentLength;
@@ -709,7 +746,9 @@
 
                     placedTrackCars.push({
                         baseX: point.x,
-                        baseY: point.y
+                        baseY: point.y,
+                        distanceKey,
+                        laneSide
                     });
 
                     // The custom SVG cars point in the opposite direction of the
