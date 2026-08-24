@@ -639,7 +639,7 @@
                     const laneOffset = isMobileTrack ? 5 : 7;
 
                     // Push the next pair a little further back so stacked cars read as separate rows.
-                    const rowSpacing = isMobileTrack ? 22 : 40;
+                    const rowSpacing = isMobileTrack ? 23 : 44;
 
                     const nearbyCars = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
@@ -673,7 +673,7 @@
                         laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
                     }
 
-                    const equalKmLaneOffset = isMobileTrack ? 8 : 13;
+                    const equalKmLaneOffset = isMobileTrack ? 9 : 15;
                     const sidewaysOffset = laneSide * (isEqualDistanceGroup ? equalKmLaneOffset : laneOffset);
                     const equalKmExtraRow = Math.floor(sameDistanceIndex / 2) * (isMobileTrack ? 14 : 24);
 
@@ -681,10 +681,17 @@
                     // second car in the pair a tiny extra rearward offset so the result reads less
                     // like a pile-up when two equal-km pairs are close to each other.
                     const equalKmMicroStagger = (isEqualDistanceGroup && (sameDistanceIndex % 2 === 1))
-                        ? (isMobileTrack ? 5 : 10)
+                        ? (isMobileTrack ? 6 : 14)
                         : 0;
 
-                    const backwardOffset = nearbyGroupCount * rowSpacing + equalKmExtraRow + equalKmMicroStagger;
+                    // If an equal-km pair sits behind one or more other local distance groups,
+                    // push that whole pair a bit further back. This specifically helps cases like
+                    // Black 5 / Gold 10, which otherwise still look too bunched into the group ahead.
+                    const trailingEqualGroupShift = (isEqualDistanceGroup && nearbyGroupCount >= 2)
+                        ? (isMobileTrack ? 6 : 12)
+                        : 0;
+
+                    const backwardOffset = nearbyGroupCount * rowSpacing + equalKmExtraRow + equalKmMicroStagger + trailingEqualGroupShift;
                     const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
