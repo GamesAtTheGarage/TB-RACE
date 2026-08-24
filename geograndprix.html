@@ -691,7 +691,21 @@
                         ? (isMobileTrack ? 6 : 12)
                         : 0;
 
-                    const backwardOffset = nearbyGroupCount * rowSpacing + equalKmExtraRow + equalKmMicroStagger + trailingEqualGroupShift;
+                    // Fine-tune Black 5 when it shares an equal-km group: the first car in an
+                    // equal pair otherwise sits slightly further forward than its partner.
+                    // A small extra rearward nudge lines Black 5 up more closely with Gold 10
+                    // and keeps it off the rear of Green 8.
+                    const black5RearNudge = (
+                        isEqualDistanceGroup &&
+                        Number(racer.race_number) === 5 &&
+                        sameDistanceIndex === 0
+                    ) ? (isMobileTrack ? 5 : 10) : 0;
+
+                    const backwardOffset = nearbyGroupCount * rowSpacing
+                        + equalKmExtraRow
+                        + equalKmMicroStagger
+                        + trailingEqualGroupShift
+                        + black5RearNudge;
                     const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
