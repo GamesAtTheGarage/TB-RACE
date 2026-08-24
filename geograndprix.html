@@ -673,10 +673,18 @@
                         laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
                     }
 
-                    const equalKmLaneOffset = isMobileTrack ? 7 : 11;
+                    const equalKmLaneOffset = isMobileTrack ? 8 : 13;
                     const sidewaysOffset = laneSide * (isEqualDistanceGroup ? equalKmLaneOffset : laneOffset);
                     const equalKmExtraRow = Math.floor(sameDistanceIndex / 2) * (isMobileTrack ? 14 : 24);
-                    const backwardOffset = nearbyGroupCount * rowSpacing + equalKmExtraRow;
+
+                    // Soft stagger for equal-km pairs: keep them broadly side-by-side, but give the
+                    // second car in the pair a tiny extra rearward offset so the result reads less
+                    // like a pile-up when two equal-km pairs are close to each other.
+                    const equalKmMicroStagger = (isEqualDistanceGroup && (sameDistanceIndex % 2 === 1))
+                        ? (isMobileTrack ? 5 : 10)
+                        : 0;
+
+                    const backwardOffset = nearbyGroupCount * rowSpacing + equalKmExtraRow + equalKmMicroStagger;
                     const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
