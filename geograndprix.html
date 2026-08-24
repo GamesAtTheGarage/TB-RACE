@@ -652,18 +652,13 @@
                     // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
 
-                    // Version 5.14: smoothly fade the special launch correction as the cars
-                    // gain distance. Previously the full start-pack boost stayed active all the
-                    // way to 120 km and then disappeared at once. That could make a 68 km car
-                    // visually catch a 123 km car even though the latter had almost twice the km.
+                    // Smooth launch correction: cars close to the start still get a visual push,
+                    // but that push fades as their real km increase. This prevents a 68 km car
+                    // from visually catching a 123 km car just because one is below 120 km.
                     const launchFactor = isStartStraightZone
                         ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
                         : 0;
 
-                    // The old forward pack bias is still useful for cars that have only just
-                    // crossed the line, but it now fades much faster than the general launch shift.
-                    // This keeps tiny-km packs clear of the 0 km grid while allowing real km gaps
-                    // to become visible as soon as the race spreads out.
                     const forwardPackBias = (nearbyCount > 0)
                         ? (isMobileTrack ? 23 : 54) * launchFactor * launchFactor
                         : 0;
@@ -675,8 +670,6 @@
                         : 0;
                     const adjustedSidewaysOffset = sidewaysOffset + laneSide * startStraightLaneBonus;
 
-                    // Give the leading moving car a little extra pull-ahead while it is still
-                    // in the launch zone. This also fades smoothly instead of switching off.
                     const leaderBreakawayShift = (nearbyCount === 0)
                         ? (isMobileTrack ? 8 : 22) * launchFactor
                         : 0;
@@ -742,6 +735,18 @@
                 car.style.top = `${Math.round(y)}px`;
                 car.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
                 car.innerHTML = getRaceCarMarkup(racer, index);
+
+                // If a custom SVG ever fails to load (for example because of a transient
+                // browser/GitHub asset error), show the built-in race-car SVG instead of
+                // displaying broken vertical alt text on the track.
+                const carImage = car.querySelector('img');
+                if (carImage) {
+                    carImage.addEventListener('error', () => {
+                        car.classList.remove('custom-svg-car');
+                        car.innerHTML = getRaceCarSvg(getCarColor(racer, index));
+                    }, { once: true });
+                }
+
                 container.appendChild(car);
 
             });
