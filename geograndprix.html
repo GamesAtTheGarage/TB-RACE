@@ -711,12 +711,22 @@
                         distanceInCurrentLap <= 30
                     ) ? (isMobileTrack ? 6 : 12) : 0;
 
+                    // Version 5.22: Red 3 is the first member of the current 16 km pair.
+                    // Give it a small rearward nudge as well, so it clears the car ahead
+                    // while still staying slightly in front of Purple 11.
+                    const red3RearNudge = (
+                        isEqualDistanceGroup &&
+                        Number(racer.race_number) === 3 &&
+                        distanceInCurrentLap <= 30
+                    ) ? (isMobileTrack ? 4 : 8) : 0;
+
                     const backwardOffset = nearbyGroupCount * rowSpacing
                         + equalKmExtraRow
                         + equalKmMicroStagger
                         + trailingEqualGroupShift
                         + black5RearNudge
-                        + purple11RearNudge;
+                        + purple11RearNudge
+                        + red3RearNudge;
                     const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
