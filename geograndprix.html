@@ -662,9 +662,17 @@
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
-                    // First two equal-km cars share the same longitudinal position and use opposite
-                    // narrow lanes. If three or more ever share the same km, additional pairs get a
-                    // modest extra row rather than stacking directly on top of each other.
+                    // Version 5.20: very-low-km equal pairs need special launch handling.
+                    // When several faster groups are still close to the start, the normal pack logic
+                    // can push a 16 km pair backwards past the start line. Keep at most one preceding
+                    // visual group in the spacing calculation during the first 30 km.
+                    const isLaunchEqualPair = isEqualDistanceGroup && distanceInCurrentLap <= 30;
+                    const spacingGroupCount = isLaunchEqualPair
+                        ? Math.min(nearbyGroupCount, 1)
+                        : nearbyGroupCount;
+
+                    // First two equal-km cars share almost the same longitudinal position and use
+                    // opposite narrow lanes. The very-low-km pair gets a touch more lane separation.
                     let laneSide;
                     if (sameDistanceIndex === 0) {
                         laneSide = nearbyGroupCount % 2 === 0 ? 1 : -1;
@@ -673,23 +681,27 @@
                         laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
                     }
 
-                    const equalKmLaneOffset = isMobileTrack ? 9 : 15;
+                    const equalKmLaneOffset = isLaunchEqualPair
+                        ? (isMobileTrack ? 10 : 19)
+                        : (isMobileTrack ? 9 : 15);
                     const sidewaysOffset = laneSide * (isEqualDistanceGroup ? equalKmLaneOffset : laneOffset);
                     const equalKmExtraRow = Math.floor(sameDistanceIndex / 2) * (isMobileTrack ? 14 : 24);
 
-                    // Soft stagger for equal-km pairs: keep them broadly side-by-side, but give the
-                    // second car in the pair a tiny extra rearward offset so the result reads less
-                    // like a pile-up when two equal-km pairs are close to each other.
+                    // Keep only a very small longitudinal stagger for the second member of a
+                    // low-km equal pair; normal equal-km pairs keep the established 5.19 spacing.
                     const equalKmMicroStagger = (isEqualDistanceGroup && (sameDistanceIndex % 2 === 1))
-                        ? (isMobileTrack ? 6 : 14)
+                        ? (isLaunchEqualPair
+                            ? (isMobileTrack ? 4 : 8)
+                            : (isMobileTrack ? 6 : 14))
                         : 0;
 
-                    // If an equal-km pair sits behind one or more other local distance groups,
-                    // push that whole pair a bit further back. This specifically helps cases like
-                    // Black 5 / Gold 10, which otherwise still look too bunched into the group ahead.
-                    const trailingEqualGroupShift = (isEqualDistanceGroup && nearbyGroupCount >= 2)
-                        ? (isMobileTrack ? 6 : 12)
-                        : 0;
+                    // Don't apply the extra trailing-pair penalty during the first 30 km; otherwise
+                    // the pair can visually fall back onto the 0 km grid despite having moved.
+                    const trailingEqualGroupShift = (
+                        !isLaunchEqualPair &&
+                        isEqualDistanceGroup &&
+                        nearbyGroupCount >= 2
+                    ) ? (isMobileTrack ? 6 : 12) : 0;
 
                     // Fine-tune Black 5 when it shares an equal-km group: the first car in an
                     // equal pair otherwise sits slightly further forward than its partner.
@@ -701,7 +713,7 @@
                         sameDistanceIndex === 0
                     ) ? (isMobileTrack ? 5 : 10) : 0;
 
-                    const backwardOffset = nearbyGroupCount * rowSpacing
+                    const backwardOffset = spacingGroupCount * rowSpacing
                         + equalKmExtraRow
                         + equalKmMicroStagger
                         + trailingEqualGroupShift
