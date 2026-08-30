@@ -786,6 +786,17 @@
                         y += isMobileTrack ? 2 : 5;
                     }
 
+                    // Version 5.23: White 6 currently sits in the very tight low-km pack.
+                    // Bring only this car a little further toward the asphalt so the lateral
+                    // stagger does not push it completely into the grass.
+                    if (
+                        isStartStraightZone &&
+                        Number(racer.race_number) === 6 &&
+                        distanceInCurrentLap <= 25
+                    ) {
+                        y -= isMobileTrack ? 6 : 14;
+                    }
+
                     // If the leading car has already left the start-straight pack and is alone
                     // in the first sector after the line (Orange 7 in the current situation),
                     // nudge it a little upward so it doesn't sit visually underneath Blue 1.
