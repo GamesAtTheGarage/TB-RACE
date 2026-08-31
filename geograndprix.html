@@ -623,115 +623,187 @@
                     const normalX = -tangentY / tangentLength;
                     const normalY = tangentX / tangentLength;
 
-                    // Version 5.31: visually stretch only extremely tight packs along the
-                    // racing line. The real KM order stays intact, but cars that are only a few
-                    // pixels apart are given a controlled visual spacing so they read as a train
-                    // through the corner instead of a pile-up.
+                    // Compact two-lane overlap handling:
+                    // Keep a tight racing pack inside the asphalt instead of fanning cars
+                    // out into 3 or 4 lanes. Cars alternate between two small lateral lanes.
+                    // When more than two cars are close together, the next pair is nudged
+                    // slightly backwards along the racing line. Because racers are processed
+                    // leader-first, this never makes a trailing car look further ahead.
                     const isMobileTrack = container.clientWidth <= 600;
-                    const nearbyThreshold = isMobileTrack ? 42 : 68;
+                    // Treat a slightly larger area as one pack, so cars that are close on the
+                    // start straight join the same compact group instead of partially overlapping.
+                    const nearbyThreshold = isMobileTrack ? 30 : 52;
+
+                    // Keep the pack narrow enough to stay on the asphalt, but give each pair just a bit
+                    // more lateral breathing room so the cars don't visually merge.
+                    const laneOffset = isMobileTrack ? 5 : 7;
+
+                    // Push the next pair a little further back so stacked cars read as separate rows.
+                    const rowSpacing = isMobileTrack ? 23 : 44;
 
                     const nearbyCars = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
                     });
 
+                    // Version 5.15: equal-distance cars form one visual distance group.
+                    // Two cars on exactly the same km should sit mainly side-by-side instead of
+                    // the second car being pushed a full row backwards. Different km groups still
+                    // use the staggered longitudinal spacing that keeps the track readable.
                     const distanceKey = String(Math.round(distanceInCurrentLap * 10) / 10);
-                    const sameDistanceCars = nearbyCars.filter(
-                        other => other.distanceKey === distanceKey
+                    const sameDistanceCars = nearbyCars.filter(other => other.distanceKey === distanceKey);
+                    const otherDistanceGroups = new Set(
+                        nearbyCars
+                            .filter(other => other.distanceKey !== distanceKey)
+                            .map(other => other.distanceKey)
                     );
+
+                    const nearbyGroupCount = otherDistanceGroups.size;
                     const sameDistanceIndex = sameDistanceCars.length;
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
-                    // Count the total spread of the local pack in true KM.
-                    const localPackCars = nearbyCars.concat([{
-                        baseX: point.x,
-                        baseY: point.y,
-                        distanceKey,
-                        distanceInCurrentLap
-                    }]);
-
-                    const packMinDistance = Math.min(...localPackCars.map(car => car.distanceInCurrentLap));
-                    const packMaxDistance = Math.max(...localPackCars.map(car => car.distanceInCurrentLap));
-                    const kmSpread = packMaxDistance - packMinDistance;
-
-                    // Only "stretch" exceptionally tight groups. A 25 km gap, for example,
-                    // should remain mostly natural; a 2.5 km cluster needs visual breathing room.
-                    const isVeryTightPack = nearbyCars.length >= 2 && kmSpread <= 6;
-
-                    let visualLongitudinalOffset = 0;
-                    if (isVeryTightPack) {
-                        // Because racers are processed from highest KM to lowest KM, the current
-                        // car is behind every nearby racer in the race order. Give it a modest
-                        // extra visual distance behind the nearest faster car.
-                        const nearestAhead = nearbyCars[nearbyCars.length - 1];
-                        const currentGap = Math.hypot(
-                            point.x - nearestAhead.baseX,
-                            point.y - nearestAhead.baseY
-                        );
-
-                        const desiredGap = isMobileTrack ? 22 : 34;
-                        visualLongitudinalOffset = Math.max(0, desiredGap - currentGap);
-
-                        // Hard cap: don't visually stretch a pack more than about two car lengths.
-                        visualLongitudinalOffset = Math.min(
-                            visualLongitudinalOffset,
-                            isMobileTrack ? 14 : 24
-                        );
-                    }
-
-                    const normalLaneOffset = isEqualDistanceGroup
-                        ? (isMobileTrack ? 8 : 11)
-                        : (isMobileTrack ? 4 : 6);
-
+                    // First two equal-km cars share the same longitudinal position and use opposite
+                    // narrow lanes. If three or more ever share the same km, additional pairs get a
+                    // modest extra row rather than stacking directly on top of each other.
                     let laneSide;
                     if (sameDistanceIndex === 0) {
-                        laneSide = nearbyCars.length % 2 === 0 ? 1 : -1;
+                        laneSide = nearbyGroupCount % 2 === 0 ? 1 : -1;
                     } else {
                         const firstSameLane = sameDistanceCars[0].laneSide || 1;
                         laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
                     }
 
-                    const lateralShift = laneSide * normalLaneOffset;
+                    const equalKmLaneOffset = isMobileTrack ? 9 : 15;
+                    const sidewaysOffset = laneSide * (isEqualDistanceGroup ? equalKmLaneOffset : laneOffset);
+                    const equalKmExtraRow = Math.floor(sameDistanceIndex / 2) * (isMobileTrack ? 14 : 24);
+
+                    // Soft stagger for equal-km pairs: keep them broadly side-by-side, but give the
+                    // second car in the pair a tiny extra rearward offset so the result reads less
+                    // like a pile-up when two equal-km pairs are close to each other.
+                    const equalKmMicroStagger = (isEqualDistanceGroup && (sameDistanceIndex % 2 === 1))
+                        ? (isMobileTrack ? 6 : 14)
+                        : 0;
+
+                    // If an equal-km pair sits behind one or more other local distance groups,
+                    // push that whole pair a bit further back. This specifically helps cases like
+                    // Black 5 / Gold 10, which otherwise still look too bunched into the group ahead.
+                    const trailingEqualGroupShift = (isEqualDistanceGroup && nearbyGroupCount >= 2)
+                        ? (isMobileTrack ? 6 : 12)
+                        : 0;
+
+                    // Fine-tune Black 5 when it shares an equal-km group: the first car in an
+                    // equal pair otherwise sits slightly further forward than its partner.
+                    // A small extra rearward nudge lines Black 5 up more closely with Gold 10
+                    // and keeps it off the rear of Green 8.
+                    const black5RearNudge = (
+                        isEqualDistanceGroup &&
+                        Number(racer.race_number) === 5 &&
+                        sameDistanceIndex === 0
+                    ) ? (isMobileTrack ? 5 : 10) : 0;
+
+                    // Version 5.21: keep the proven 5.19 pack logic and only fine-tune
+                    // Purple 11 when it is part of a very-low-km equal-distance pair.
+                    // Give Purple a small extra rearward nudge so it does not visually
+                    // jump ahead or sit too tightly on Red 3.
+                    const purple11RearNudge = (
+                        isEqualDistanceGroup &&
+                        Number(racer.race_number) === 11 &&
+                        distanceInCurrentLap <= 30
+                    ) ? (isMobileTrack ? 6 : 12) : 0;
+
+                    // Version 5.22: Red 3 is the first member of the current 16 km pair.
+                    // Give it a small rearward nudge as well, so it clears the car ahead
+                    // while still staying slightly in front of Purple 11.
+                    const red3RearNudge = (
+                        isEqualDistanceGroup &&
+                        Number(racer.race_number) === 3 &&
+                        distanceInCurrentLap <= 30
+                    ) ? (isMobileTrack ? 4 : 8) : 0;
+
+                    const backwardOffset = nearbyGroupCount * rowSpacing
+                        + equalKmExtraRow
+                        + equalKmMicroStagger
+                        + trailingEqualGroupShift
+                        + black5RearNudge
+                        + purple11RearNudge
+                        + red3RearNudge;
+                    const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
                     const unitTangentY = tangentY / tangentLength;
 
-                    // Exact KM position is still the basis; only the tiny pack stretch is visual.
-                    x = point.x
-                        + normalX * lateralShift
-                        - unitTangentX * visualLongitudinalOffset;
-                    y = point.y
-                        + visualOffsetY
-                        + normalY * lateralShift
-                        - unitTangentY * visualLongitudinalOffset;
-
-                    // Keep the proven start/finish presentation.
+                    // Version 5.3 tuning:
+                    // keep the staggered pack, but shift the whole moving pack a bit further
+                    // forward on the start straight so the km-cars sit beyond the start line.
+                    // Also add a tiny extra sideways separation there so car 1 and car 2 read
+                    // as distinct cars instead of nearly touching.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
+
+                    // Smooth launch correction: cars close to the start still get a visual push,
+                    // but that push fades as their real km increase. This prevents a 68 km car
+                    // from visually catching a 123 km car just because one is below 120 km.
                     const launchFactor = isStartStraightZone
                         ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
                         : 0;
 
-                    if (isStartStraightZone) {
-                        const startForwardShift = (isMobileTrack ? 8 : 16) * launchFactor;
-                        x += unitTangentX * startForwardShift;
-                        y += unitTangentY * startForwardShift;
+                    const forwardPackBias = (nearbyCount > 0)
+                        ? (isMobileTrack ? 23 : 54) * launchFactor * launchFactor
+                        : 0;
+                    const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
 
-                        if (laneSide === 1) {
-                            y += isMobileTrack ? 2 : 3;
-                        }
+                    const startStraightForwardShift = (isMobileTrack ? 15 : 32) * launchFactor;
+                    const startStraightLaneBonus = isStartStraightZone
+                        ? (isMobileTrack ? 1 : 2)
+                        : 0;
+                    const adjustedSidewaysOffset = sidewaysOffset + laneSide * startStraightLaneBonus;
 
-                        if (nearbyCars.length === 1) {
-                            y += isMobileTrack ? 2 : 5;
-                        }
+                    const leaderBreakawayShift = (nearbyCount === 0)
+                        ? (isMobileTrack ? 8 : 22) * launchFactor
+                        : 0;
+                    const totalForwardShift = startStraightForwardShift + leaderBreakawayShift;
+
+                    x = point.x
+                        + normalX * adjustedSidewaysOffset
+                        - unitTangentX * effectiveBackwardOffset
+                        + unitTangentX * totalForwardShift;
+                    y = point.y
+                        + visualOffsetY
+                        + normalY * adjustedSidewaysOffset
+                        - unitTangentY * effectiveBackwardOffset
+                        + unitTangentY * totalForwardShift;
+
+                    // Small polishing tweak for the horizontal start straight:
+                    // the upper lane was sitting a touch too high, especially for car 7.
+                    // Nudge only that lane slightly downward without affecting the real track order.
+                    if (isStartStraightZone && laneSide === 1) {
+                        y += isMobileTrack ? 2 : 3;
                     }
 
-                    // Keep White 6's proven correction.
+                    // One extra tiny drop for the second moving car on the start straight
+                    // (Yellow 2 in the current pack), so it sits a touch lower and overlaps
+                    // less with Green 8.
+                    if (isStartStraightZone && nearbyCount === 1) {
+                        y += isMobileTrack ? 2 : 5;
+                    }
+
+                    // Version 5.23: White 6 currently sits in the very tight low-km pack.
+                    // Bring only this car a little further toward the asphalt so the lateral
+                    // stagger does not push it completely into the grass.
                     if (
                         isStartStraightZone &&
                         Number(racer.race_number) === 6 &&
                         distanceInCurrentLap <= 25
                     ) {
+                        // Move White 6 DOWN on screen, back toward the asphalt.
                         y += isMobileTrack ? 8 : 20;
+                    }
+
+                    // If the leading car has already left the start-straight pack and is alone
+                    // in the first sector after the line (Orange 7 in the current situation),
+                    // nudge it a little upward so it doesn't sit visually underneath Blue 1.
+                    const isOpeningSector = distanceInCurrentLap > 120 && distanceInCurrentLap <= 350;
+                    if (isOpeningSector && nearbyCount === 0) {
+                        y -= isMobileTrack ? 6 : 12;
                     }
 
                     placedTrackCars.push({
