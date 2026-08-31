@@ -623,12 +623,12 @@
                     const normalX = -tangentY / tangentLength;
                     const normalY = tangentX / tangentLength;
 
-                    // Version 5.30: compact ordered pack formation.
-                    // The exact KM/racing-line position remains the basis. When several cars are
-                    // extremely close, we arrange them in a small 2-lane diagonal formation.
-                    // Crucially, we do not move them to a different part of the track.
+                    // Version 5.31: visually stretch only extremely tight packs along the
+                    // racing line. The real KM order stays intact, but cars that are only a few
+                    // pixels apart are given a controlled visual spacing so they read as a train
+                    // through the corner instead of a pile-up.
                     const isMobileTrack = container.clientWidth <= 600;
-                    const nearbyThreshold = isMobileTrack ? 34 : 54;
+                    const nearbyThreshold = isMobileTrack ? 42 : 68;
 
                     const nearbyCars = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
@@ -642,49 +642,90 @@
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
-                    // Alternate the cars across two narrow lanes. For a close pack we use a
-                    // consistent diagonal pattern rather than pushing cars longitudinally.
-                    const packIndex = nearbyCars.length;
-                    const laneSide = packIndex % 2 === 0 ? 1 : -1;
+                    // Count the total spread of the local pack in true KM.
+                    const localPackCars = nearbyCars.concat([{
+                        baseX: point.x,
+                        baseY: point.y,
+                        distanceKey,
+                        distanceInCurrentLap
+                    }]);
 
-                    const normalLaneOffset = isMobileTrack ? 5 : 7;
-                    const equalKmLaneOffset = isMobileTrack ? 8 : 11;
+                    const packMinDistance = Math.min(...localPackCars.map(car => car.distanceInCurrentLap));
+                    const packMaxDistance = Math.max(...localPackCars.map(car => car.distanceInCurrentLap));
+                    const kmSpread = packMaxDistance - packMinDistance;
 
-                    // The deeper the pack, the slightly wider the two-lane separation, capped
-                    // so the outside car remains on asphalt.
-                    const lateralBase = isEqualDistanceGroup
-                        ? equalKmLaneOffset
-                        : normalLaneOffset;
-                    const lateralScale = Math.min(1 + Math.floor(packIndex / 2) * 0.12, 1.24);
-                    const lateralShift = laneSide * Math.min(
-                        lateralBase * lateralScale,
-                        isMobileTrack ? 10 : 13
-                    );
+                    // Only "stretch" exceptionally tight groups. A 25 km gap, for example,
+                    // should remain mostly natural; a 2.5 km cluster needs visual breathing room.
+                    const isVeryTightPack = nearbyCars.length >= 2 && kmSpread <= 6;
 
-                    x = point.x + normalX * lateralShift;
-                    y = point.y + visualOffsetY + normalY * lateralShift;
+                    let visualLongitudinalOffset = 0;
+                    if (isVeryTightPack) {
+                        // Because racers are processed from highest KM to lowest KM, the current
+                        // car is behind every nearby racer in the race order. Give it a modest
+                        // extra visual distance behind the nearest faster car.
+                        const nearestAhead = nearbyCars[nearbyCars.length - 1];
+                        const currentGap = Math.hypot(
+                            point.x - nearestAhead.baseX,
+                            point.y - nearestAhead.baseY
+                        );
 
-                    // Small start/finish presentation tweak retained from the good versions.
-                    // It does not alter the racing-line position used by the race itself.
+                        const desiredGap = isMobileTrack ? 22 : 34;
+                        visualLongitudinalOffset = Math.max(0, desiredGap - currentGap);
+
+                        // Hard cap: don't visually stretch a pack more than about two car lengths.
+                        visualLongitudinalOffset = Math.min(
+                            visualLongitudinalOffset,
+                            isMobileTrack ? 14 : 24
+                        );
+                    }
+
+                    const normalLaneOffset = isEqualDistanceGroup
+                        ? (isMobileTrack ? 8 : 11)
+                        : (isMobileTrack ? 4 : 6);
+
+                    let laneSide;
+                    if (sameDistanceIndex === 0) {
+                        laneSide = nearbyCars.length % 2 === 0 ? 1 : -1;
+                    } else {
+                        const firstSameLane = sameDistanceCars[0].laneSide || 1;
+                        laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
+                    }
+
+                    const lateralShift = laneSide * normalLaneOffset;
+
+                    const unitTangentX = tangentX / tangentLength;
+                    const unitTangentY = tangentY / tangentLength;
+
+                    // Exact KM position is still the basis; only the tiny pack stretch is visual.
+                    x = point.x
+                        + normalX * lateralShift
+                        - unitTangentX * visualLongitudinalOffset;
+                    y = point.y
+                        + visualOffsetY
+                        + normalY * lateralShift
+                        - unitTangentY * visualLongitudinalOffset;
+
+                    // Keep the proven start/finish presentation.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const launchFactor = isStartStraightZone
                         ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
                         : 0;
 
                     if (isStartStraightZone) {
-                        const startUnitX = tangentX / tangentLength;
-                        const startUnitY = tangentY / tangentLength;
                         const startForwardShift = (isMobileTrack ? 8 : 16) * launchFactor;
-
-                        x += startUnitX * startForwardShift;
-                        y += startUnitY * startForwardShift;
+                        x += unitTangentX * startForwardShift;
+                        y += unitTangentY * startForwardShift;
 
                         if (laneSide === 1) {
                             y += isMobileTrack ? 2 : 3;
                         }
+
+                        if (nearbyCars.length === 1) {
+                            y += isMobileTrack ? 2 : 5;
+                        }
                     }
 
-                    // Established White 6 correction: keep it on the asphalt.
+                    // Keep White 6's proven correction.
                     if (
                         isStartStraightZone &&
                         Number(racer.race_number) === 6 &&
