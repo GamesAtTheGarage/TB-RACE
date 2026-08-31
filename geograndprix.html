@@ -662,26 +662,32 @@
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
-                    // Version 5.27: scale the visual row spacing to the REAL race gap.
-                    // A fixed 44px row is far too much when two racers are only a few km apart
-                    // (for example 477 vs 471 km). Keep larger gaps on the established spacing,
-                    // but compress very close groups so the cars remain on the natural bend.
+                    // Version 5.32: use the actual KM gap, but cap accumulated visual
+                    // spacing for very tight groups. This keeps 15-17.5 km cars at the back
+                    // instead of allowing multiple row offsets to push one of them forward
+                    // through the pack.
                     const nearestRaceGap = nearbyCars.length > 0
-                        ? Math.min(...nearbyCars.map(other => Math.max(0, (other.raceDistance ?? 0) - distance)))
+                        ? Math.min(...nearbyCars.map(other => Math.max(
+                            0,
+                            (other.raceDistance ?? distance) - distance
+                        )))
                         : Infinity;
+
+                    const isVeryTightPack = nearestRaceGap <= 3;
+                    const isNearEqualPair = nearestRaceGap <= 1;
 
                     let localRowSpacing = rowSpacing;
                     if (nearestRaceGap <= 10) {
                         localRowSpacing = Math.max(
-                            isMobileTrack ? 6 : 9,
+                            isMobileTrack ? 5 : 8,
                             Math.min(
-                                isMobileTrack ? 16 : 24,
-                                (isMobileTrack ? 6 : 9) + nearestRaceGap * (isMobileTrack ? 1.4 : 2.1)
+                                isMobileTrack ? 12 : 18,
+                                (isMobileTrack ? 5 : 8) + nearestRaceGap * (isMobileTrack ? 1.2 : 1.8)
                             )
                         );
                     } else if (nearestRaceGap <= 25) {
-                        localRowSpacing = (isMobileTrack ? 16 : 24)
-                            + (nearestRaceGap - 10) * (isMobileTrack ? 0.8 : 1.3);
+                        localRowSpacing = (isMobileTrack ? 12 : 18)
+                            + (nearestRaceGap - 10) * (isMobileTrack ? 0.7 : 1.1);
                     }
 
                     // First two equal-km cars share the same longitudinal position and use opposite
@@ -742,13 +748,26 @@
                         distanceInCurrentLap <= 30
                     ) ? (isMobileTrack ? 4 : 8) : 0;
 
-                    const backwardOffset = nearbyGroupCount * localRowSpacing
+                    // For extremely close cars, use only a small capped stagger instead of
+                    // accumulating several full row offsets. Equal/near-equal cars mainly use
+                    // their lateral separation.
+                    const tightPackOffset = isVeryTightPack
+                        ? Math.min(nearbyGroupCount, 2) * (isMobileTrack ? 4 : 7)
+                        : 0;
+
+                    const normalBackwardOffset = nearbyGroupCount * localRowSpacing
                         + equalKmExtraRow
                         + equalKmMicroStagger
                         + trailingEqualGroupShift
                         + black5RearNudge
                         + purple11RearNudge
                         + red3RearNudge;
+
+                    const backwardOffset = isNearEqualPair
+                        ? (sameDistanceIndex > 0 ? (isMobileTrack ? 2 : 4) : 0)
+                        : isVeryTightPack
+                            ? tightPackOffset
+                            : normalBackwardOffset;
                     const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
