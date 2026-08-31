@@ -799,7 +799,9 @@
                         // its lateral lane position.
                         // Keep White 6 clearly at the very back of the low-km group.
                         // We also move it slightly DOWN on screen so its body stays on the asphalt.
-                        const white6RearwardShift = isMobileTrack ? 16 : 30;
+                        // White 6 needs to sit clearly behind the rest of the low-km pack.
+                        // Keep the same longitudinal direction, but increase the shift.
+                        const white6RearwardShift = isMobileTrack ? 24 : 44;
                         x -= unitTangentX * white6RearwardShift;
                         y -= unitTangentY * white6RearwardShift;
 
