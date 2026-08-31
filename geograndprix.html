@@ -773,7 +773,14 @@
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
 
-                    const startStraightForwardShift = (isMobileTrack ? 15 : 32) * launchFactor;
+                    // Very-low-km cars are still physically at the back of the field. Do not
+                    // give them the generic start-straight forward push when they are already
+                    // surrounded by other cars; that can make a 15 km car visually jump ahead
+                    // of the 16-17 km group.
+                    const isLowKmPack = distanceInCurrentLap <= 25 && nearbyCount > 0;
+                    const startStraightForwardShift = isLowKmPack
+                        ? 0
+                        : (isMobileTrack ? 15 : 32) * launchFactor;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
                         : 0;
