@@ -794,8 +794,12 @@
                         Number(racer.race_number) === 6 &&
                         distanceInCurrentLap <= 25
                     ) {
-                        // Move White 6 DOWN on screen, back toward the asphalt.
-                        y += isMobileTrack ? 8 : 20;
+                        // White 6: move it BACKWARDS along the racing line so its
+                        // visual position matches its very low KM value. Do not change
+                        // its lateral lane position.
+                        const white6RearwardShift = isMobileTrack ? 8 : 16;
+                        x -= unitTangentX * white6RearwardShift;
+                        y -= unitTangentY * white6RearwardShift;
                     }
 
                     // If the leading car has already left the start-straight pack and is alone
