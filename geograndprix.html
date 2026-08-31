@@ -803,8 +803,10 @@
                         nearestRaceGap <= 10
                     ) {
                         const black5SideShift = isMobileTrack ? 4 : 8;
-                        x += normalX * black5SideShift;
-                        y += normalY * black5SideShift;
+                        // Reverse the lateral direction: the previous nudge moved Black 5
+                        // toward the other cars. This one moves it to the open side of the bend.
+                        x -= normalX * black5SideShift;
+                        y -= normalY * black5SideShift;
                     }
 
                     // Small polishing tweak for the horizontal start straight:
