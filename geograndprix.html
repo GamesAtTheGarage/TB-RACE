@@ -623,26 +623,29 @@
                     const normalX = -tangentY / tangentLength;
                     const normalY = tangentX / tangentLength;
 
-                    // Version 5.27: order-preserving track-distance spacing.
-                    // Instead of shifting cars with local x/y math, calculate every visual
-                    // correction in distance ALONG the racing line. This keeps the race order
-                    // intact and makes cars follow the curve correctly instead of cutting across
-                    // it or being pushed into the grass.
+                    // Version 5.28: keep the true KM position fixed.
+                    // Overlap handling is visual only: a small lateral offset is allowed,
+                    // but cars are never pushed backwards/forwards along the racing line.
                     const isMobileTrack = container.clientWidth <= 600;
+                    const nearbyThreshold = isMobileTrack ? 28 : 46;
+
+                    const nearbyCars = placedTrackCars.filter(other => {
+                        return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
+                    });
 
                     const distanceKey = String(Math.round(distanceInCurrentLap * 10) / 10);
-                    const sameDistanceCars = placedTrackCars.filter(
+                    const sameDistanceCars = nearbyCars.filter(
                         other => other.distanceKey === distanceKey
                     );
                     const sameDistanceIndex = sameDistanceCars.length;
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
-                    // Very small lateral lane separation. Longitudinal spacing does most of
-                    // the work now, so the cars don't need to fan out across the asphalt.
+                    // Default to one of two narrow lanes. The lateral offset is intentionally
+                    // small enough to keep cars on the asphalt even through bends.
                     let laneSide;
                     if (sameDistanceIndex === 0) {
-                        laneSide = (placedTrackCars.length % 2 === 0) ? 1 : -1;
+                        laneSide = nearbyCars.length % 2 === 0 ? 1 : -1;
                     } else {
                         const firstSameLane = sameDistanceCars[0].laneSide || 1;
                         laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
@@ -650,94 +653,37 @@
 
                     const sidewaysOffset = laneSide * (
                         isEqualDistanceGroup
-                            ? (isMobileTrack ? 7 : 10)
+                            ? (isMobileTrack ? 8 : 11)
                             : (isMobileTrack ? 4 : 6)
                     );
 
-                    // Real race position measured in pixels around the racing line.
-                    const baseTrackDistance = progress * totalTrackLength;
+                    // True race position: never alter the longitudinal KM position.
+                    x = point.x + normalX * sidewaysOffset;
+                    y = point.y + visualOffsetY + normalY * sidewaysOffset;
 
-                    // Minimum centre-to-centre spacing for nearby cars. This is deliberately
-                    // smaller for equal-km pairs because their lateral lane separation helps.
-                    const normalMinGap = isMobileTrack ? 30 : 42;
-                    const equalKmMinGap = isMobileTrack ? 24 : 34;
-                    const minimumGap = isEqualDistanceGroup ? equalKmMinGap : normalMinGap;
-
-                    // Find the visual position of the nearest faster car on the same lap.
-                    // Because racers are processed leader-first, we can safely enforce that
-                    // the current car never visually passes a faster car.
-                    let visualTrackDistance = baseTrackDistance;
-
-                    for (const other of placedTrackCars) {
-                        const otherBase = other.baseTrackDistance;
-                        const baseGap = otherBase - baseTrackDistance;
-
-                        // Only compare cars that are genuinely close along the same lap.
-                        if (baseGap >= 0 && baseGap < 180) {
-                            const requiredGap = (
-                                other.distanceKey === distanceKey
-                                    ? minimumGap
-                                    : normalMinGap
-                            );
-
-                            visualTrackDistance = Math.min(
-                                visualTrackDistance,
-                                other.visualTrackDistance - requiredGap
-                            );
-                        }
-                    }
-
-                    // Keep the visual correction modest. This prevents a dense group from
-                    // cascading backwards through half the circuit while still separating
-                    // the cars enough to read individually.
-                    const maxVisualRetreat = isMobileTrack ? 75 : 110;
-                    visualTrackDistance = Math.max(
-                        baseTrackDistance - maxVisualRetreat,
-                        visualTrackDistance
-                    );
-
-                    // Convert the corrected distance back into a genuine point on the track.
-                    // This is the important part: bends stay bends and cars remain on the asphalt.
-                    const correctedProgress = ((visualTrackDistance / totalTrackLength) % 1 + 1) % 1;
-                    const correctedTrackPosition = getTrackPositionAtProgress(correctedProgress);
-
-                    const correctedPoint = correctedTrackPosition.point;
-                    const correctedTangentX = correctedTrackPosition.tangentX;
-                    const correctedTangentY = correctedTrackPosition.tangentY;
-                    const correctedTangentLength = correctedTrackPosition.tangentLength;
-
-                    const correctedNormalX = -correctedTangentY / correctedTangentLength;
-                    const correctedNormalY = correctedTangentX / correctedTangentLength;
-
-                    // Replace the base position/tangent with the corrected track-relative one.
-                    const correctedOffsetX = correctedNormalX * sidewaysOffset;
-                    const correctedOffsetY = correctedNormalY * sidewaysOffset;
-
-                    x = correctedPoint.x + correctedOffsetX;
-                    y = correctedPoint.y + visualOffsetY + correctedOffsetY;
-
-                    // The established start/finish behavior is kept, but now applied to the
-                    // corrected point so the pack cannot jump back across the start line.
+                    // Keep the established start/finish visual treatment, but apply it only
+                    // as a small lateral/forward presentation tweak. It does not change the
+                    // underlying race position used for ordering.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const launchFactor = isStartStraightZone
                         ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
                         : 0;
 
-                    const startStraightShift = (isMobileTrack ? 10 : 22) * launchFactor;
-                    const leaderBreakawayShift = (placedTrackCars.length === 0)
-                        ? (isMobileTrack ? 6 : 14) * launchFactor
-                        : 0;
+                    const startStraightForwardShift = (isMobileTrack ? 8 : 16) * launchFactor;
 
                     if (isStartStraightZone) {
-                        x += correctedTangentX / correctedTangentLength * (startStraightShift + leaderBreakawayShift);
-                        y += correctedTangentY / correctedTangentLength * (startStraightShift + leaderBreakawayShift);
+                        const startUnitX = tangentX / tangentLength;
+                        const startUnitY = tangentY / tangentLength;
+
+                        x += startUnitX * startStraightForwardShift;
+                        y += startUnitY * startStraightForwardShift;
 
                         if (laneSide === 1) {
                             y += isMobileTrack ? 2 : 3;
                         }
                     }
 
-                    // Keep the proven White 6 correction from v5.24/v5.25.
+                    // Keep White 6 on the asphalt with the proven correction.
                     if (
                         isStartStraightZone &&
                         Number(racer.race_number) === 6 &&
@@ -747,10 +693,8 @@
                     }
 
                     placedTrackCars.push({
-                        baseX: correctedPoint.x,
-                        baseY: correctedPoint.y,
-                        baseTrackDistance: baseTrackDistance,
-                        visualTrackDistance: visualTrackDistance,
+                        baseX: point.x,
+                        baseY: point.y,
                         distanceKey,
                         laneSide
                     });
@@ -759,7 +703,7 @@
                     // racing-line tangent, so rotate the calculated tangent by 180 degrees.
                     // Without this correction, the first car that leaves the <=120 km
                     // start-straight override suddenly appears to drive backwards.
-                    angle = Math.atan2(correctedTangentY, correctedTangentX) * 180 / Math.PI + 180;
+                    angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI + 180;
 
                     // Keep very low km values perfectly horizontal on the start straight.
                     if (distanceInCurrentLap > 0 && distanceInCurrentLap <= 120) {
