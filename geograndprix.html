@@ -623,12 +623,13 @@
                     const normalX = -tangentY / tangentLength;
                     const normalY = tangentX / tangentLength;
 
-                    // Version 5.29: clean, limited pack layer.
-                    // The true KM position is always the base position. We only add a small
-                    // local visual offset when cars are very close, with hard limits so the
-                    // pack cannot be pushed off the circuit or reordered visually.
+                    // Version 5.30: compact ordered pack formation.
+                    // The exact KM/racing-line position remains the basis. When several cars are
+                    // extremely close, we arrange them in a small 2-lane diagonal formation.
+                    // Crucially, we do not move them to a different part of the track.
                     const isMobileTrack = container.clientWidth <= 600;
-                    const nearbyThreshold = isMobileTrack ? 28 : 46;
+                    const nearbyThreshold = isMobileTrack ? 34 : 54;
+
                     const nearbyCars = placedTrackCars.filter(other => {
                         return Math.hypot(point.x - other.baseX, point.y - other.baseY) < nearbyThreshold;
                     });
@@ -641,64 +642,49 @@
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
-                    // Use only two narrow visual lanes. Equal-KM pairs get a little more lateral room.
-                    let laneSide;
-                    if (sameDistanceIndex === 0) {
-                        laneSide = nearbyCars.length % 2 === 0 ? 1 : -1;
-                    } else {
-                        const firstSameLane = sameDistanceCars[0].laneSide || 1;
-                        laneSide = sameDistanceIndex % 2 === 1 ? -firstSameLane : firstSameLane;
-                    }
+                    // Alternate the cars across two narrow lanes. For a close pack we use a
+                    // consistent diagonal pattern rather than pushing cars longitudinally.
+                    const packIndex = nearbyCars.length;
+                    const laneSide = packIndex % 2 === 0 ? 1 : -1;
 
-                    const laneOffset = isEqualDistanceGroup
-                        ? (isMobileTrack ? 8 : 12)
-                        : (isMobileTrack ? 4 : 6);
+                    const normalLaneOffset = isMobileTrack ? 5 : 7;
+                    const equalKmLaneOffset = isMobileTrack ? 8 : 11;
 
-                    // Only apply the lateral correction when the sprites are genuinely crowded.
-                    // Keep a strict cap so the visual nudge cannot throw a car onto the grass.
-                    const gapToNearest = nearbyCars.length > 0
-                        ? Math.min(...nearbyCars.map(other =>
-                            Math.hypot(point.x - other.baseX, point.y - other.baseY)
-                        ))
-                        : Infinity;
+                    // The deeper the pack, the slightly wider the two-lane separation, capped
+                    // so the outside car remains on asphalt.
+                    const lateralBase = isEqualDistanceGroup
+                        ? equalKmLaneOffset
+                        : normalLaneOffset;
+                    const lateralScale = Math.min(1 + Math.floor(packIndex / 2) * 0.12, 1.24);
+                    const lateralShift = laneSide * Math.min(
+                        lateralBase * lateralScale,
+                        isMobileTrack ? 10 : 13
+                    );
 
-                    const crowdFactor = Number.isFinite(gapToNearest)
-                        ? clamp((nearbyThreshold - gapToNearest) / nearbyThreshold, 0, 1)
-                        : 0;
-
-                    const maxLateralOffset = isMobileTrack ? 8 : 12;
-                    const lateralShift = Math.min(
-                        maxLateralOffset,
-                        laneOffset * crowdFactor
-                    ) * laneSide;
-
-                    // Start from the exact KM position. No longitudinal correction is applied here.
                     x = point.x + normalX * lateralShift;
                     y = point.y + visualOffsetY + normalY * lateralShift;
 
-                    // Preserve the proven start/finish presentation tweak.
+                    // Small start/finish presentation tweak retained from the good versions.
+                    // It does not alter the racing-line position used by the race itself.
                     const isStartStraightZone = distanceInCurrentLap > 0 && distanceInCurrentLap <= 120;
                     const launchFactor = isStartStraightZone
                         ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
                         : 0;
 
-                    const startStraightForwardShift = (isMobileTrack ? 10 : 18) * launchFactor;
                     if (isStartStraightZone) {
                         const startUnitX = tangentX / tangentLength;
                         const startUnitY = tangentY / tangentLength;
-                        x += startUnitX * startStraightForwardShift;
-                        y += startUnitY * startStraightForwardShift;
+                        const startForwardShift = (isMobileTrack ? 8 : 16) * launchFactor;
+
+                        x += startUnitX * startForwardShift;
+                        y += startUnitY * startForwardShift;
 
                         if (laneSide === 1) {
                             y += isMobileTrack ? 2 : 3;
                         }
-
-                        if (nearbyCars.length === 1) {
-                            y += isMobileTrack ? 2 : 5;
-                        }
                     }
 
-                    // White 6's established correction.
+                    // Established White 6 correction: keep it on the asphalt.
                     if (
                         isStartStraightZone &&
                         Number(racer.race_number) === 6 &&
