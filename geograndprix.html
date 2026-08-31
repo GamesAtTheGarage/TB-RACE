@@ -819,6 +819,15 @@
                     // start-straight override suddenly appears to drive backwards.
                     angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI + 180;
 
+                    // Small visual angle corrections for the two cars currently entering the
+                    // left-hand bend. Their position still follows the racing line exactly;
+                    // this only makes the car body sit a little more naturally with the curve.
+                    if (Number(racer.race_number) === 7) {
+                        angle += 12;
+                    } else if (Number(racer.race_number) === 5) {
+                        angle -= 10;
+                    }
+
                     // Keep very low km values perfectly horizontal on the start straight.
                     if (distanceInCurrentLap > 0 && distanceInCurrentLap <= 120) {
                         angle = 0;
