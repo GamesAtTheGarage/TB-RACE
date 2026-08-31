@@ -794,6 +794,19 @@
                         - unitTangentY * effectiveBackwardOffset
                         + unitTangentY * totalForwardShift;
 
+                    // Black 5: keep exactly the same longitudinal/racing-line position.
+                    // Only move the car slightly sideways in the current bend so its body
+                    // doesn't overlap Gold 10 and Orange 7.
+                    if (
+                        Number(racer.race_number) === 5 &&
+                        nearbyCars.length > 0 &&
+                        nearestRaceGap <= 10
+                    ) {
+                        const black5SideShift = isMobileTrack ? 4 : 8;
+                        x += normalX * black5SideShift;
+                        y += normalY * black5SideShift;
+                    }
+
                     // Small polishing tweak for the horizontal start straight:
                     // the upper lane was sitting a touch too high, especially for car 7.
                     // Nudge only that lane slightly downward without affecting the real track order.
