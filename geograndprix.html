@@ -797,9 +797,14 @@
                         // White 6: move it BACKWARDS along the racing line so its
                         // visual position matches its very low KM value. Do not change
                         // its lateral lane position.
-                        const white6RearwardShift = isMobileTrack ? 8 : 16;
+                        // Keep White 6 clearly at the very back of the low-km group.
+                        // We also move it slightly DOWN on screen so its body stays on the asphalt.
+                        const white6RearwardShift = isMobileTrack ? 16 : 30;
                         x -= unitTangentX * white6RearwardShift;
                         y -= unitTangentY * white6RearwardShift;
+
+                        const white6DownShift = isMobileTrack ? 6 : 12;
+                        y += white6DownShift;
                     }
 
                     // If the leading car has already left the start-straight pack and is alone
