@@ -662,34 +662,6 @@
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
-                    // Version 5.32: use the actual KM gap, but cap accumulated visual
-                    // spacing for very tight groups. This keeps 15-17.5 km cars at the back
-                    // instead of allowing multiple row offsets to push one of them forward
-                    // through the pack.
-                    const nearestRaceGap = nearbyCars.length > 0
-                        ? Math.min(...nearbyCars.map(other => Math.max(
-                            0,
-                            (other.raceDistance ?? distance) - distance
-                        )))
-                        : Infinity;
-
-                    const isVeryTightPack = nearestRaceGap <= 3;
-                    const isNearEqualPair = nearestRaceGap <= 1;
-
-                    let localRowSpacing = rowSpacing;
-                    if (nearestRaceGap <= 10) {
-                        localRowSpacing = Math.max(
-                            isMobileTrack ? 5 : 8,
-                            Math.min(
-                                isMobileTrack ? 12 : 18,
-                                (isMobileTrack ? 5 : 8) + nearestRaceGap * (isMobileTrack ? 1.2 : 1.8)
-                            )
-                        );
-                    } else if (nearestRaceGap <= 25) {
-                        localRowSpacing = (isMobileTrack ? 12 : 18)
-                            + (nearestRaceGap - 10) * (isMobileTrack ? 0.7 : 1.1);
-                    }
-
                     // First two equal-km cars share the same longitudinal position and use opposite
                     // narrow lanes. If three or more ever share the same km, additional pairs get a
                     // modest extra row rather than stacking directly on top of each other.
@@ -748,26 +720,13 @@
                         distanceInCurrentLap <= 30
                     ) ? (isMobileTrack ? 4 : 8) : 0;
 
-                    // For extremely close cars, use only a small capped stagger instead of
-                    // accumulating several full row offsets. Equal/near-equal cars mainly use
-                    // their lateral separation.
-                    const tightPackOffset = isVeryTightPack
-                        ? Math.min(nearbyGroupCount, 2) * (isMobileTrack ? 4 : 7)
-                        : 0;
-
-                    const normalBackwardOffset = nearbyGroupCount * localRowSpacing
+                    const backwardOffset = nearbyGroupCount * rowSpacing
                         + equalKmExtraRow
                         + equalKmMicroStagger
                         + trailingEqualGroupShift
                         + black5RearNudge
                         + purple11RearNudge
                         + red3RearNudge;
-
-                    const backwardOffset = isNearEqualPair
-                        ? (sameDistanceIndex > 0 ? (isMobileTrack ? 2 : 4) : 0)
-                        : isVeryTightPack
-                            ? tightPackOffset
-                            : normalBackwardOffset;
                     const nearbyCount = nearbyCars.length;
 
                     const unitTangentX = tangentX / tangentLength;
@@ -792,14 +751,7 @@
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
 
-                    // Very-low-km cars are still physically at the back of the field. Do not
-                    // give them the generic start-straight forward push when they are already
-                    // surrounded by other cars; that can make a 15 km car visually jump ahead
-                    // of the 16-17 km group.
-                    const isLowKmPack = distanceInCurrentLap <= 25 && nearbyCount > 0;
-                    const startStraightForwardShift = isLowKmPack
-                        ? 0
-                        : (isMobileTrack ? 15 : 32) * launchFactor;
+                    const startStraightForwardShift = (isMobileTrack ? 15 : 32) * launchFactor;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
                         : 0;
@@ -820,19 +772,29 @@
                         - unitTangentY * effectiveBackwardOffset
                         + unitTangentY * totalForwardShift;
 
-                    // Black 5: keep exactly the same longitudinal/racing-line position.
-                    // Only move the car slightly sideways in the current bend so its body
-                    // doesn't overlap Gold 10 and Orange 7.
-                    if (
-                        Number(racer.race_number) === 5 &&
-                        nearbyCars.length > 0 &&
-                        nearestRaceGap <= 10
-                    ) {
-                        const black5SideShift = isMobileTrack ? 4 : 8;
-                        // Reverse the lateral direction: the previous nudge moved Black 5
-                        // toward the other cars. This one moves it to the open side of the bend.
-                        x -= normalX * black5SideShift;
-                        y -= normalY * black5SideShift;
+                    // Version 5.33: for cars that are only a few KM behind a faster car,
+                    // add a very small extra separation ALONG the current racing line.
+                    // This is deliberately local and capped, so it cannot create a giant
+                    // backward jump or throw the car into a different corner.
+                    const nearestRaceGap = nearbyCars.length > 0
+                        ? Math.min(...nearbyCars.map(other =>
+                            Math.max(0, (other.raceDistance ?? distance) - distance)
+                        ))
+                        : Infinity;
+
+                    if (nearbyCars.length > 0 && nearestRaceGap <= 25) {
+                        const currentScreenGap = Math.min(...nearbyCars.map(other =>
+                            Math.hypot(point.x - other.baseX, point.y - other.baseY)
+                        ));
+
+                        const desiredScreenGap = isMobileTrack ? 20 : 28;
+                        const extraAlongTrack = Math.min(
+                            isMobileTrack ? 8 : 12,
+                            Math.max(0, desiredScreenGap - currentScreenGap) * 0.7
+                        );
+
+                        x -= unitTangentX * extraAlongTrack;
+                        y -= unitTangentY * extraAlongTrack;
                     }
 
                     // Small polishing tweak for the horizontal start straight:
