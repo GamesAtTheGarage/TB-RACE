@@ -662,6 +662,28 @@
                     const distanceGroupTotal = distanceGroupTotals[distanceKey] || 1;
                     const isEqualDistanceGroup = distanceGroupTotal > 1;
 
+                    // Version 5.27: scale the visual row spacing to the REAL race gap.
+                    // A fixed 44px row is far too much when two racers are only a few km apart
+                    // (for example 477 vs 471 km). Keep larger gaps on the established spacing,
+                    // but compress very close groups so the cars remain on the natural bend.
+                    const nearestRaceGap = nearbyCars.length > 0
+                        ? Math.min(...nearbyCars.map(other => Math.max(0, (other.raceDistance ?? 0) - distance)))
+                        : Infinity;
+
+                    let localRowSpacing = rowSpacing;
+                    if (nearestRaceGap <= 10) {
+                        localRowSpacing = Math.max(
+                            isMobileTrack ? 6 : 9,
+                            Math.min(
+                                isMobileTrack ? 16 : 24,
+                                (isMobileTrack ? 6 : 9) + nearestRaceGap * (isMobileTrack ? 1.4 : 2.1)
+                            )
+                        );
+                    } else if (nearestRaceGap <= 25) {
+                        localRowSpacing = (isMobileTrack ? 16 : 24)
+                            + (nearestRaceGap - 10) * (isMobileTrack ? 0.8 : 1.3);
+                    }
+
                     // First two equal-km cars share the same longitudinal position and use opposite
                     // narrow lanes. If three or more ever share the same km, additional pairs get a
                     // modest extra row rather than stacking directly on top of each other.
@@ -720,7 +742,7 @@
                         distanceInCurrentLap <= 30
                     ) ? (isMobileTrack ? 4 : 8) : 0;
 
-                    const backwardOffset = nearbyGroupCount * rowSpacing
+                    const backwardOffset = nearbyGroupCount * localRowSpacing
                         + equalKmExtraRow
                         + equalKmMicroStagger
                         + trailingEqualGroupShift
@@ -810,7 +832,8 @@
                         baseX: point.x,
                         baseY: point.y,
                         distanceKey,
-                        laneSide
+                        laneSide,
+                        raceDistance: distance
                     });
 
                     // The custom SVG cars point in the opposite direction of the
@@ -818,15 +841,6 @@
                     // Without this correction, the first car that leaves the <=120 km
                     // start-straight override suddenly appears to drive backwards.
                     angle = Math.atan2(tangentY, tangentX) * 180 / Math.PI + 180;
-
-                    // Small visual angle corrections for the two cars currently entering the
-                    // left-hand bend. Their position still follows the racing line exactly;
-                    // this only makes the car body sit a little more naturally with the curve.
-                    if (Number(racer.race_number) === 7) {
-                        angle += 12;
-                    } else if (Number(racer.race_number) === 5) {
-                        angle -= 10;
-                    }
 
                     // Keep very low km values perfectly horizontal on the start straight.
                     if (distanceInCurrentLap > 0 && distanceInCurrentLap <= 120) {
