@@ -573,6 +573,12 @@
             // The km / longitudinal race position itself never changes.
             const placedTrackCars = [];
 
+            // Version 5.34: visual order guard for the long bottom/start straight.
+            // Racers are processed leader-first. On this straight the racing direction is
+            // from right to left, so every trailing car must end up a little further RIGHT
+            // than the faster car ahead of it. Keep this separate per lap.
+            const lastBottomStraightXByLap = new Map();
+
             // Pre-count exact 0.1 km groups so both members of an equal-km pair can use
             // the same wider two-lane spacing from the moment the first one is drawn.
             const distanceGroupTotals = {};
@@ -746,31 +752,18 @@
                         ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
                         : 0;
 
-                    // Version 5.31: protect the real race order at the back of the field.
-                    // Cars in the very-low-km launch zone (<= 25 km) must not receive the old
-                    // visual "forward boost", because that can make a 15-17.5 km car appear
-                    // ahead of Blue 1 at 134.8 km.
-                    const isVeryLowKmCar = distanceInCurrentLap <= 25;
-
-                    const forwardPackBias = (nearbyCount > 0 && !isVeryLowKmCar)
+                    const forwardPackBias = (nearbyCount > 0)
                         ? (isMobileTrack ? 23 : 54) * launchFactor * launchFactor
                         : 0;
-                    // For the very-low-km cars, also disable the old longitudinal pack
-                    // offset entirely. Their exact KM position on the racing line is already
-                    // behind Blue 1, so extra pack shifting must not pull them forward.
-                    const effectiveBackwardOffset = isVeryLowKmCar
-                        ? 0
-                        : Math.max(0, backwardOffset - forwardPackBias);
+                    const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
 
-                    const startStraightForwardShift = isVeryLowKmCar
-                        ? 0
-                        : (isMobileTrack ? 15 : 32) * launchFactor;
+                    const startStraightForwardShift = (isMobileTrack ? 15 : 32) * launchFactor;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
                         : 0;
                     const adjustedSidewaysOffset = sidewaysOffset + laneSide * startStraightLaneBonus;
 
-                    const leaderBreakawayShift = (nearbyCount === 0 && !isVeryLowKmCar)
+                    const leaderBreakawayShift = (nearbyCount === 0)
                         ? (isMobileTrack ? 8 : 22) * launchFactor
                         : 0;
                     const totalForwardShift = startStraightForwardShift + leaderBreakawayShift;
@@ -799,36 +792,27 @@
                         y += isMobileTrack ? 2 : 5;
                     }
 
-                    // Version 5.33: explicitly separate the two very-low-km cars from
-                    // the 95-243 km pack. Their true positions are so close to the start
-                    // that the older overlap offsets can place other cars on top of them.
-                    // Move only Darkgreen 9 and White 6 a little BACKWARDS along the start
-                    // straight, with White 6 furthest back because it has the lowest KM.
-
-                    if (
-                        isStartStraightZone &&
-                        Number(racer.race_number) === 9 &&
-                        distanceInCurrentLap <= 25
-                    ) {
-                        const darkgreenRearwardShift = isMobileTrack ? 22 : 40;
-                        x -= unitTangentX * darkgreenRearwardShift;
-                        y -= unitTangentY * darkgreenRearwardShift;
-
-                        // Keep it on the asphalt.
-                        y += isMobileTrack ? 4 : 8;
-                    }
-
+                    // Version 5.23: White 6 currently sits in the very tight low-km pack.
+                    // Bring only this car a little further toward the asphalt so the lateral
+                    // stagger does not push it completely into the grass.
                     if (
                         isStartStraightZone &&
                         Number(racer.race_number) === 6 &&
                         distanceInCurrentLap <= 25
                     ) {
-                        const white6RearwardShift = isMobileTrack ? 34 : 62;
+                        // White 6: move it BACKWARDS along the racing line so its
+                        // visual position matches its very low KM value. Do not change
+                        // its lateral lane position.
+                        // Keep White 6 clearly at the very back of the low-km group.
+                        // We also move it slightly DOWN on screen so its body stays on the asphalt.
+                        // White 6 needs to sit clearly behind the rest of the low-km pack.
+                        // Keep the same longitudinal direction, but increase the shift.
+                        const white6RearwardShift = isMobileTrack ? 24 : 44;
                         x -= unitTangentX * white6RearwardShift;
                         y -= unitTangentY * white6RearwardShift;
 
-                        // White 6 sits slightly lower so it doesn't overlap Darkgreen 9.
-                        y += isMobileTrack ? 8 : 15;
+                        const white6DownShift = isMobileTrack ? 10 : 18;
+                        y += white6DownShift;
                     }
 
                     // If the leading car has already left the start-straight pack and is alone
@@ -837,6 +821,25 @@
                     const isOpeningSector = distanceInCurrentLap > 120 && distanceInCurrentLap <= 350;
                     if (isOpeningSector && nearbyCount === 0) {
                         y -= isMobileTrack ? 6 : 12;
+                    }
+
+                    // Final order guard on the long bottom straight.
+                    // This does NOT recalculate the racing line or alter other parts of the track.
+                    // It only prevents a lower-KM car from being drawn in front of a higher-KM car
+                    // after all the older overlap/launch offsets have been applied.
+                    const isBottomStraightOrderZone =
+                        distanceInCurrentLap > 0 && distanceInCurrentLap <= 350;
+
+                    if (isBottomStraightOrderZone) {
+                        const lapIndex = Math.floor(distance / KM_PER_LAP);
+                        const previousX = lastBottomStraightXByLap.get(lapIndex);
+
+                        if (previousX !== undefined) {
+                            const minimumOrderGap = isMobileTrack ? 11 : 22;
+                            x = Math.max(x, previousX + minimumOrderGap);
+                        }
+
+                        lastBottomStraightXByLap.set(lapIndex, x);
                     }
 
                     placedTrackCars.push({
