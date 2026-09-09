@@ -746,18 +746,26 @@
                         ? clamp((120 - distanceInCurrentLap) / 120, 0, 1)
                         : 0;
 
-                    const forwardPackBias = (nearbyCount > 0)
+                    // Version 5.31: protect the real race order at the back of the field.
+                    // Cars in the very-low-km launch zone (<= 25 km) must not receive the old
+                    // visual "forward boost", because that can make a 15-17.5 km car appear
+                    // ahead of Blue 1 at 134.8 km.
+                    const isVeryLowKmCar = distanceInCurrentLap <= 25;
+
+                    const forwardPackBias = (nearbyCount > 0 && !isVeryLowKmCar)
                         ? (isMobileTrack ? 23 : 54) * launchFactor * launchFactor
                         : 0;
                     const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
 
-                    const startStraightForwardShift = (isMobileTrack ? 15 : 32) * launchFactor;
+                    const startStraightForwardShift = isVeryLowKmCar
+                        ? 0
+                        : (isMobileTrack ? 15 : 32) * launchFactor;
                     const startStraightLaneBonus = isStartStraightZone
                         ? (isMobileTrack ? 1 : 2)
                         : 0;
                     const adjustedSidewaysOffset = sidewaysOffset + laneSide * startStraightLaneBonus;
 
-                    const leaderBreakawayShift = (nearbyCount === 0)
+                    const leaderBreakawayShift = (nearbyCount === 0 && !isVeryLowKmCar)
                         ? (isMobileTrack ? 8 : 22) * launchFactor
                         : 0;
                     const totalForwardShift = startStraightForwardShift + leaderBreakawayShift;
