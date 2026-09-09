@@ -755,7 +755,12 @@
                     const forwardPackBias = (nearbyCount > 0 && !isVeryLowKmCar)
                         ? (isMobileTrack ? 23 : 54) * launchFactor * launchFactor
                         : 0;
-                    const effectiveBackwardOffset = Math.max(0, backwardOffset - forwardPackBias);
+                    // For the very-low-km cars, also disable the old longitudinal pack
+                    // offset entirely. Their exact KM position on the racing line is already
+                    // behind Blue 1, so extra pack shifting must not pull them forward.
+                    const effectiveBackwardOffset = isVeryLowKmCar
+                        ? 0
+                        : Math.max(0, backwardOffset - forwardPackBias);
 
                     const startStraightForwardShift = isVeryLowKmCar
                         ? 0
@@ -802,17 +807,9 @@
                         Number(racer.race_number) === 6 &&
                         distanceInCurrentLap <= 25
                     ) {
-                        // White 6: move it BACKWARDS along the racing line so its
-                        // visual position matches its very low KM value. Do not change
-                        // its lateral lane position.
-                        // Keep White 6 clearly at the very back of the low-km group.
-                        // We also move it slightly DOWN on screen so its body stays on the asphalt.
-                        // White 6 needs to sit clearly behind the rest of the low-km pack.
-                        // Keep the same longitudinal direction, but increase the shift.
-                        const white6RearwardShift = isMobileTrack ? 24 : 44;
-                        x -= unitTangentX * white6RearwardShift;
-                        y -= unitTangentY * white6RearwardShift;
-
+                        // White 6 now keeps its TRUE 15 km longitudinal position.
+                        // Only retain the small downward visual correction so it stays
+                        // clear of the nearby car and remains on the asphalt.
                         const white6DownShift = isMobileTrack ? 10 : 18;
                         y += white6DownShift;
                     }
