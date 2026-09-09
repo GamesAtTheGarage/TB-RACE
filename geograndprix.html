@@ -799,19 +799,36 @@
                         y += isMobileTrack ? 2 : 5;
                     }
 
-                    // Version 5.23: White 6 currently sits in the very tight low-km pack.
-                    // Bring only this car a little further toward the asphalt so the lateral
-                    // stagger does not push it completely into the grass.
+                    // Version 5.33: explicitly separate the two very-low-km cars from
+                    // the 95-243 km pack. Their true positions are so close to the start
+                    // that the older overlap offsets can place other cars on top of them.
+                    // Move only Darkgreen 9 and White 6 a little BACKWARDS along the start
+                    // straight, with White 6 furthest back because it has the lowest KM.
+
+                    if (
+                        isStartStraightZone &&
+                        Number(racer.race_number) === 9 &&
+                        distanceInCurrentLap <= 25
+                    ) {
+                        const darkgreenRearwardShift = isMobileTrack ? 22 : 40;
+                        x -= unitTangentX * darkgreenRearwardShift;
+                        y -= unitTangentY * darkgreenRearwardShift;
+
+                        // Keep it on the asphalt.
+                        y += isMobileTrack ? 4 : 8;
+                    }
+
                     if (
                         isStartStraightZone &&
                         Number(racer.race_number) === 6 &&
                         distanceInCurrentLap <= 25
                     ) {
-                        // White 6 now keeps its TRUE 15 km longitudinal position.
-                        // Only retain the small downward visual correction so it stays
-                        // clear of the nearby car and remains on the asphalt.
-                        const white6DownShift = isMobileTrack ? 10 : 18;
-                        y += white6DownShift;
+                        const white6RearwardShift = isMobileTrack ? 34 : 62;
+                        x -= unitTangentX * white6RearwardShift;
+                        y -= unitTangentY * white6RearwardShift;
+
+                        // White 6 sits slightly lower so it doesn't overlap Darkgreen 9.
+                        y += isMobileTrack ? 8 : 15;
                     }
 
                     // If the leading car has already left the start-straight pack and is alone
