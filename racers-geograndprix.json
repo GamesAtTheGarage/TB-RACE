@@ -3,15 +3,15 @@
     "car": "Blue 1",
     "owner": "Piet-Emmy",
     "reference": "TBBARN5",
-    "cache": "GC2Y979",
+    "cache": "GCB8E2A",
     "location": "In the hands of LaLaReCaLa.",
-    "km": 344,
+    "km": 606,
     "name": "TB RACER - P-E Racing - Car: Blue 1",
     "coordinates": [
-      50.77507,
-      6.2093
+      52.07603,
+      4.34058
     ],
-    "last_updated": "2026-10-03T21:57:36.001858",
+    "last_updated": "2026-10-05T19:38:31.503151",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -32,7 +32,7 @@
       51.31437,
       3.1224
     ],
-    "last_updated": "2026-10-03T21:57:36.860796",
+    "last_updated": "2026-10-05T19:38:32.302904",
     "status": "in_hands",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       49.86825,
       4.88628
     ],
-    "last_updated": "2026-10-03T21:57:37.757380",
+    "last_updated": "2026-10-05T19:38:33.118323",
     "status": "in_cache",
     "nickname": "AxelFox Racing",
     "race_number": 3,
@@ -74,7 +74,7 @@
       50.9225,
       6.60057
     ],
-    "last_updated": "2026-10-03T21:57:38.690187",
+    "last_updated": "2026-10-05T19:38:34.161586",
     "status": "in_hands",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -95,7 +95,7 @@
       51.0622,
       4.24903
     ],
-    "last_updated": "2026-10-03T21:57:39.529191",
+    "last_updated": "2026-10-05T19:38:35.043241",
     "status": "in_cache",
     "nickname": "The Stig",
     "race_number": 6,
@@ -108,16 +108,16 @@
     "car": "Orange 7",
     "owner": "KrisBuytaert",
     "reference": "TBBARN8",
-    "cache": "GCBXYRQ",
-    "location": "In the hands of guelin.",
-    "km": 5188,
+    "cache": "GCBY2K4",
+    "location": "In Frühstück in Allhaming #5",
+    "km": 5915,
     "name": "TB RACER - Car: Orange #7",
     "coordinates": [
-      48.01077,
-      13.92332
+      48.15333,
+      14.15808
     ],
-    "last_updated": "2026-10-03T21:57:40.461412",
-    "status": "in_hands",
+    "last_updated": "2026-10-05T19:38:35.881651",
+    "status": "in_cache",
     "nickname": "KrisBuytaert Racing",
     "race_number": 7,
     "color_name": "Orange",
@@ -129,15 +129,15 @@
     "car": "Green 8",
     "owner": "MonsterBlazeRacing",
     "reference": "TBBARN9",
-    "cache": "GC57NAM",
+    "cache": "GCB7AVW",
     "location": "In the hands of Danle1.",
-    "km": 492,
+    "km": 549,
     "name": "TB RACER - Monster Blaze Racing - Car: light green #8",
     "coordinates": [
-      51.43517,
-      5.36305
+      51.275,
+      4.68333
     ],
-    "last_updated": "2026-10-03T21:57:41.488493",
+    "last_updated": "2026-10-05T19:38:36.717200",
     "status": "in_hands",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -150,16 +150,16 @@
     "car": "Darkgreen 9",
     "owner": "Suuz59",
     "reference": "TBBARN1",
-    "cache": "GC9PC3C",
-    "location": "In the hands of Het verdict.",
-    "km": 17.5,
+    "cache": "GC9HHZD",
+    "location": "In La Nuit de l'Obscurité",
+    "km": 164,
     "name": "TB RACER - Felis Racing - Car: Dark Green #9",
     "coordinates": [
-      51.05772,
-      4.21423
+      50.49397,
+      6.09993
     ],
-    "last_updated": "2026-10-03T21:57:42.333514",
-    "status": "in_hands",
+    "last_updated": "2026-10-05T19:38:37.663831",
+    "status": "in_cache",
     "nickname": "Felis Racing",
     "race_number": 9,
     "color_name": "Darkgreen",
@@ -179,7 +179,7 @@
       48.22233,
       16.3506
     ],
-    "last_updated": "2026-10-03T21:57:43.667942",
+    "last_updated": "2026-10-05T19:38:38.938956",
     "status": "in_hands",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -200,7 +200,7 @@
       49.865,
       4.88167
     ],
-    "last_updated": "2026-10-03T21:57:44.526392",
+    "last_updated": "2026-10-05T19:38:39.703811",
     "status": "in_cache",
     "nickname": "Violet Velocity",
     "race_number": 11,
