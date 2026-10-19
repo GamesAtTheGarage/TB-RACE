@@ -3,15 +3,15 @@
     "car": "Blue 1",
     "owner": "Piet-Emmy",
     "reference": "TBBARN5",
-    "cache": "GCB7YT5",
+    "cache": "GCBVP5D",
     "location": "In the hands of LaLaReCaLa.",
-    "km": 1161,
+    "km": 1208,
     "name": "TB RACER - P-E Racing - Car: Blue 1",
     "coordinates": [
-      52.15803,
-      4.49057
+      52.01858,
+      4.43183
     ],
-    "last_updated": "2026-10-16T19:55:14.535140",
+    "last_updated": "2026-10-19T22:56:07.833950",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -32,7 +32,7 @@
       51.53643,
       5.0946
     ],
-    "last_updated": "2026-10-16T19:55:15.393029",
+    "last_updated": "2026-10-19T22:56:08.715061",
     "status": "in_cache",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       49.86825,
       4.88628
     ],
-    "last_updated": "2026-10-16T19:55:16.182052",
+    "last_updated": "2026-10-19T22:56:09.713192",
     "status": "in_cache",
     "nickname": "AxelFox Racing",
     "race_number": 3,
@@ -68,13 +68,13 @@
     "reference": "TBBARND",
     "cache": "GCBG52E",
     "location": "In the hands of ilkeleene.",
-    "km": 1440,
+    "km": 1441,
     "name": "TB RACER - Malcroys Racing - Car: Black #5",
     "coordinates": [
       50.99802,
       4.46878
     ],
-    "last_updated": "2026-10-16T19:55:16.997829",
+    "last_updated": "2026-10-19T22:56:10.553653",
     "status": "in_hands",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -87,15 +87,15 @@
     "car": "White 6",
     "owner": "Penumbra59",
     "reference": "TBBARN7",
-    "cache": "GC9PC3Q",
-    "location": "In MTB #08",
-    "km": 15,
+    "cache": "GCBTC8K",
+    "location": "In 8. Zoek de dieren bonus",
+    "km": 103,
     "name": "TB RACER - The Stig - Car: White #6",
     "coordinates": [
-      51.0622,
-      4.24903
+      51.33063,
+      5.4363
     ],
-    "last_updated": "2026-10-16T19:55:17.790880",
+    "last_updated": "2026-10-19T22:56:11.406559",
     "status": "in_cache",
     "nickname": "The Stig",
     "race_number": 6,
@@ -116,7 +116,7 @@
       48.31535,
       14.15362
     ],
-    "last_updated": "2026-10-16T19:55:18.663253",
+    "last_updated": "2026-10-19T22:56:12.244777",
     "status": "in_cache",
     "nickname": "KrisBuytaert Racing",
     "race_number": 7,
@@ -137,7 +137,7 @@
       51.38002,
       4.45108
     ],
-    "last_updated": "2026-10-16T19:55:19.705470",
+    "last_updated": "2026-10-19T22:56:13.078101",
     "status": "in_cache",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -158,7 +158,7 @@
       50.49397,
       6.09993
     ],
-    "last_updated": "2026-10-16T19:55:20.534369",
+    "last_updated": "2026-10-19T22:56:13.960546",
     "status": "in_cache",
     "nickname": "Felis Racing",
     "race_number": 9,
@@ -173,13 +173,13 @@
     "reference": "TBBARN2",
     "cache": "GCBN47T",
     "location": "In the hands of Wiesia.K.",
-    "km": 2578,
+    "km": 2580,
     "name": "TB RACER - Golden Racer - Car: Gold #10",
     "coordinates": [
       54.40175,
       18.58577
     ],
-    "last_updated": "2026-10-16T19:55:21.349453",
+    "last_updated": "2026-10-19T22:56:14.806376",
     "status": "in_hands",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -200,7 +200,7 @@
       49.865,
       4.88167
     ],
-    "last_updated": "2026-10-16T19:55:22.147917",
+    "last_updated": "2026-10-19T22:56:15.637128",
     "status": "in_cache",
     "nickname": "Violet Velocity",
     "race_number": 11,
