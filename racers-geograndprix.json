@@ -3,15 +3,15 @@
     "car": "Blue 1",
     "owner": "Piet-Emmy",
     "reference": "TBBARN5",
-    "cache": "GCBVP5D",
+    "cache": "GCBWEBH",
     "location": "In the hands of LaLaReCaLa.",
-    "km": 1208,
+    "km": 1216,
     "name": "TB RACER - P-E Racing - Car: Blue 1",
     "coordinates": [
-      52.01858,
-      4.43183
+      51.99392,
+      4.31608
     ],
-    "last_updated": "2026-10-19T22:56:07.833950",
+    "last_updated": "2026-10-23T17:43:34.014774",
     "status": "in_hands",
     "nickname": "P-E Racing",
     "race_number": 1,
@@ -32,7 +32,7 @@
       51.53643,
       5.0946
     ],
-    "last_updated": "2026-10-19T22:56:08.715061",
+    "last_updated": "2026-10-23T17:43:34.871050",
     "status": "in_cache",
     "nickname": "Mettes Racing",
     "race_number": 2,
@@ -53,7 +53,7 @@
       49.86825,
       4.88628
     ],
-    "last_updated": "2026-10-19T22:56:09.713192",
+    "last_updated": "2026-10-23T17:43:35.732437",
     "status": "in_cache",
     "nickname": "AxelFox Racing",
     "race_number": 3,
@@ -74,7 +74,7 @@
       50.99802,
       4.46878
     ],
-    "last_updated": "2026-10-19T22:56:10.553653",
+    "last_updated": "2026-10-23T17:43:36.517834",
     "status": "in_hands",
     "nickname": "Malcroys Racing",
     "race_number": 5,
@@ -95,7 +95,7 @@
       51.33063,
       5.4363
     ],
-    "last_updated": "2026-10-19T22:56:11.406559",
+    "last_updated": "2026-10-23T17:43:37.514580",
     "status": "in_cache",
     "nickname": "The Stig",
     "race_number": 6,
@@ -116,7 +116,7 @@
       48.31535,
       14.15362
     ],
-    "last_updated": "2026-10-19T22:56:12.244777",
+    "last_updated": "2026-10-23T17:43:38.345080",
     "status": "in_cache",
     "nickname": "KrisBuytaert Racing",
     "race_number": 7,
@@ -137,7 +137,7 @@
       51.38002,
       4.45108
     ],
-    "last_updated": "2026-10-19T22:56:13.078101",
+    "last_updated": "2026-10-23T17:43:39.366621",
     "status": "in_cache",
     "nickname": "Monster Blaze Racing",
     "race_number": 8,
@@ -158,7 +158,7 @@
       50.49397,
       6.09993
     ],
-    "last_updated": "2026-10-19T22:56:13.960546",
+    "last_updated": "2026-10-23T17:43:40.249729",
     "status": "in_cache",
     "nickname": "Felis Racing",
     "race_number": 9,
@@ -179,7 +179,7 @@
       54.40175,
       18.58577
     ],
-    "last_updated": "2026-10-19T22:56:14.806376",
+    "last_updated": "2026-10-23T17:43:41.062959",
     "status": "in_hands",
     "nickname": "Golden Racer",
     "race_number": 10,
@@ -200,7 +200,7 @@
       49.865,
       4.88167
     ],
-    "last_updated": "2026-10-19T22:56:15.637128",
+    "last_updated": "2026-10-23T17:43:41.853951",
     "status": "in_cache",
     "nickname": "Violet Velocity",
     "race_number": 11,
