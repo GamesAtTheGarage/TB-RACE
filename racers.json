@@ -4,15 +4,15 @@
     "owner": "Penumbra59",
     "reference": "TBB93KK",
     "cache": "GC5TBW1",
-    "location": "In Jára da Cimrman - ležící spící",
-    "km": 5264,
+    "location": "In the hands of MekekeKáji.",
+    "km": 5274,
     "name": "TB RACERS TEST CAR 1",
     "coordinates": [
       49.7991,
       13.35875
     ],
-    "last_updated": "2026-10-23T17:44:51.096971",
-    "status": "in_cache",
+    "last_updated": "2026-11-16T17:01:20.961683",
+    "status": "in_hands",
     "nickname": "TB RACERS TEST CAR 1",
     "race_number": 1,
     "color_name": "Yellow",
@@ -30,7 +30,7 @@
       57.17153,
       24.83332
     ],
-    "last_updated": "2026-10-23T17:44:51.363912",
+    "last_updated": "2026-11-16T17:01:21.229114",
     "status": "in_hands",
     "nickname": "TB RACERS TEST CAR 5",
     "race_number": 5,
